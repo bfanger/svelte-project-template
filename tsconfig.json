@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "lib": ["ESNext", "dom"],
+    "jsx": "react",
+    "types": ["svelte"]
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}
