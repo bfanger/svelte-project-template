@@ -3,14 +3,12 @@
   "extends": [
     "airbnb-base",
     "plugin:@typescript-eslint/recommended",
-    "prettier",
-    "prettier/@typescript-eslint"
+    "plugin:prettier/recommended"
   ],
-  "plugins": ["prettier", "only-warn"],
+  "plugins": ["only-warn"],
   "rules": {
     "import/extensions": ["error", "ignorePackages", { "ts": "never" }],
-    "no-restricted-syntax": "off",
-    "prettier/prettier": "error"
+    "no-restricted-syntax": "off"
   },
   "overrides": [
     {

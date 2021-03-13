@@ -1,16 +1,18 @@
 {
-  "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
-    "lib": ["ESNext", "dom"],
-    "jsx": "react",
-    "types": ["svelte"]
-  },
-  "include": ["src"],
-  "exclude": ["node_modules"]
+	"compilerOptions": {
+		"moduleResolution": "node",
+		"target": "es2017",
+		"importsNotUsedAsValues": "error",
+		"isolatedModules": true,
+		"sourceMap": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"baseUrl": ".",
+		"paths": {
+			"$components/*": ["./src/components/*"]
+		}
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules/*", ".svelte"]
 }

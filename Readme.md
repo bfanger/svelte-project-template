@@ -2,7 +2,7 @@
 
 Svelte project preconfigured with:
 
-- Snowpack
+- Sveltekit (Vite)
 - Typescript
 - Sass
 - Eslint & Prettier
