@@ -1,5 +1,9 @@
 <script lang="ts">
-  import Hello from "$components/Hello.svelte";
+  import Hello from "../components/Hello.svelte";
+  let name = "world";
+  function onClick() {
+    name = "you";
+  }
 </script>
 
-<Hello name="world" />
+<Hello {name} on:click={onClick} />
