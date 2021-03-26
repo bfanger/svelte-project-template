@@ -11,6 +11,7 @@
     text-align: center;
     transition: letter-spacing 200ms;
     cursor: pointer;
+
     &:hover {
       letter-spacing: 1px;
     }
