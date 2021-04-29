@@ -31,7 +31,7 @@ chmod a+x .git/hooks/pre-commit
 
 Creates the `.git/hooks/pre-commit` and makes it executable.
 
-Edit the `pre-commit` file and replce the contents with:
+Edit the `pre-commit` file and replace the contents with:
 
 ```sh
 #!/bin/sh
