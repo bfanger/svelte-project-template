@@ -1,6 +1,7 @@
 {
   "name": "svelte-project-template",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "svelte-kit dev",
     "build": "svelte-kit build",
@@ -24,16 +25,17 @@
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^1.0.0-next.7",
-    "@sveltejs/kit": "next",
+    "@sveltejs/kit": "^1.0.0-next.102",
     "@typescript-eslint/eslint-plugin": "^4.19.0",
     "@typescript-eslint/parser": "^4.19.0",
     "eslint": "^7.22.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^8.1.0",
+    "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-only-warn": "^1.0.2",
     "eslint-plugin-prettier": "^3.3.1",
-    "lint-staged": "^10.5.4",
+    "lint-staged": "^11.0.0",
     "prettier": "~2.2.1",
     "prettier-plugin-svelte": "^2.2.0",
     "sass": "^1.32.12",
@@ -43,6 +45,5 @@
     "tslib": "^2.0.0",
     "typescript": "^4.0.0",
     "vite": "^2.2.3"
-  },
-  "type": "module"
+  }
 }
