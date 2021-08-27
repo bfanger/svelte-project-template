@@ -2,24 +2,26 @@
 
 Svelte project preconfigured with:
 
-- Sveltekit (Vite)
+- SvelteKit (Vite)
 - Typescript
 - Sass
 - Eslint & Prettier
+- Husky
 
-## Setup
+## Initial setup
 
 ```sh
 npx degit "github.com/bfanger/svelte-project-template#main" my-svelte-project
 cd my-svelte-project
-npm install   # or  yarn install
-npm run dev   # or  yarn dev
+git init && git add .
+yarn            # or  npm install
+yarn dev --open # or  npm run dev
 ```
 
 ## Linting
 
 ```sh
-npm run lint  # or  yarn lint
+yarn lint  # or  npm run lint
 ```
 
 To automaticly run linting before a git commit:
@@ -41,6 +43,10 @@ npm run precommit
 ## Build
 
 ```sh
-npm run build  # or  yarn build
+yarn build  # or  npm run build
 npx serve -s build
 ```
+
+# Dependencies caveats
+
+`typescript` is locked a v4.3.x because of [@typescript-eslint/typescript-estree](https://github.com/typescript-eslint/typescript-eslint/pull/3730)

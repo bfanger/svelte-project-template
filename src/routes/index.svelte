@@ -9,3 +9,4 @@
 </script>
 
 <Hello {name} on:click={onClick} />
+<slot />

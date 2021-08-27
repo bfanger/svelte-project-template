@@ -5,18 +5,18 @@
   "scripts": {
     "dev": "svelte-kit dev",
     "build": "svelte-kit build",
-    "start": "svelte-kit preview",
-    "lint": "prettier --check --loglevel=warn 'src/**/*.svelte' && tsc --noEmit && svelte-check --fail-on-warnings --fail-on-hints && eslint --max-warnings 0 src",
-    "format": "prettier --write . && eslint --fix src",
-    "precommit": "lint-staged"
+    "preview": "svelte-kit preview",
+    "lint": "prettier --check --loglevel=warn 'src/**/*.svelte' && tsc --noEmit && svelte-check --fail-on-warnings --fail-on-hints && eslint --ext=js,ts --max-warnings=0 src",
+    "format": "prettier --write . && eslint --ext=js,ts --fix src",
+    "prepare": "husky install"
   },
   "lint-staged": {
-    "*.ts?(x)": [
-      "eslint --max-warnings 0 --ext ts,tsx --no-ignore",
+    "*.ts": [
+      "eslint --max-warnings 0 --no-ignore",
       "sh -c 'tsc -p tsconfig.json --noEmit'"
     ],
     "*.js": [
-      "eslint --max-warnings 0 --ext js --no-ignore"
+      "eslint --max-warnings 0 --no-ignore"
     ],
     "*.svelte": [
       "svelte-check --fail-on-warnings --fail-on-hints",
@@ -26,24 +26,26 @@
   "devDependencies": {
     "@sveltejs/adapter-static": "next",
     "@sveltejs/kit": "next",
-    "@typescript-eslint/eslint-plugin": "^4.28.3",
-    "@typescript-eslint/parser": "^4.28.3",
-    "eslint": "^7.30.0",
+    "@typescript-eslint/eslint-plugin": "^4.28.4",
+    "@typescript-eslint/parser": "^4.28.4",
+    "eslint": "^7.31.0",
     "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-airbnb-typescript": "^14.0.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-import-resolver-typescript": "^2.4.0",
-    "eslint-plugin-import": "^2.23.4",
-    "eslint-plugin-only-warn": "^1.0.2",
-    "eslint-plugin-prettier": "^3.3.1",
-    "lint-staged": "^11.0.1",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-only-warn": "^1.0.3",
+    "eslint-plugin-prettier": "^3.4.1",
+    "husky": "^7.0.0",
+    "lint-staged": "^11.1.1",
     "prettier": "~2.3.2",
     "prettier-plugin-svelte": "^2.3.1",
-    "sass": "^1.35.2",
-    "svelte": "^3.38.3",
-    "svelte-check": "^2.2.2",
-    "svelte-preprocess": "^4.7.4",
-    "tslib": "^2.3.0",
-    "typescript": "^4.3.5",
-    "vite": "^2.4.2"
+    "sass": "^1.36.0",
+    "svelte": "^3.42.3",
+    "svelte-check": "^2.2.3",
+    "svelte-preprocess": "^4.8.0",
+    "tslib": "^2.3.1",
+    "typescript": "4.3",
+    "vite": "^2.4.3"
   }
 }
