@@ -10,18 +10,12 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "allowJs": true,
+    "noEmit": true,
     "checkJs": true,
     "paths": {
       "$app/*": [".svelte/dev/runtime/app/*", ".svelte/build/runtime/app/*"],
       "$lib/*": ["src/lib/*"]
     }
   },
-  "include": [
-    "src/**/*.d.ts",
-    "src/**/*.js",
-    "src/**/*.ts",
-    "src/**/*.svelte",
-    "**/*.js",
-    "*.js"
-  ]
+  "include": ["src/**/*.d.ts", "src/**/*.js", "src/**/*.ts", "src/**/*.svelte"]
 }

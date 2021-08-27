@@ -15,7 +15,7 @@
       "eslint --max-warnings 0 --no-ignore",
       "sh -c 'tsc -p tsconfig.json --noEmit'"
     ],
-    "*.js": [
+    "*.(c)?js": [
       "eslint --max-warnings 0 --no-ignore"
     ],
     "*.svelte": [

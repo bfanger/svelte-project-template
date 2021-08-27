@@ -5,7 +5,7 @@
 - [SvelteKit](https://kit.svelte.dev/) ([Vite](https://vitejs.dev))
 - [Typescript](http://typescriptlang.org)
 - [Sass](https://sass-lang.com)
-- [Eslint](https://eslint.org) & [Prettier](https://prettier.io)
+- [Prettier](https://prettier.io) & [Eslint](https://eslint.org) \*1
 - [Husky](https://typicode.github.io/husky/) & [Lint-staged](https://github.com/okonet/lint-staged)
 
 ## Initial setup
@@ -50,3 +50,5 @@ npx serve -s build
 # Dependencies caveats
 
 `typescript` is locked a v4.3.x because of [@typescript-eslint/typescript-estree](https://github.com/typescript-eslint/typescript-eslint/pull/3730)
+
+\*1: eslint is not enabled for svelte files, as the eslint-plugin-svelte3 is too buggy.
