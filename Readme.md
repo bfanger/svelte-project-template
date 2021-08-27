@@ -1,12 +1,12 @@
 # Svelte Project Template
 
-Svelte project preconfigured with:
+[Svelte](https://svelte.dev/) project preconfigured with:
 
-- SvelteKit (Vite)
-- Typescript
-- Sass
-- Eslint & Prettier
-- Husky
+- [SvelteKit](https://kit.svelte.dev/) ([Vite](https://vitejs.dev))
+- [Typescript](http://typescriptlang.org)
+- [Sass](https://sass-lang.com)
+- [Eslint](https://eslint.org) & [Prettier](https://prettier.io)
+- [Husky](https://typicode.github.io/husky/) & [Lint-staged](https://github.com/okonet/lint-staged)
 
 ## Initial setup
 
