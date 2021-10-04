@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "moduleResolution": "node",
-    "target": "es2018",
+    "target": "ESNext",
+    "module": "ESNext",
     "importsNotUsedAsValues": "error",
     "isolatedModules": true,
     "sourceMap": true,

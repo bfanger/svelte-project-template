@@ -7,6 +7,7 @@
 - [Sass](https://sass-lang.com)
 - [Prettier](https://prettier.io) & [Eslint](https://eslint.org) \*1
 - [Husky](https://typicode.github.io/husky/) & [Lint-staged](https://github.com/okonet/lint-staged)
+- [Jest](https://jestjs.io)
 
 ## Initial setup
 
@@ -24,22 +25,6 @@ yarn dev --open # or  npm run dev
 yarn lint  # or  npm run lint
 ```
 
-To automaticly run linting before a git commit:
-
-```sh
-touch .git/hooks/pre-commit
-chmod a+x .git/hooks/pre-commit
-```
-
-Creates the `.git/hooks/pre-commit` and makes it executable.
-
-Edit the `pre-commit` file and replace the contents with:
-
-```sh
-#!/bin/sh
-npm run precommit
-```
-
 ## Build
 
 ```sh
@@ -47,8 +32,6 @@ yarn build  # or  npm run build
 npx serve -s build
 ```
 
-# Dependencies caveats
-
-`typescript` is locked a v4.3.x because of [@typescript-eslint/typescript-estree](https://github.com/typescript-eslint/typescript-eslint/pull/3730)
+# Caveats
 
 \*1: eslint is not enabled for svelte files, as the eslint-plugin-svelte3 is too buggy.
