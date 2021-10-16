@@ -8,5 +8,21 @@
   }
 </script>
 
+<svelte:head>
+  <title>SvelteKit demo page</title>
+</svelte:head>
+
 <Hello {name} on:click={onClick} />
+
+<div class="links">
+  <a href="/posts/1">Api Example</a>
+</div>
 <slot />
+
+<style>
+  .links {
+    display: flex;
+    justify-content: center;
+    font-family: sans-serif;
+  }
+</style>
