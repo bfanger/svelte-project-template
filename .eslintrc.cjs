@@ -2,7 +2,7 @@ module.exports = {
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: "./tsconfig.eslint.json",
-    extraFileExtensions: [".cjs"],
+    extraFileExtensions: [".cjs", ".svelte"],
   },
   env: {
     browser: true,
@@ -14,16 +14,10 @@ module.exports = {
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended",
   ],
-  plugins: ["only-warn"],
+  plugins: ["only-warn", "svelte3"],
   settings: {
-    "import/parsers": {
-      "@typescript-eslint/parser": [".ts"],
-    },
-    "import/resolver": {
-      typescript: {
-        alwaysTryTypes: true,
-      },
-    },
+    "svelte3/typescript": true,
+    "svelte3/ignore-styles": ({ lang }) => !!lang,
   },
   overrides: [
     {
@@ -33,10 +27,32 @@ module.exports = {
         "@typescript-eslint/no-var-requires": "off",
       },
     },
+    {
+      files: ["*.svelte"],
+      processor: "svelte3/svelte3",
+      rules: {
+        // Interactions with other plugins: https://github.com/sveltejs/eslint-plugin-svelte3/blob/master/OTHER_PLUGINS.md
+        "prettier/prettier": "off",
+        "import/prefer-default-export": "off",
+        "import/order": "off",
+        "import/first": "off",
+        "import/no-duplicates": "off",
+        "import/no-mutable-exports": "off",
+        "import/no-unresolved": "off",
+        "import/no-extraneous-dependencies": "off",
+        "no-undef-init": "off", // Required for optional properties
+        "@typescript-eslint/no-unused-vars": "off", // Ignores usage in template
+      },
+    },
   ],
   rules: {
+    "no-console": ["warn", { allow: ["warn", "error", "debug", "info"] }],
     "@typescript-eslint/no-explicit-any": "off",
-    "import/extensions": ["error", "ignorePackages", { ts: "never" }],
+    "import/extensions": "off",
     "no-restricted-syntax": "off",
+    "@typescript-eslint/no-use-before-define": [
+      "warn",
+      { functions: false, classes: true, variables: true },
+    ],
   },
 };

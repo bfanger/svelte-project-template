@@ -1,10 +1,9 @@
 <script lang="ts" context="module">
+  import type { Load } from "@sveltejs/kit";
   import api from "$lib/services/api";
 
-  import type { Load } from "@sveltejs/kit";
-
   export const load: Load = async ({ fetch, page }) => {
-    const id = page.params.id;
+    const { id } = page.params;
     const post = await api.get("posts/[id]", { params: { id }, fetch });
     return { props: { id: post.id, title: post.title, body: post.body } };
   };

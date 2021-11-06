@@ -10,8 +10,8 @@
     "lint:prettier": "prettier --check --loglevel=warn \"src/**/*.svelte\"",
     "lint:svelte-check": "svelte-check --fail-on-warnings --fail-on-hints",
     "lint:tsc": "tsc --noEmit",
-    "lint:eslint": "eslint --ext=js,ts --max-warnings=0 src",
-    "format": "prettier --write . && eslint --ext=js,ts --fix src",
+    "lint:eslint": "eslint --ext=js,ts,svelte --max-warnings=0 src",
+    "format": "prettier --write . && eslint --ext=js,ts,svelte --fix src",
     "test": "jest --passWithNoTests",
     "prepare": "husky install"
   },
@@ -24,6 +24,7 @@
       "eslint --max-warnings 0 --no-ignore"
     ],
     "*.svelte": [
+      "eslint --max-warnings 0 --no-ignore",
       "svelte-check --fail-on-warnings --fail-on-hints",
       "prettier --check"
     ]
@@ -40,7 +41,7 @@
     "concurrently": "^6.3.0",
     "eslint": "^8.0.1",
     "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-config-airbnb-typescript": "^14.0.1",
+    "eslint-config-airbnb-typescript": "^15.0.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-import": "^2.25.2",
@@ -59,5 +60,8 @@
     "tslib": "^2.3.1",
     "typescript": "^4.4.4",
     "vite": "^2.6.7"
+  },
+  "dependencies": {
+    "eslint-plugin-svelte3": "^3.2.1"
   }
 }

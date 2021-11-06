@@ -5,7 +5,7 @@
 - [SvelteKit](https://kit.svelte.dev/) ([Vite](https://vitejs.dev))
 - [Typescript](http://typescriptlang.org)
 - [Sass](https://sass-lang.com)
-- [Prettier](https://prettier.io) & [Eslint](https://eslint.org) \*1
+- [Prettier](https://prettier.io) & [Eslint](https://eslint.org)
 - [Husky](https://typicode.github.io/husky/) & [Lint-staged](https://github.com/okonet/lint-staged)
 - [Jest](https://jestjs.io)
 
@@ -31,7 +31,3 @@ yarn lint  # or  npm run lint
 yarn build  # or  npm run build
 npx serve -s build
 ```
-
-# Caveats
-
-\*1: eslint is not enabled for svelte files, as the eslint-plugin-svelte3 is too buggy.
