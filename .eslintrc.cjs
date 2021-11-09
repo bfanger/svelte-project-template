@@ -25,34 +25,37 @@ module.exports = {
       rules: {
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/no-var-requires": "off",
+        "import/no-extraneous-dependencies": "off",
       },
     },
     {
       files: ["*.svelte"],
       processor: "svelte3/svelte3",
+      // Interactions with other plugins: https://github.com/sveltejs/eslint-plugin-svelte3/blob/master/OTHER_PLUGINS.md
       rules: {
-        // Interactions with other plugins: https://github.com/sveltejs/eslint-plugin-svelte3/blob/master/OTHER_PLUGINS.md
-        "prettier/prettier": "off",
-        "import/prefer-default-export": "off",
-        "import/order": "off",
+        "@typescript-eslint/no-unused-vars": "off", // is unable to detect $store as usage of store.
         "import/first": "off",
         "import/no-duplicates": "off",
-        "import/no-mutable-exports": "off",
-        "import/no-unresolved": "off",
-        "import/no-extraneous-dependencies": "off",
-        "no-undef-init": "off", // Required for optional properties
-        "@typescript-eslint/no-unused-vars": "off", // Ignores usage in template
+        "import/no-mutable-exports": "off", // this is how props are defined
+        "import/no-unresolved": "off", // didn't detect the $lib & $app aliases
+        "import/order": "off", // autofix breaks code
+        "import/prefer-default-export": "off", // the default export is implicit (it's the component)
+        "no-undef-init": "off", // `needed to specify an prop with a defauft value of undefined
+        "prettier/prettier": "off", // incompatible, luckily the vscode extension already applies prettier formatting
       },
     },
   ],
   rules: {
-    "no-console": ["warn", { allow: ["warn", "error", "debug", "info"] }],
     "@typescript-eslint/no-explicit-any": "off",
-    "import/extensions": "off",
-    "no-restricted-syntax": "off",
     "@typescript-eslint/no-use-before-define": [
       "warn",
       { functions: false, classes: true, variables: true },
     ],
+    "class-methods-use-this": "off",
+    "import/extensions": "off",
+    "import/no-extraneous-dependencies": "warn",
+    "no-console": ["warn", { allow: ["warn", "error", "debug", "info"] }],
+    "no-restricted-syntax": "off",
+    "no-use-before-define": "off",
   },
 };
