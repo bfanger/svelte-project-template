@@ -53,7 +53,7 @@ module.exports = {
     ],
     "class-methods-use-this": "off",
     "import/extensions": "off",
-    "import/no-extraneous-dependencies": "warn",
+    "import/no-extraneous-dependencies": ["warn", {}],
     "no-console": ["warn", { allow: ["warn", "error", "debug", "info"] }],
     "no-restricted-syntax": "off",
     "no-use-before-define": "off",

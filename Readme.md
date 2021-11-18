@@ -8,6 +8,7 @@
 - [Prettier](https://prettier.io) & [Eslint](https://eslint.org)
 - [Husky](https://typicode.github.io/husky/) & [Lint-staged](https://github.com/okonet/lint-staged)
 - [Jest](https://jestjs.io)
+- [Storybook](https://storybook.js.org/docs/6.4/svelte/writing-stories/introduction)
 
 ## Initial setup
 
