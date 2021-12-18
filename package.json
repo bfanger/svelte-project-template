@@ -14,6 +14,7 @@
     "format": "prettier --write . && eslint --ext=js,ts,svelte --fix src",
     "prepare": "husky install"
   },
+  "prettier": "eslint-config-triple/.prettierrc",
   "lint-staged": {
     "*.ts": [
       "eslint --max-warnings 0 --no-ignore",
@@ -31,13 +32,14 @@
   "devDependencies": {
     "@sveltejs/adapter-static": "next",
     "@sveltejs/kit": "next",
-    "@typescript-eslint/eslint-plugin": "^5.4.0",
-    "@typescript-eslint/parser": "^5.4.0",
+    "@typescript-eslint/eslint-plugin": "^5.7.0",
+    "@typescript-eslint/parser": "^5.7.0",
     "concurrently": "^6.4.0",
-    "eslint": "^8.2.0",
+    "eslint": "^8.5.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-airbnb-typescript": "^16.0.0",
+    "eslint-config-airbnb-typescript": "^16.1.0",
     "eslint-config-prettier": "^8.3.0",
+    "eslint-config-triple": "^0.0.6",
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-only-warn": "^1.0.3",
