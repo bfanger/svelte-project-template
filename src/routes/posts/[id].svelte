@@ -37,8 +37,6 @@
   </div>
 </div>
 
-<slot />
-
 <style>
   .post {
     margin-left: auto;

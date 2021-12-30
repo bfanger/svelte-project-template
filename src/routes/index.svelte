@@ -17,7 +17,6 @@
 <div class="links">
   <a href="/posts/1">Api Example</a>
 </div>
-<slot />
 
 <style>
   .links {
