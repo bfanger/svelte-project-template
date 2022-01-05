@@ -2,8 +2,8 @@
   import type { Load } from "@sveltejs/kit";
   import api from "$lib/services/api";
 
-  export const load: Load = async ({ fetch, page }) => {
-    const { id } = page.params;
+  export const load: Load = async ({ fetch, params }) => {
+    const { id } = params;
     const post = await api.get("posts/[id]", { params: { id }, fetch });
     return { props: { id: post.id, title: post.title, body: post.body } };
   };
