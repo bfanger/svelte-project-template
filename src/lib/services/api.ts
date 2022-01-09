@@ -2,6 +2,7 @@
  * Typed api wrapper with injectable fetch for SSR
  */
 import type { CommentDto, PostDto, TodoDto } from "./api-types-jsonplaceholder";
+import buildUrl from "./buildUrl";
 
 const ENDPOINT =
   <string>import.meta.env.VITE_API_ENDPOINT ??
@@ -15,22 +16,6 @@ type GetResponse = {
 type PostResponse = {
   posts: PostDto;
 };
-/**
- * Inject the params into the url and add the remaining params as search/query params and prefix the  endpoint.
- */
-function buildUrl(path: string, params: Record<string, string>) {
-  const query = { ...params };
-  let interpolatedPath = path;
-  for (const [param, value] of Object.entries(params)) {
-    const replaced = interpolatedPath.replace(`[${param}]`, value as string);
-    if (replaced !== interpolatedPath) {
-      interpolatedPath = replaced;
-      delete query[param];
-    }
-  }
-  const search = new URLSearchParams(query).toString();
-  return `${ENDPOINT}${interpolatedPath}${search ? `?${search}` : ""}`;
-}
 
 export type Fetch = (
   info: RequestInfo,
@@ -57,7 +42,7 @@ async function wrapped(
     fetch = window.fetch;
   }
   init.method = method;
-  const url = buildUrl(path, params);
+  const url = ENDPOINT + buildUrl(path, params);
   const response = await fetch(url, init);
   if (!response.ok) {
     throw new Error(
