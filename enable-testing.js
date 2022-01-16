@@ -31,6 +31,7 @@ const devDependencies = {
   "@types/jest": "^27.0.3",
   "babel-loader": "^8.2.3",
   jest: "^27.3.1",
+  "storybook-builder-vite": "^0.1.13",
   "svelte-jester": "^2.1.5",
   tslib: "^2.3.1",
   "svelte-loader": "^3.1.2",
@@ -72,6 +73,9 @@ await writeFile(
   `const preprocess = require("svelte-preprocess");
 
 module.exports = {
+  core: {
+    builder: "storybook-builder-vite"
+  },
   stories: ["../src/**/*.stories.mdx", "../src/**/*.stories.@(ts|svelte)"],
   addons: [
     "@storybook/addon-links",
