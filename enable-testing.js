@@ -10,7 +10,8 @@ const packageJson = JSON.parse(
 );
 
 const scripts = {
-  test: "jest --passWithNoTests",
+  test: "vitest --passWithNoTests run",
+  "test:watch": "npm run test -- --watch",
   storybook: "start-storybook -p 6006",
   "build-storybook": "build-storybook",
 };
@@ -19,22 +20,15 @@ for (const [task, command] of Object.entries(scripts)) {
 }
 
 const devDependencies = {
-  "@babel/core": "^7.16.0",
-  "@babel/preset-env": "^7.16.4",
-  "@babel/preset-typescript": "^7.16.0",
-  "@storybook/addon-actions": "^6.4.9",
-  "@storybook/addon-essentials": "^6.4.9",
-  "@storybook/addon-links": "^6.4.9",
+  "@storybook/addon-actions": "^6.4.13",
+  "@storybook/addon-essentials": "^6.4.13",
+  "@storybook/addon-links": "^6.4.13",
   "@storybook/addon-svelte-csf": "^1.1.0",
-  "@storybook/svelte": "^6.4.9",
+  "@storybook/svelte": "^6.4.13",
   "@testing-library/svelte": "^3.0.3",
-  "@types/jest": "^27.0.3",
-  "babel-loader": "^8.2.3",
-  jest: "^27.3.1",
+  jsdom: "^19.0.0",
   "storybook-builder-vite": "^0.1.13",
-  "svelte-jester": "^2.1.5",
-  tslib: "^2.3.1",
-  "svelte-loader": "^3.1.2",
+  vitest: "^0.1.17",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
@@ -50,22 +44,20 @@ async function writeFile(filename, body) {
   process.stdout.write(`created "${filename}" (${body.length} bytes)\n`);
 }
 
-await writeFile("package.json", JSON.stringify(packageJson, null, 2));
+await writeFile("package.json", `${JSON.stringify(packageJson, null, 2)}\n`);
 await writeFile(
-  "jest.config.cjs",
-  `module.exports = {
-  testEnvironment: "jsdom",
-  transform: {
-    "^.+\\\\.svelte$": [
-      "svelte-jester",
-      {
-        preprocess: true,
-      },
-    ],
-    "^.+\\\\.(js|ts)$": "babel-jest",
+  "vitest.config.ts",
+  `// eslint-disable-next-line import/no-extraneous-dependencies
+import { svelte } from "@sveltejs/vite-plugin-svelte";
+import { defineConfig, UserConfigExport } from "vite";
+
+export default defineConfig({
+  plugins: [svelte({ hot: !process.env.VITEST })],
+  test: {
+    global: true,
+    environment: "jsdom",
   },
-  transformIgnorePatterns: ["/!node_modules\\\\/lodash-es/"],
-};
+} as UserConfigExport);
 `
 );
 await writeFile(
@@ -74,7 +66,7 @@ await writeFile(
 
 module.exports = {
   core: {
-    builder: "storybook-builder-vite"
+    builder: "storybook-builder-vite",
   },
   stories: ["../src/**/*.stories.mdx", "../src/**/*.stories.@(ts|svelte)"],
   addons: [
@@ -88,16 +80,7 @@ module.exports = {
 };
 `
 );
-await writeFile(
-  "babel.config.cjs",
-  `module.exports = {
-  presets: [
-    ["@babel/preset-env", { targets: { node: "current" } }],
-    "@babel/preset-typescript",
-  ],
-};
-`
-);
+
 await writeFile(
   ".husky/pre-push",
   `#!/bin/sh
@@ -115,7 +98,8 @@ const helloComponentExists = await fs
 if (helloComponentExists) {
   await writeFile(
     "src/lib/Hello.spec.ts",
-    `import { render, fireEvent } from "@testing-library/svelte";
+    `import { expect, it, describe, vi } from "vitest";
+import { render, fireEvent } from "@testing-library/svelte";
 import { tick } from "svelte";
 import Hallo from "./Hello.svelte";
 
@@ -136,7 +120,7 @@ describe("Hello component", () => {
 
   it("should trigger handlers based on events", async () => {
     const { getByText, component } = render(Hallo, { name: "click" });
-    const listener = jest.fn();
+    const listener = vi.fn();
     component.$on("click", listener);
     fireEvent(getByText("Hello click"), new MouseEvent("click"));
     expect(listener).toBeCalledTimes(1);
@@ -181,5 +165,5 @@ describe("Hello component", () => {
   );
 }
 process.stdout.write(
-  "\n\nTo bring in the additional depencencies for Jest & Storybook run:\n\nyarn install  # or npm install\n"
+  "\n\nTo bring in the additional depencencies for Vitest & Storybook run:\n\nyarn install  # or npm install\n"
 );
