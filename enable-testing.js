@@ -20,14 +20,14 @@ for (const [task, command] of Object.entries(scripts)) {
 }
 
 const devDependencies = {
-  "@storybook/addon-actions": "^6.4.13",
-  "@storybook/addon-essentials": "^6.4.13",
-  "@storybook/addon-links": "^6.4.13",
+  "@storybook/addon-actions": "^6.4.18",
+  "@storybook/addon-essentials": "^6.4.18",
+  "@storybook/addon-links": "^6.4.18",
   "@storybook/addon-svelte-csf": "^1.1.0",
-  "@storybook/svelte": "^6.4.13",
+  "@storybook/svelte": "^6.4.18",
   "@testing-library/svelte": "^3.0.3",
   jsdom: "^19.0.0",
-  "storybook-builder-vite": "^0.1.13",
+  "storybook-builder-vite": "0.1.13",
   vitest: "^0.1.17",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
