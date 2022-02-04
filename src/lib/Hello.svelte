@@ -6,11 +6,11 @@
 
 <style lang="scss">
   .hello {
-    background-color: #14a354;
+    background-color: #1d859e;
     color: white;
-    padding: 40px;
-    margin: 40px;
-    font: bold 40px sans-serif;
+    padding: 4rem;
+    margin: 0;
+    font: bold 4rem sans-serif;
     text-align: center;
     transition: letter-spacing 200ms;
     cursor: pointer;

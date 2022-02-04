@@ -41,14 +41,13 @@
   .post {
     margin-left: auto;
     margin-right: auto;
-    width: 700px;
-    padding: 40px;
+    width: 70rem;
+    padding: 4rem;
     box-sizing: border-box;
     max-width: 100vw;
   }
   .pager {
     display: flex;
-    font-family: sans-serif;
   }
   .next {
     margin-left: auto;

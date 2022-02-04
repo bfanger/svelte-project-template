@@ -28,6 +28,7 @@ const devDependencies = {
   "@testing-library/svelte": "^3.0.3",
   jsdom: "^19.0.0",
   "storybook-builder-vite": "0.1.13",
+  "vite-tsconfig-paths": "^3.3.17",
   vitest: "^0.1.17",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
@@ -47,12 +48,13 @@ async function writeFile(filename, body) {
 await writeFile("package.json", `${JSON.stringify(packageJson, null, 2)}\n`);
 await writeFile(
   "vitest.config.ts",
-  `// eslint-disable-next-line import/no-extraneous-dependencies
+  `import { defineConfig, UserConfigExport } from "vite";
+import tsconfigPaths from "vite-tsconfig-paths";
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { svelte } from "@sveltejs/vite-plugin-svelte";
-import { defineConfig, UserConfigExport } from "vite";
 
 export default defineConfig({
-  plugins: [svelte({ hot: !process.env.VITEST })],
+  plugins: [tsconfigPaths(), svelte({ hot: !process.env.VITEST })],
   test: {
     global: true,
     environment: "jsdom",
@@ -63,6 +65,7 @@ export default defineConfig({
 await writeFile(
   ".storybook/main.cjs",
   `const preprocess = require("svelte-preprocess");
+const { default: tsconfigPaths } = require("vite-tsconfig-paths");
 
 module.exports = {
   core: {
@@ -77,9 +80,24 @@ module.exports = {
   svelteOptions: {
     preprocess: preprocess(),
   },
+  viteFinal(config) {
+    config.plugins.push(tsconfigPaths());
+    return config;
+  },
 };
 `
 );
+const globalScssExists = await fs
+  .stat(path.resolve(projectDir, "src/global.scss"))
+  .catch(() => false);
+
+if (globalScssExists) {
+  await writeFile(
+    ".storybook/preview.cjs",
+    `import "../src/global.scss";
+  `
+  );
+}
 
 await writeFile(
   ".husky/pre-push",

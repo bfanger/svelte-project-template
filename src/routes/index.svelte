@@ -22,6 +22,6 @@
   .links {
     display: flex;
     justify-content: center;
-    font-family: sans-serif;
+    margin-top: 4rem;
   }
 </style>
