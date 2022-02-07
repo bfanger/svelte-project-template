@@ -15,7 +15,7 @@
 <Hello {name} on:click={onClick} />
 
 <div class="links">
-  <a href="/posts/1">Api Example</a>
+  <a href="/posts/1" sveltekit:prefetch>Api Example</a>
 </div>
 
 <style>
