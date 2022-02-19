@@ -20,16 +20,16 @@ for (const [task, command] of Object.entries(scripts)) {
 }
 
 const devDependencies = {
-  "@storybook/addon-actions": "^6.4.18",
-  "@storybook/addon-essentials": "^6.4.18",
-  "@storybook/addon-links": "^6.4.18",
+  "@storybook/addon-actions": "^6.4.19",
+  "@storybook/addon-essentials": "^6.4.19",
+  "@storybook/addon-links": "^6.4.19",
   "@storybook/addon-svelte-csf": "^1.1.0",
-  "@storybook/svelte": "^6.4.18",
+  "@storybook/svelte": "^6.4.19",
   "@testing-library/svelte": "^3.0.3",
   jsdom: "^19.0.0",
-  "storybook-builder-vite": "0.1.13",
-  "vite-tsconfig-paths": "^3.3.17",
-  vitest: "^0.1.17",
+  "storybook-builder-vite": "^0.1.16",
+  "vite-tsconfig-paths": "^3.4.0",
+  vitest: "^0.4.2",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
@@ -68,9 +68,6 @@ await writeFile(
 const { default: tsconfigPaths } = require("vite-tsconfig-paths");
 
 module.exports = {
-  core: {
-    builder: "storybook-builder-vite",
-  },
   stories: ["../src/**/*.stories.mdx", "../src/**/*.stories.@(ts|svelte)"],
   addons: [
     "@storybook/addon-links",
@@ -81,6 +78,8 @@ module.exports = {
     preprocess: preprocess(),
   },
   viteFinal(config) {
+    /* eslint-disable no-param-reassign */
+    config.base = "";
     config.plugins.push(tsconfigPaths());
     return config;
   },
