@@ -1,13 +1,33 @@
 /* eslint-disable import/prefer-default-export */
+import dotenv from "dotenv";
+import type { ExternalFetch, Handle } from "@sveltejs/kit";
 import cache from "$lib/services/cache";
-import type { ExternalFetch } from "@sveltejs/kit";
+
+dotenv.config();
+
+export const handle: Handle = async ({ event, resolve }) => {
+  const response = await resolve(event);
+  const body = await response.text();
+  // Inject environment variables
+  return new Response(
+    body.replace(
+      '<script type="env"></script>',
+      `<script>window.env = ${JSON.stringify(
+        { API_ENDPOINT: process.env.API_ENDPOINT },
+        null,
+        2
+      )}</script>`
+    ),
+    response
+  );
+};
 
 export const externalFetch: ExternalFetch = async (request) => {
-  if (request.headers.has("Svelte-Cache") === false) {
+  if (request.headers.has("SSR-Cache") === false) {
     return fetch(request);
   }
-  const ttl = parseInt(request.headers.get("Svelte-Cache") as string, 10);
-  request.headers.delete("Svelte-Cache");
+  const ttl = parseInt(request.headers.get("SSR-Cache") as string, 10);
+  request.headers.delete("SSR-Cache");
 
   return cache(
     keyFromRequest(request),
@@ -18,12 +38,10 @@ export const externalFetch: ExternalFetch = async (request) => {
 
 function keyFromRequest(request: Request) {
   if (request.method !== "GET") {
-    throw new Error(
-      `Svelte-Cache not supported for ${request.method} requests`
-    );
+    throw new Error(`SSR-Cache not supported for ${request.method} requests`);
   }
   const headers = Object.fromEntries(request.headers.entries());
-  return `externalFetch_${request.url}_${JSON.stringify(headers)}`;
+  return `SSR-Cache_${request.url}_${JSON.stringify(headers)}`;
 }
 
 /**

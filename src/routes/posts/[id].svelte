@@ -1,15 +1,18 @@
 <script lang="ts" context="module">
   import type { Load } from "@sveltejs/kit";
-  import api from "$lib/services/api";
+  import api, { getMaxAge } from "$lib/services/api";
 
   export const load: Load = async ({ fetch, params }) => {
     const { id } = params;
     const post = await api.get("posts/[id]", {
       params: { id },
-      headers: { "Svelte-Cache": "30" },
+      ssrCache: 30,
       fetch,
     });
-    return { props: { id: post.id, title: post.title, body: post.body } };
+    return {
+      maxage: getMaxAge(post),
+      props: { id: post.id, title: post.title, body: post.body },
+    };
   };
 </script>
 
