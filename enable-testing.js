@@ -29,7 +29,7 @@ const devDependencies = {
   jsdom: "^19.0.0",
   "storybook-builder-vite": "^0.1.16",
   "vite-tsconfig-paths": "^3.4.0",
-  vitest: "^0.4.2",
+  vitest: "^0.5.5",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
@@ -68,6 +68,9 @@ await writeFile(
 const { default: tsconfigPaths } = require("vite-tsconfig-paths");
 
 module.exports = {
+  core: {
+    builder: "storybook-builder-vite",
+  },
   stories: ["../src/**/*.stories.mdx", "../src/**/*.stories.@(ts|svelte)"],
   addons: [
     "@storybook/addon-links",
