@@ -8,26 +8,27 @@ dotenv.config();
 export const handle: Handle = async ({ event, resolve }) => {
   const response = await resolve(event);
   const body = await response.text();
+  const env = Object.fromEntries(
+    Object.entries(process.env).filter(([key]) =>
+      key.startsWith("SVELTE_PUBLIC_")
+    )
+  );
   // Inject environment variables
   return new Response(
     body.replace(
       '<script type="env"></script>',
-      `<script>window.env = ${JSON.stringify(
-        { API_ENDPOINT: process.env.API_ENDPOINT },
-        null,
-        2
-      )}</script>`
+      `<script>window.env = ${JSON.stringify(env, null, 2)}</script>`
     ),
     response
   );
 };
 
 export const externalFetch: ExternalFetch = async (request) => {
-  if (request.headers.has("SSR-Cache") === false) {
+  if (request.headers.has("Svelte-Cache") === false) {
     return fetch(request);
   }
-  const ttl = parseInt(request.headers.get("SSR-Cache") as string, 10);
-  request.headers.delete("SSR-Cache");
+  const ttl = parseInt(request.headers.get("Svelte-Cache") as string, 10);
+  request.headers.delete("Svelte-Cache");
 
   return cache(
     keyFromRequest(request),
@@ -38,10 +39,11 @@ export const externalFetch: ExternalFetch = async (request) => {
 
 function keyFromRequest(request: Request) {
   if (request.method !== "GET") {
-    throw new Error(`SSR-Cache not supported for ${request.method} requests`);
+    throw new Error(
+      `Svelte-Cache not supported for ${request.method} requests`
+    );
   }
-  const headers = Object.fromEntries(request.headers.entries());
-  return `SSR-Cache_${request.url}_${JSON.stringify(headers)}`;
+  return `Svelte-Cache_${request.url}`;
 }
 
 /**

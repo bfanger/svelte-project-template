@@ -29,7 +29,7 @@ const devDependencies = {
   jsdom: "^19.0.0",
   "storybook-builder-vite": "^0.1.16",
   "vite-tsconfig-paths": "^3.4.0",
-  vitest: "^0.5.5",
+  vitest: "^0.6.0",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
@@ -48,18 +48,18 @@ async function writeFile(filename, body) {
 await writeFile("package.json", `${JSON.stringify(packageJson, null, 2)}\n`);
 await writeFile(
   "vitest.config.ts",
-  `import { defineConfig, UserConfigExport } from "vite";
-import tsconfigPaths from "vite-tsconfig-paths";
-// eslint-disable-next-line import/no-extraneous-dependencies
+  `// eslint-disable-next-line import/no-extraneous-dependencies
 import { svelte } from "@sveltejs/vite-plugin-svelte";
+import { configDefaults, defineConfig } from "vitest/config";
 
 export default defineConfig({
-  plugins: [tsconfigPaths(), svelte({ hot: !process.env.VITEST })],
+  plugins: [svelte({ hot: !process.env.VITEST })],
   test: {
     global: true,
     environment: "jsdom",
+    exclude: [...configDefaults.exclude, "package"],
   },
-} as UserConfigExport);
+});
 `
 );
 await writeFile(

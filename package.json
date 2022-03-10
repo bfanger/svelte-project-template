@@ -8,7 +8,7 @@
     "preview": "svelte-kit preview",
     "lint": "concurrently --kill-others-on-fail \"yarn:lint:*\"",
     "lint:prettier": "prettier --check --loglevel=warn \"src/**/*.svelte\"",
-    "lint:svelte-check": "svelte-check --fail-on-warnings --fail-on-hints",
+    "lint:svelte-check": "svelte-check --fail-on-warnings --fail-on-hints --ignore build,package",
     "lint:tsc": "tsc --noEmit",
     "lint:eslint": "eslint --ext=js,ts,svelte --max-warnings=0 src",
     "format": "prettier --write . && eslint --ext=js,ts,svelte --fix src",

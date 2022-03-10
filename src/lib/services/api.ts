@@ -8,9 +8,9 @@ import type { CommentDto, PostDto, TodoDto } from "./api-types-jsonplaceholder";
 import buildUrl from "./buildUrl";
 import env from "./env";
 
-const RESPONSE_KEY = Symbol("response");
-const API_ENDPOINT =
-  env("API_ENDPOINT") ?? "https://jsonplaceholder.typicode.com/";
+const responseSymbol = Symbol("response");
+const endpoint =
+  env("SVELTE_PUBLIC_API_ENDPOINT") ?? "https://jsonplaceholder.typicode.com/";
 
 type GetResponse = {
   "posts/[id]": PostDto;
@@ -31,7 +31,7 @@ type Config = RequestInit & {
   fetch?: Fetch;
   ssrCache?: number;
 };
-type Augmented = Partial<{ [RESPONSE_KEY]: Response }>;
+type Augmented = Partial<{ [responseSymbol]: Response }>;
 
 async function wrapped(
   method: RequestInit["method"],
@@ -49,20 +49,20 @@ async function wrapped(
   }
   if (ssrCache && typeof window === "undefined") {
     init.headers = new Headers(init.headers);
-    init.headers.append("SSR-Cache", `${ssrCache}`);
+    init.headers.append("Svelte-Cache", `${ssrCache}`);
   }
   init.method = method;
-  const url = API_ENDPOINT + buildUrl(path, params);
+  const url = endpoint + buildUrl(path, params);
   const response = await fetch(url, init);
   if (!response.ok) {
     const error: Error & Augmented = new Error(
       `${method} ${url} failed: ${response.status} ${response.statusText}`
     );
-    error[RESPONSE_KEY] = response;
+    error[responseSymbol] = response;
     throw error;
   }
   const data = await response.json();
-  data[RESPONSE_KEY] = response;
+  data[responseSymbol] = response;
   return data;
 }
 const api = {
@@ -91,7 +91,7 @@ export default api;
 
 function getResponse(dataOrError: Augmented | unknown): Response | undefined {
   if (typeof dataOrError === "object" && dataOrError !== null) {
-    return (dataOrError as any)[RESPONSE_KEY];
+    return (dataOrError as any)[responseSymbol];
   }
   return undefined;
 }
