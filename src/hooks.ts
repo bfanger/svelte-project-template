@@ -1,24 +1,22 @@
-/* eslint-disable import/prefer-default-export */
 import dotenv from "dotenv";
 import type { ExternalFetch, Handle } from "@sveltejs/kit";
 import cache from "$lib/services/cache";
 
 dotenv.config();
 
-export const handle: Handle = async ({ event, resolve }) => {
-  const response = await resolve(event);
-  const body = await response.text();
-  const env = Object.fromEntries(
+const envScript = `<script type="svelte/env">${JSON.stringify(
+  Object.fromEntries(
     Object.entries(process.env).filter(([key]) =>
       key.startsWith("SVELTE_PUBLIC_")
     )
-  );
-  // Inject environment variables
+  )
+)}</script>`;
+
+export const handle: Handle = async ({ event, resolve }) => {
+  const response = await resolve(event);
+  const body = await response.text();
   return new Response(
-    body.replace(
-      '<script type="env"></script>',
-      `<script>window.env = ${JSON.stringify(env, null, 2)}</script>`
-    ),
+    body.replace('<script type="svelte/env"></script>', envScript),
     response
   );
 };

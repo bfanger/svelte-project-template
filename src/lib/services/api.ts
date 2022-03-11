@@ -10,7 +10,7 @@ import env from "./env";
 
 const responseSymbol = Symbol("response");
 const endpoint =
-  env("SVELTE_PUBLIC_API_ENDPOINT") ?? "https://jsonplaceholder.typicode.com/";
+  env.SVELTE_PUBLIC_API_ENDPOINT ?? "https://jsonplaceholder.typicode.com/";
 
 type GetResponse = {
   "posts/[id]": PostDto;
