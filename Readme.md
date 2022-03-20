@@ -2,10 +2,10 @@
 
 [Svelte](https://svelte.dev/) project preconfigured with:
 
-- [SvelteKit](https://kit.svelte.dev/) ([Vite](https://vitejs.dev))
-- [Typescript](http://typescriptlang.org)
-- [Sass](https://sass-lang.com)
-- [Prettier](https://prettier.io) & [Eslint](https://eslint.org)
+- [SvelteKit](https://kit.svelte.dev/) ([Vite](https://vitejs.dev/))
+- [Typescript](http://typescriptlang.org/)
+- [Sass](https://sass-lang.com/)
+- [Prettier](https://prettier.io/) & [Eslint](https://eslint.org/)
 - [Husky](https://typicode.github.io/husky/) & [Lint-staged](https://github.com/okonet/lint-staged)
 - [Vitest](https://vitest.dev/) \*1
 - [Storybook](https://storybook.js.org/docs/6.4/svelte/writing-stories/introduction) \*1
@@ -19,7 +19,7 @@ npx degit "github.com/bfanger/svelte-project-template#main" my-svelte-project
 cd my-svelte-project
 git init && git add .
 yarn             # or  npm install
-yarn dev --open  # or  npm run dev
+yarn dev --open  # or  npm run dev -- --open
 ```
 
 ## Enabling Testing & Storybook

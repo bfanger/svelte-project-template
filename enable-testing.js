@@ -29,7 +29,7 @@ const devDependencies = {
   jsdom: "^19.0.0",
   "storybook-builder-vite": "^0.1.16",
   "vite-tsconfig-paths": "^3.4.0",
-  vitest: "^0.6.0",
+  vitest: "^0.7.0",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
