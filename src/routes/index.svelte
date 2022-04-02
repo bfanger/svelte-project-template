@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Hello from "$lib/Hello.svelte";
+  import Hello from "$lib/components/Hello/Hello.svelte";
 
   let name = "world";
 

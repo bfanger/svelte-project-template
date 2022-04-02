@@ -20,16 +20,16 @@ for (const [task, command] of Object.entries(scripts)) {
 }
 
 const devDependencies = {
-  "@storybook/addon-actions": "^6.4.19",
-  "@storybook/addon-essentials": "^6.4.19",
-  "@storybook/addon-links": "^6.4.19",
+  "@storybook/addon-actions": "^6.4.20",
+  "@storybook/addon-essentials": "^6.4.20",
+  "@storybook/addon-links": "^6.4.20",
   "@storybook/addon-svelte-csf": "^1.1.0",
-  "@storybook/svelte": "^6.4.19",
-  "@testing-library/svelte": "^3.0.3",
+  "@storybook/builder-vite": "^0.1.23",
+  "@storybook/svelte": "^6.4.20",
+  "@testing-library/svelte": "^3.1.0",
   jsdom: "^19.0.0",
-  "storybook-builder-vite": "^0.1.16",
-  "vite-tsconfig-paths": "^3.4.0",
-  vitest: "^0.7.0",
+  "vite-tsconfig-paths": "^3.4.1",
+  vitest: "^0.8.2",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
@@ -68,9 +68,7 @@ await writeFile(
 const { default: tsconfigPaths } = require("vite-tsconfig-paths");
 
 module.exports = {
-  core: {
-    builder: "storybook-builder-vite",
-  },
+  core: { builder: "@storybook/builder-vite" },
   stories: ["../src/**/*.stories.mdx", "../src/**/*.stories.@(ts|svelte)"],
   addons: [
     "@storybook/addon-links",
@@ -112,12 +110,12 @@ npm run test
 await fs.chmod(path.resolve(projectDir, ".husky/pre-push"), "755");
 
 const helloComponentExists = await fs
-  .stat(path.resolve(projectDir, "src/lib/Hello.svelte"))
+  .stat(path.resolve(projectDir, "src/lib/components/Hello/Hello.svelte"))
   .catch(() => false);
 
 if (helloComponentExists) {
   await writeFile(
-    "src/lib/Hello.spec.ts",
+    "src/lib/components/Hello/Hello.spec.ts",
     `import { expect, it, describe, vi } from "vitest";
 import { render, fireEvent } from "@testing-library/svelte";
 import { tick } from "svelte";
@@ -149,7 +147,7 @@ describe("Hello component", () => {
 `
   );
   await writeFile(
-    "src/lib/Hello.stories.svelte",
+    "src/lib/components/Hello/Hello.stories.svelte",
     `<script lang="ts">
   import { Meta, Template, Story } from "@storybook/addon-svelte-csf";
   import Hello from "./Hello.svelte";
