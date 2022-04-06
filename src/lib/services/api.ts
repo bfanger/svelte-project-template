@@ -2,13 +2,13 @@
  * Typed api wrapper with injectable fetch for SSR
  *
  * The responses of the api methods contain the data direcly but also have a hidden property.
- * This allows access to the headers an http status of the response
+ * This allows access to the headers and http status of the response using the helper methods.
  */
+import type { Load } from "@sveltejs/kit";
 import type { CommentDto, PostDto, TodoDto } from "./api-types-jsonplaceholder";
 import buildUrl from "./buildUrl";
 import env from "./env";
 
-const responseSymbol = Symbol("response");
 const endpoint =
   env.SVELTE_PUBLIC_API_ENDPOINT ?? "https://jsonplaceholder.typicode.com/";
 
@@ -31,7 +31,8 @@ type Config = RequestInit & {
   fetch?: Fetch;
   ssrCache?: number;
 };
-type Augmented = Partial<{ [responseSymbol]: Response }>;
+const responseSymbol = Symbol("response");
+type ApiResponse<T = unknown> = T & { [responseSymbol]: Response };
 
 async function wrapped(
   method: RequestInit["method"],
@@ -55,9 +56,9 @@ async function wrapped(
   const url = endpoint + buildUrl(path, params);
   const response = await fetch(url, init);
   if (!response.ok) {
-    const error: Error & Augmented = new Error(
+    const error = new Error(
       `${method} ${url} failed: ${response.status} ${response.statusText}`
-    );
+    ) as ApiResponse<Error>;
     error[responseSymbol] = response;
     throw error;
   }
@@ -69,14 +70,14 @@ const api = {
   get<T extends keyof GetResponse>(
     path: T,
     config?: Config
-  ): Promise<GetResponse[T] & Augmented> {
+  ): Promise<ApiResponse<GetResponse[T]>> {
     return wrapped("GET", path, config || {});
   },
   async post<T extends keyof PostResponse>(
     path: T,
     data: unknown,
     config?: Config
-  ): Promise<PostResponse[T] & Augmented> {
+  ): Promise<ApiResponse<PostResponse[T]>> {
     return wrapped("POST", path, {
       ...config,
       headers: {
@@ -89,7 +90,7 @@ const api = {
 };
 export default api;
 
-function getResponse(dataOrError: Augmented | unknown): Response | undefined {
+function getResponse(dataOrError: ApiResponse | unknown): Response | undefined {
   if (typeof dataOrError === "object" && dataOrError !== null) {
     return (dataOrError as any)[responseSymbol];
   }
@@ -97,7 +98,7 @@ function getResponse(dataOrError: Augmented | unknown): Response | undefined {
 }
 
 export function getStatus(
-  dataOrError: Augmented | unknown
+  dataOrError: ApiResponse | unknown
 ): number | undefined {
   const response = getResponse(dataOrError);
   if (response) {
@@ -107,7 +108,7 @@ export function getStatus(
 }
 
 export function getStatusText(
-  dataOrError: Augmented | unknown
+  dataOrError: ApiResponse | unknown
 ): string | undefined {
   const response = getResponse(dataOrError);
   if (response) {
@@ -117,7 +118,7 @@ export function getStatusText(
 }
 
 export function getHeader(
-  dataOrError: Augmented | unknown,
+  dataOrError: ApiResponse | unknown,
   name: string
 ): string | undefined {
   const response = getResponse(dataOrError);
@@ -130,11 +131,31 @@ export function getHeader(
   return undefined;
 }
 
-export function getMaxAge(response: Augmented): number | undefined {
+export function getMaxAge(response: ApiResponse): number | undefined {
   const cacheControl = getHeader(response, "Cache-Control");
   const match = cacheControl && cacheControl.match(/^max-age=([0-9]+)/);
   if (match) {
     return parseInt(match[1], 10);
   }
   return undefined;
+}
+
+/**
+ * Report the error message and generate a load response that will go the the __error.svelte route.
+ */
+export function loadError(err: Error | unknown): ReturnType<Load> {
+  const error = err as Error;
+  const code = getStatus(err);
+  if (code === undefined) {
+    console.error(error);
+  } else {
+    const clean = new Error(error.message || "load error");
+    clean.stack = error.stack;
+    clean.name = error.name;
+    console.error(clean);
+  }
+  return {
+    status: code && code > 400 ? code : 500,
+    error: error || "load error",
+  };
 }

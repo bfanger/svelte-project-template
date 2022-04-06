@@ -7,10 +7,6 @@ export default {
   kit: {
     prerender: { default: true },
     adapter: adapter(),
-    vite: {
-      css: {
-        devSourcemap: true, // Experimental and usually the wrong line, but the filename info is very useful.
-      },
-    },
+    vite: { css: { devSourcemap: true } },
   },
 };
