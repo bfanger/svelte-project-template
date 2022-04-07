@@ -2,8 +2,18 @@
  * DTO (Data Transfer Objects) are types defined by the (external) API
  */
 
+export type ApiGetResponse = {
+  "posts/[id]": PostDto;
+  "posts/[id]/comments": CommentDto[];
+  "user/[id]/todos": TodoDto[];
+};
+
+export type ApiPostResponse = {
+  posts: PostDto;
+};
+
 // https://jsonplaceholder.typicode.com/posts
-export type PostDto = {
+type PostDto = {
   id: number;
   userId: number;
   title: string;
@@ -11,7 +21,7 @@ export type PostDto = {
 };
 
 // https://jsonplaceholder.typicode.com/user/1/todos
-export type TodoDto = {
+type TodoDto = {
   userId: number;
   id: number;
   title: string;
@@ -19,7 +29,7 @@ export type TodoDto = {
 };
 
 // https://jsonplaceholder.typicode.com/posts/1/comments
-export type CommentDto = {
+type CommentDto = {
   postId: number;
   id: number;
   name: string;

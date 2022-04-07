@@ -5,21 +5,15 @@
  * This allows access to the headers and http status of the response using the helper methods.
  */
 import type { Load } from "@sveltejs/kit";
-import type { CommentDto, PostDto, TodoDto } from "./api-types-jsonplaceholder";
-import buildUrl from "./buildUrl";
 import env from "./env";
+import buildUrl from "./buildUrl";
+import type {
+  ApiGetResponse,
+  ApiPostResponse,
+} from "./api-types-jsonplaceholder";
 
 const endpoint =
   env.SVELTE_PUBLIC_API_ENDPOINT ?? "https://jsonplaceholder.typicode.com/";
-
-type GetResponse = {
-  "posts/[id]": PostDto;
-  "posts/[id]/comments": CommentDto[];
-  "user/[id]/todos": TodoDto[];
-};
-type PostResponse = {
-  posts: PostDto;
-};
 
 export type Fetch = (
   info: RequestInfo,
@@ -67,17 +61,17 @@ async function wrapped(
   return data;
 }
 const api = {
-  get<T extends keyof GetResponse>(
+  get<T extends keyof ApiGetResponse>(
     path: T,
     config?: Config
-  ): Promise<ApiResponse<GetResponse[T]>> {
+  ): Promise<ApiResponse<ApiGetResponse[T]>> {
     return wrapped("GET", path, config || {});
   },
-  async post<T extends keyof PostResponse>(
+  async post<T extends keyof ApiPostResponse>(
     path: T,
     data: unknown,
     config?: Config
-  ): Promise<ApiResponse<PostResponse[T]>> {
+  ): Promise<ApiResponse<ApiPostResponse[T]>> {
     return wrapped("POST", path, {
       ...config,
       headers: {
