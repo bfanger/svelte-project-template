@@ -57,6 +57,9 @@ async function wrapped(
     throw error;
   }
   const data = await response.json();
+  if (config.signal && config.signal.aborted) {
+    throw new Error("Aborted");
+  }
   data[responseSymbol] = response;
   return data;
 }

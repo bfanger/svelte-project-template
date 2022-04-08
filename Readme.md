@@ -4,7 +4,7 @@
 
 - [SvelteKit](https://kit.svelte.dev/) ([Vite](https://vitejs.dev/))
 - [Typescript](http://typescriptlang.org/)
-- [Sass](https://sass-lang.com/)
+- [Sass](https://sass-lang.com/) & [Autoprefixer](https://github.com/postcss/autoprefixer)
 - [Prettier](https://prettier.io/) & [Eslint](https://eslint.org/)
 - [Husky](https://typicode.github.io/husky/) & [Lint-staged](https://github.com/okonet/lint-staged)
 - [Vitest](https://vitest.dev/) \*1

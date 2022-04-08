@@ -68,6 +68,7 @@
     font-weight: bold;
     color: white;
     text-decoration: none;
+    user-select: none;
 
     &:focus-visible {
       box-shadow: 0px 0px 0px 2px rgba(white, 0.9);
