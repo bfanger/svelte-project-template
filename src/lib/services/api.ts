@@ -48,7 +48,14 @@ async function wrapped(
   }
   init.method = method;
   const url = endpoint + buildUrl(path, params);
+  const start = Date.now();
   const response = await fetch(url, init);
+  const duration = (Date.now() - start) / 1000;
+  if (duration > 1) {
+    console.info(
+      `${method} ${url.substring(endpoint.length)} took ${duration.toFixed(3)}s`
+    );
+  }
   if (!response.ok) {
     const error = new Error(
       `${method} ${url} failed: ${response.status} ${response.statusText}`
@@ -128,7 +135,7 @@ export function getHeader(
   return undefined;
 }
 
-export function getMaxAge(response: ApiResponse): number | undefined {
+export function getMaxAge(response: ApiResponse | unknown): number | undefined {
   const cacheControl = getHeader(response, "Cache-Control");
   const match = cacheControl && cacheControl.match(/^max-age=([0-9]+)/);
   if (match) {

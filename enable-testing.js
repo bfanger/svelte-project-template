@@ -11,7 +11,7 @@ const packageJson = JSON.parse(
 
 const scripts = {
   test: "vitest --passWithNoTests run",
-  "test:watch": "npm run test -- --watch",
+  "test:watch": "vitest",
   storybook: "start-storybook -p 6006",
   "build-storybook": "build-storybook",
 };
