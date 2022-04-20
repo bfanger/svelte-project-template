@@ -10,26 +10,37 @@ const packageJson = JSON.parse(
 );
 
 const scripts = {
+  "dev:sveltekit": "svelte-kit dev",
+  "dev:storybook": "start-storybook --modern --no-open --port 6006",
+  "build:sveltekit": "svelte-kit build",
+  "build:storybook":
+    "build-storybook --modern --output-dir build/styleguide-storybook",
   test: "vitest --passWithNoTests run",
   "test:watch": "vitest",
-  storybook: "start-storybook -p 6006",
-  "build-storybook": "build-storybook",
 };
 for (const [task, command] of Object.entries(scripts)) {
   packageJson.scripts[task] = packageJson.scripts[task] || command;
 }
+if (packageJson.scripts.dev === "svelte-kit dev") {
+  packageJson.scripts.dev =
+    'concurrently -c "#676778","#990f3f" --kill-others-on-fail "npm:dev:*"';
+}
+if (packageJson.scripts.build === "svelte-kit build") {
+  packageJson.scripts.build =
+    "npm run build:sveltekit && npm run build:storybook";
+}
 
 const devDependencies = {
-  "@storybook/addon-actions": "^6.4.20",
-  "@storybook/addon-essentials": "^6.4.20",
-  "@storybook/addon-links": "^6.4.20",
-  "@storybook/addon-svelte-csf": "^1.1.0",
+  "@storybook/addon-actions": "^6.4.22",
+  "@storybook/addon-essentials": "^6.4.22",
+  "@storybook/addon-links": "^6.4.22",
+  "@storybook/addon-svelte-csf": "^2.0.2",
   "@storybook/builder-vite": "^0.1.23",
-  "@storybook/svelte": "^6.4.20",
+  "@storybook/svelte": "^6.4.22",
   "@testing-library/svelte": "^3.1.0",
   jsdom: "^19.0.0",
   "vite-tsconfig-paths": "^3.4.1",
-  vitest: "^0.8.2",
+  vitest: "^0.9.3",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
@@ -64,7 +75,8 @@ export default defineConfig({
 );
 await writeFile(
   ".storybook/main.cjs",
-  `const preprocess = require("svelte-preprocess");
+  `const path = require("path");
+const preprocess = require("svelte-preprocess");
 const { default: tsconfigPaths } = require("vite-tsconfig-paths");
 
 module.exports = {
@@ -75,13 +87,18 @@ module.exports = {
     "@storybook/addon-essentials",
     "@storybook/addon-svelte-csf",
   ],
+  staticDirs: ["../static"],
   svelteOptions: {
-    preprocess: preprocess(),
+    preprocess: preprocess({ sourceMap: true }),
   },
   viteFinal(config) {
     /* eslint-disable no-param-reassign */
     config.base = "";
+    config.resolve.alias = config.resolve.alias || {};
+    config.resolve.alias.$lib = path.resolve(__dirname, "../src/lib");
     config.plugins.push(tsconfigPaths());
+    config.build = config.build || {};
+    config.build.chunkSizeWarningLimit = 1000;
     return config;
   },
 };
@@ -95,7 +112,7 @@ if (globalScssExists) {
   await writeFile(
     ".storybook/preview.cjs",
     `import "../src/global.scss";
-  `
+`
   );
 }
 
