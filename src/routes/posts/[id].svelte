@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
   import type { Load } from "@sveltejs/kit";
-  import api, { getMaxAge, loadError } from "$lib/services/api";
+  import api, { getCacheConfig, loadError } from "$lib/services/api";
 
   export const load: Load = async ({ fetch, params }) => {
     try {
@@ -11,7 +11,7 @@
         fetch,
       });
       return {
-        maxage: getMaxAge(post),
+        cache: getCacheConfig(post),
         props: { id: post.id, title: post.title, body: post.body },
       };
     } catch (err) {

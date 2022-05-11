@@ -4,7 +4,7 @@
  * The responses of the api methods contain the data direcly but also have a hidden property.
  * This allows access to the headers and http status of the response using the helper methods.
  */
-import type { Load } from "@sveltejs/kit";
+import type { Load, LoadOutputCache } from "@sveltejs/kit";
 import env from "./env";
 import buildUrl from "./buildUrl";
 import type {
@@ -135,11 +135,13 @@ export function getHeader(
   return undefined;
 }
 
-export function getMaxAge(response: ApiResponse | unknown): number | undefined {
+export function getCacheConfig(
+  response: ApiResponse | unknown
+): LoadOutputCache | undefined {
   const cacheControl = getHeader(response, "Cache-Control");
   const match = cacheControl && cacheControl.match(/^max-age=([0-9]+)/);
   if (match) {
-    return parseInt(match[1], 10);
+    return { maxage: parseInt(match[1], 10) };
   }
   return undefined;
 }
