@@ -8,9 +8,10 @@
 - [Prettier](https://prettier.io/) & [Eslint](https://eslint.org/)
 - [Husky](https://typicode.github.io/husky/) & [Lint-staged](https://github.com/okonet/lint-staged)
 - [Vitest](https://vitest.dev/) \*1
-- [Storybook](https://storybook.js.org/docs/6.4/svelte/writing-stories/introduction) \*1
+- [Playwright](https://playwright.dev/) \*1
+- [Storybook](https://storybook.js.org/docs/svelte/writing-stories/introduction) \*1
 
-\*1: To keep the installation speedy Vitest and Storybook are disabled by default.
+\*1: To keep the installation speedy Vitest, Playwright and Storybook are disabled by default.
 
 ## Initial setup
 
@@ -31,8 +32,9 @@ yarn  # or  npm install
 
 - Creates the configuration files
 - Creates an example unittest
+- Creates an example e2e test
 - Creates an example storybook story
-- Installs ~686 additional modules
+- Number of folders inside node_modules goes from ~279 to ~964.
 
 ## Linting
 

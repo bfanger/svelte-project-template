@@ -15,8 +15,12 @@ const scripts = {
   "build:sveltekit": "svelte-kit build",
   "build:storybook":
     "build-storybook --modern --output-dir build/styleguide-storybook",
-  test: "vitest --passWithNoTests run",
-  "test:watch": "vitest",
+  test: 'concurrently -c "#fcc72a","#45ba4b" --kill-others-on-fail "npm:test:*"',
+  "test:vitest": "vitest run --passWithNoTests",
+  "test:playwright": "playwright test",
+  vitest: "vitest watch",
+  playwright:
+    'npx chokidar-cli "playwright/**/*.ts" --initial -c "npx playwright test"',
 };
 for (const [task, command] of Object.entries(scripts)) {
   packageJson.scripts[task] = packageJson.scripts[task] || command;
@@ -31,12 +35,13 @@ if (packageJson.scripts.build === "svelte-kit build") {
 }
 
 const devDependencies = {
-  "@storybook/addon-actions": "^6.4.22",
-  "@storybook/addon-essentials": "^6.4.22",
-  "@storybook/addon-links": "^6.4.22",
-  "@storybook/addon-svelte-csf": "^2.0.2",
-  "@storybook/builder-vite": "^0.1.23",
-  "@storybook/svelte": "^6.4.22",
+  "@playwright/test": "^1.22.1",
+  "@storybook/addon-actions": "^6.5.3",
+  "@storybook/addon-essentials": "^6.5.3",
+  "@storybook/addon-links": "^6.5.3",
+  "@storybook/addon-svelte-csf": "^2.0.4",
+  "@storybook/builder-vite": "^0.1.35",
+  "@storybook/svelte": "^6.5.3",
   "@testing-library/svelte": "^3.1.0",
   jsdom: "^19.0.0",
   "vite-tsconfig-paths": "^3.4.1",
@@ -68,8 +73,55 @@ export default defineConfig({
   test: {
     global: true,
     environment: "jsdom",
-    exclude: [...configDefaults.exclude, "package"],
+    exclude: [...configDefaults.exclude, "package", "playwright"],
   },
+});
+`
+);
+await writeFile(
+  "playwright.config.ts",
+  `import type { PlaywrightTestConfig } from "@playwright/test";
+import { devices } from "@playwright/test";
+
+const baseURL = "http://localhost:3000";
+const CI = !!process.env.CI;
+const config: PlaywrightTestConfig = {
+  testDir: "./playwright/tests",
+  fullyParallel: true,
+  forbidOnly: CI,
+  // retries: CI ? 2 : 0,
+  // workers: CI ? 1 : undefined,
+  use: {
+    baseURL,
+    trace: "retain-on-failure",
+  },
+  webServer: {
+    command: "npm run build:sveltekit && npm run preview",
+    url: baseURL,
+    reuseExistingServer: true,
+  },
+  ...(CI
+    ? {
+        projects: [
+          { name: "Chrome", use: { ...devices["Desktop Chrome"] } },
+          { name: "Firefox", use: { ...devices["Desktop Firefox"] } },
+          { name: "Safari", use: { ...devices["Desktop Safari"] } },
+        ],
+      }
+    : {}),
+};
+
+export default config;
+`
+);
+await writeFile(
+  "playwright/tests/hello-world.spec.ts",
+  `import { test, expect } from "@playwright/test";
+
+test("hello world", async ({ page }) => {
+  await page.goto("http://localhost:3000/");
+  await page.locator("text=Hello world").click();
+  await expect(page.locator("text=Hello you")).toBeVisible();
 });
 `
 );

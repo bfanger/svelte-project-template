@@ -5,4 +5,5 @@ node_modules
 /package
 /functions
 /storybook-static
+/test-results
 .env
