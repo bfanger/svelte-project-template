@@ -45,7 +45,7 @@ const devDependencies = {
   "@testing-library/svelte": "^3.1.0",
   jsdom: "^19.0.0",
   "vite-tsconfig-paths": "^3.4.1",
-  vitest: "^0.12.4",
+  vitest: "^0.13.1",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
@@ -197,7 +197,10 @@ import Hallo from "./Hello.svelte";
  */
 describe("Hello component", () => {
   it("should render based on prop", async () => {
-    const { getByText, component } = render(Hallo, { name: "world" });
+    const { getByText, component } = render(
+      Hallo as any,
+      { name: "world" } as any
+    );
     const el = getByText("Hello world");
     expect(el.textContent).toBe("Hello world");
     component.$set({ name: "you" });
