@@ -52,9 +52,12 @@ for (const [dependency, version] of Object.entries(devDependencies)) {
     packageJson.devDependencies[dependency] || version;
 }
 
-await fs.stat(path.resolve(projectDir, ".storybook")).catch(() => {
-  return fs.mkdir(path.resolve(projectDir, ".storybook"));
-});
+for (const folder of [".storybook", "playwright", "playwright/tests"]) {
+  // eslint-disable-next-line no-await-in-loop
+  await fs.stat(path.resolve(projectDir, folder)).catch(() => {
+    return fs.mkdir(path.resolve(projectDir, folder));
+  });
+}
 
 async function writeFile(filename, body) {
   await fs.writeFile(path.resolve(projectDir, filename), body);
