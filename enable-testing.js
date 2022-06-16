@@ -45,7 +45,7 @@ const devDependencies = {
   "@testing-library/svelte": "^3.1.0",
   jsdom: "^19.0.0",
   "vite-tsconfig-paths": "^3.4.1",
-  vitest: "^0.13.1",
+  vitest: "^0.15.1",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
@@ -88,21 +88,31 @@ import { devices } from "@playwright/test";
 
 const baseURL = "http://localhost:3000";
 const CI = !!process.env.CI;
+const nodeVersion = parseInt(
+  (process.version.match(/v([0-9]+)\\./) as string[])[1],
+  10
+);
+// https://github.com/nodejs/node/issues/40702
+const webServer =
+  nodeVersion >= 17
+    ? undefined
+    : {
+        url: baseURL,
+        reuseExistingServer: true,
+        command: \`\${
+          process.platform === "darwin" ? "npm run build:sveltekit && " : ""
+        } node ./build/index.js\`,
+      };
+
 const config: PlaywrightTestConfig = {
   testDir: "./playwright/tests",
   fullyParallel: true,
   forbidOnly: CI,
-  // retries: CI ? 2 : 0,
-  // workers: CI ? 1 : undefined,
   use: {
     baseURL,
     trace: "retain-on-failure",
   },
-  webServer: {
-    command: "npm run build:sveltekit && npm run preview",
-    url: baseURL,
-    reuseExistingServer: true,
-  },
+  webServer,
   ...(CI
     ? {
         projects: [
@@ -122,7 +132,7 @@ await writeFile(
   `import { test, expect } from "@playwright/test";
 
 test("hello world", async ({ page }) => {
-  await page.goto("http://localhost:3000/");
+  await page.goto("http://localhost:3000/", { waitUntil: "load" });
   await page.locator("text=Hello world").click();
   await expect(page.locator("text=Hello you")).toBeVisible();
 });
@@ -258,5 +268,5 @@ describe("Hello component", () => {
   );
 }
 process.stdout.write(
-  "\n\nTo bring in the additional depencencies for Vitest & Storybook run:\n\nyarn install  # or npm install\n"
+  "\n\nTo bring in the additional depencencies for Vitest & Storybook run:\n\nyarn  # or npm install\n"
 );
