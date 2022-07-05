@@ -13,12 +13,11 @@ const envScript = `<script type="svelte/env">${JSON.stringify(
 )}</script>`;
 
 export const handle: Handle = async ({ event, resolve }) => {
-  const response = await resolve(event);
-  const body = await response.text();
-  return new Response(
-    body.replace('<script type="svelte/env"></script>', envScript),
-    response
-  );
+  return resolve(event, {
+    transformPage: ({ html }) => {
+      return html.replace('<script type="svelte/env"></script>', envScript);
+    },
+  });
 };
 
 export const externalFetch: ExternalFetch = async (request) => {
