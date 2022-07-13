@@ -40,12 +40,12 @@ const devDependencies = {
   "@storybook/addon-essentials": "^6.5.3",
   "@storybook/addon-links": "^6.5.3",
   "@storybook/addon-svelte-csf": "^2.0.4",
-  "@storybook/builder-vite": "^0.1.35",
+  "@storybook/builder-vite": "^0.2.0",
   "@storybook/svelte": "^6.5.3",
   "@testing-library/svelte": "^3.1.0",
-  jsdom: "^19.0.0",
+  "happy-dom": "^6.0.3",
   "vite-tsconfig-paths": "^3.4.1",
-  vitest: "^0.15.1",
+  vitest: "^0.18.0",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
@@ -67,15 +67,14 @@ async function writeFile(filename, body) {
 await writeFile("package.json", `${JSON.stringify(packageJson, null, 2)}\n`);
 await writeFile(
   "vitest.config.ts",
-  `// eslint-disable-next-line import/no-extraneous-dependencies
-import { svelte } from "@sveltejs/vite-plugin-svelte";
+  `import { sveltekit } from "@sveltejs/kit/vite";
 import { configDefaults, defineConfig } from "vitest/config";
 
 export default defineConfig({
-  plugins: [svelte({ hot: !process.env.VITEST })],
+  plugins: [sveltekit()],
   test: {
-    global: true,
-    environment: "jsdom",
+    globals: true,
+    environment: "happy-dom",
     exclude: [...configDefaults.exclude, "package", "playwright"],
   },
 });
@@ -86,7 +85,7 @@ await writeFile(
   `import type { PlaywrightTestConfig } from "@playwright/test";
 import { devices } from "@playwright/test";
 
-const baseURL = "http://localhost:3000";
+const baseURL = "http://localhost:5173";
 const CI = !!process.env.CI;
 const nodeVersion = parseInt(
   (process.version.match(/v([0-9]+)\\./) as string[])[1],
@@ -132,7 +131,7 @@ await writeFile(
   `import { test, expect } from "@playwright/test";
 
 test("hello world", async ({ page }) => {
-  await page.goto("http://localhost:3000/", { waitUntil: "load" });
+  await page.goto("http://localhost:5173/", { waitUntil: "networkidle" });
   await page.locator("text=Hello world").click();
   await expect(page.locator("text=Hello you")).toBeVisible();
 });
@@ -169,14 +168,14 @@ module.exports = {
 };
 `
 );
-const globalScssExists = await fs
-  .stat(path.resolve(projectDir, "src/global.scss"))
+const appScssExists = await fs
+  .stat(path.resolve(projectDir, "src/app.scss"))
   .catch(() => false);
 
-if (globalScssExists) {
+if (appScssExists) {
   await writeFile(
     ".storybook/preview.cjs",
-    `import "../src/global.scss";
+    `import "../src/app.scss";
 `
   );
 }

@@ -2,6 +2,6 @@
 
 <style lang="scss">
   :global {
-    @import "../global.scss";
+    @import "../app.scss";
   }
 </style>

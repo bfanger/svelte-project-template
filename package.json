@@ -12,7 +12,7 @@
     "lint:tsc": "tsc --noEmit",
     "lint:eslint": "eslint --ext=js,ts,svelte --max-warnings=0 src",
     "format": "prettier --write . && eslint --ext=js,ts,svelte --fix src",
-    "prepare": "husky install"
+    "prepare": "svelte-kit sync && husky install"
   },
   "prettier": "eslint-config-triple/.prettierrc",
   "lint-staged": {
@@ -56,7 +56,7 @@
     "svelte-check": "^2.7.2",
     "svelte-preprocess": "^4.10.6",
     "typescript": "^4.7.2",
-    "vite": "^2.9.9"
+    "vite": "^3.0.0"
   },
   "dependencies": {
     "dotenv": "^16.0.0"
