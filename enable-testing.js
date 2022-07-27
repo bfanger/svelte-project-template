@@ -10,9 +10,9 @@ const packageJson = JSON.parse(
 );
 
 const scripts = {
-  "dev:sveltekit": "svelte-kit dev",
+  "dev:vite": "vite dev",
   "dev:storybook": "start-storybook --modern --no-open --port 6006",
-  "build:sveltekit": "svelte-kit build",
+  "build:vite": "vite build",
   "build:storybook":
     "build-storybook --modern --output-dir build/styleguide-storybook",
   test: 'concurrently -c "#fcc72a","#45ba4b" --kill-others-on-fail "npm:test:*"',
@@ -25,11 +25,11 @@ const scripts = {
 for (const [task, command] of Object.entries(scripts)) {
   packageJson.scripts[task] = packageJson.scripts[task] || command;
 }
-if (packageJson.scripts.dev === "svelte-kit dev") {
+if (packageJson.scripts.dev === "vite dev") {
   packageJson.scripts.dev =
     'concurrently -c "#676778","#990f3f" --kill-others-on-fail "npm:dev:*"';
 }
-if (packageJson.scripts.build === "svelte-kit build") {
+if (packageJson.scripts.build === "vite build") {
   packageJson.scripts.build =
     "npm run build:sveltekit && npm run build:storybook";
 }
@@ -45,7 +45,7 @@ const devDependencies = {
   "@testing-library/svelte": "^3.1.0",
   "happy-dom": "^6.0.3",
   "vite-tsconfig-paths": "^3.4.1",
-  vitest: "^0.18.0",
+  vitest: "^0.19.1",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
@@ -85,33 +85,23 @@ await writeFile(
   `import type { PlaywrightTestConfig } from "@playwright/test";
 import { devices } from "@playwright/test";
 
-const baseURL = "http://localhost:5173";
 const CI = !!process.env.CI;
-const nodeVersion = parseInt(
-  (process.version.match(/v([0-9]+)\\./) as string[])[1],
-  10
-);
-// https://github.com/nodejs/node/issues/40702
-const webServer =
-  nodeVersion >= 17
-    ? undefined
-    : {
-        url: baseURL,
-        reuseExistingServer: true,
-        command: \`\${
-          process.platform === "darwin" ? "npm run build:sveltekit && " : ""
-        } node ./build/index.js\`,
-      };
 
 const config: PlaywrightTestConfig = {
   testDir: "./playwright/tests",
   fullyParallel: true,
   forbidOnly: CI,
   use: {
-    baseURL,
+    baseURL: "http://localhost:5173",
     trace: "retain-on-failure",
   },
-  webServer,
+  webServer: {
+    port: 5173,
+    reuseExistingServer: true,
+    command: \`\${
+      process.platform === "darwin" ? "npm run build:vite && " : ""
+    } npm run preview -- --port 5173\`,
+  },
   ...(CI
     ? {
         projects: [
