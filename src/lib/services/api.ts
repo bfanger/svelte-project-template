@@ -139,9 +139,10 @@ export function getCacheConfig(
   response: ApiResponse | unknown
 ): LoadOutputCache | undefined {
   const cacheControl = getHeader(response, "Cache-Control");
-  const match = cacheControl && cacheControl.match(/^max-age=([0-9]+)/);
+  const match = cacheControl && cacheControl.match(/max-age=([0-9]+)/);
+  const isPrivate = !!cacheControl && /private/.test(cacheControl);
   if (match) {
-    return { maxage: parseInt(match[1], 10) };
+    return { private: isPrivate, maxage: parseInt(match[1], 10) };
   }
   return undefined;
 }

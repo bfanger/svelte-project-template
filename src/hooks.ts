@@ -14,7 +14,7 @@ const envScript = `<script type="svelte/env">${JSON.stringify(
 
 export const handle: Handle = async ({ event, resolve }) => {
   return resolve(event, {
-    transformPage: ({ html }) => {
+    transformPageChunk: ({ html }) => {
       return html.replace('<script type="svelte/env"></script>', envScript);
     },
   });
