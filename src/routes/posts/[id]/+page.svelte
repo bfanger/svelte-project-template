@@ -1,29 +1,10 @@
-<script lang="ts" context="module">
-  import type { Load } from "@sveltejs/kit";
-  import api, { getCacheConfig, loadError } from "$lib/services/api";
-
-  export const load: Load = async ({ fetch, params }) => {
-    try {
-      const { id } = params;
-      const post = await api.get("posts/[id]", {
-        params: { id },
-        ssrCache: 30,
-        fetch,
-      });
-      return {
-        cache: getCacheConfig(post),
-        props: { id: post.id, title: post.title, body: post.body },
-      };
-    } catch (err) {
-      return loadError(err);
-    }
-  };
-</script>
-
 <script lang="ts">
-  export let id: number;
-  export let title: string;
-  export let body: string;
+  import type { PageData } from "./$types";
+
+  export let data: PageData;
+  $: id = data.id;
+  $: title = data.title;
+  $: body = data.body;
 </script>
 
 <svelte:head>
@@ -34,7 +15,7 @@
   <a href="/">&lt; Home</a>
   <article>
     <h1>{title}</h1>
-    <p>{body}</p>
+    <p>{body}LoadError</p>
   </article>
   <div class="pager">
     {#if id > 1}

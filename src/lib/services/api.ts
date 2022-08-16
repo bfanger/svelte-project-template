@@ -4,7 +4,8 @@
  * The responses of the api methods contain the data direcly but also have a hidden property.
  * This allows access to the headers and http status of the response using the helper methods.
  */
-import type { Load, LoadOutputCache } from "@sveltejs/kit";
+import type { ResponseHeaders } from "@sveltejs/kit/types/private";
+import { error } from "@sveltejs/kit";
 import env from "./env";
 import buildUrl from "./buildUrl";
 import type {
@@ -57,11 +58,11 @@ async function wrapped(
     );
   }
   if (!response.ok) {
-    const error = new Error(
+    const err = new Error(
       `${method} ${url} failed: ${response.status} ${response.statusText}`
     ) as ApiResponse<Error>;
-    error[responseSymbol] = response;
-    throw error;
+    err[responseSymbol] = response;
+    throw err;
   }
   const data = await response.json();
   if (config.signal && config.signal.aborted) {
@@ -135,34 +136,34 @@ export function getHeader(
   return undefined;
 }
 
-export function getCacheConfig(
-  response: ApiResponse | unknown
-): LoadOutputCache | undefined {
+export function repeatCacheHeaders(
+  response: ApiResponse | unknown,
+  setHeaders: (headers: ResponseHeaders) => void
+) {
   const cacheControl = getHeader(response, "Cache-Control");
-  const match = cacheControl && cacheControl.match(/max-age=([0-9]+)/);
-  const isPrivate = !!cacheControl && /private/.test(cacheControl);
-  if (match) {
-    return { private: isPrivate, maxage: parseInt(match[1], 10) };
+  if (cacheControl) {
+    setHeaders({
+      "Cache-Control": cacheControl,
+    });
   }
-  return undefined;
 }
 
 /**
  * Report the error message and generate a load response that will go the the __error.svelte route.
  */
-export function loadError(err: Error | unknown): ReturnType<Load> {
-  const error = err as Error;
+export function withErrorStatus(err: Error | unknown) {
+  const typedError = err as Error;
   const code = getStatus(err);
   if (code === undefined) {
-    console.error(error);
+    console.error(typedError);
   } else {
-    const clean = new Error(error.message || "load error");
-    clean.stack = error.stack;
-    clean.name = error.name;
+    const clean = new Error(typedError.message || "load error");
+    clean.stack = typedError.stack;
+    clean.name = typedError.name;
     console.error(clean);
   }
-  return {
-    status: code && code > 400 ? code : 500,
-    error: error || "load error",
-  };
+  if (code && code > 400) {
+    return error(code, typedError.message);
+  }
+  return typedError;
 }

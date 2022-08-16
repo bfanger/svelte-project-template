@@ -5,7 +5,7 @@
  *
  * @link https://www.robotstxt.org/robotstxt.html
  */
-export const get = () => {
+export const GET = () => {
   let allow = true;
   const robotstxt = process.env.ROBOTSTXT;
   if (robotstxt === "noindex") {
@@ -14,9 +14,7 @@ export const get = () => {
     console.warn("Invalid ROBOTSTXT env, expecting 'noindex' or 'index'");
   }
 
-  return {
-    body: `User-agent: *
+  return new Response(`User-agent: *
 Disallow:${allow ? "" : " /"}
-`,
-  };
+`);
 };
