@@ -50,7 +50,15 @@ async function wrapped(
   init.method = method;
   const url = endpoint + buildUrl(path, params);
   const start = Date.now();
-  const response = await fetch(url, init);
+  let response: Response;
+  try {
+    response = await fetch(url, init);
+  } catch (err: any) {
+    if (err.message) {
+      throw new Error(`${method} ${url} failed: ${err.message}`);
+    }
+    throw err;
+  }
   const duration = (Date.now() - start) / 1000;
   if (duration > 1) {
     console.info(
