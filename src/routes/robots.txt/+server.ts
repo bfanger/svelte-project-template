@@ -1,4 +1,5 @@
-/* eslint-disable import/prefer-default-export */
+// Remove prerender when switching to the adapter-node (SSR)
+export const prerender = true;
 
 /**
  * Enable or disable indexing of the site.
