@@ -136,9 +136,13 @@ export function getHeader(
 ): string | undefined {
   const response = getResponse(dataOrError);
   if (response) {
-    const value = response.headers.get(name);
-    if (value !== null) {
-      return value;
+    try {
+      const value = response.headers.get(name);
+      if (value !== null) {
+        return value;
+      }
+    } catch (_) {
+      // ignore
     }
   }
   return undefined;

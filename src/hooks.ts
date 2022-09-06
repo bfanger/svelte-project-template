@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import type { ExternalFetch, Handle } from "@sveltejs/kit";
+import type { Handle, HandleFetch } from "@sveltejs/kit";
 import cache from "$lib/services/cache";
 
 dotenv.config();
@@ -20,7 +20,7 @@ export const handle: Handle = async ({ event, resolve }) => {
   });
 };
 
-export const externalFetch: ExternalFetch = async (request) => {
+export const handleFetch: HandleFetch = async ({ request }) => {
   if (request.headers.has("Svelte-Cache") === false) {
     return fetch(request);
   }
