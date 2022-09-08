@@ -4,7 +4,6 @@
  * The responses of the api methods contain the data direcly but also have a hidden property.
  * This allows access to the headers and http status of the response using the helper methods.
  */
-import type { ResponseHeaders } from "@sveltejs/kit/types/private";
 import { error } from "@sveltejs/kit";
 import env from "./env";
 import buildUrl from "./buildUrl";
@@ -150,7 +149,7 @@ export function getHeader(
 
 export function repeatCacheHeaders(
   response: ApiResponse | unknown,
-  setHeaders: (headers: ResponseHeaders) => void
+  setHeaders: (headers: Record<string, string>) => void
 ) {
   const cacheControl = getHeader(response, "Cache-Control");
   if (cacheControl) {
