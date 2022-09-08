@@ -1,26 +1,9 @@
-import dotenv from "dotenv";
-import type { Handle, HandleFetch } from "@sveltejs/kit";
+/* eslint-disable import/prefer-default-export */
+import type { HandleFetch } from "@sveltejs/kit";
 import cache from "$lib/services/cache";
 
-dotenv.config();
-
-const envScript = `<script type="svelte/env">${JSON.stringify(
-  Object.fromEntries(
-    Object.entries(process.env).filter(([key]) =>
-      key.startsWith("SVELTE_PUBLIC_")
-    )
-  )
-)}</script>`;
-
-export const handle: Handle = async ({ event, resolve }) => {
-  return resolve(event, {
-    transformPageChunk: ({ html }) => {
-      return html.replace('<script type="svelte/env"></script>', envScript);
-    },
-  });
-};
-
-export const handleFetch: HandleFetch = async ({ request }) => {
+export const handleFetch: HandleFetch = async ({ request, fetch, event }) => {
+  request.headers.set("origin", event.url.origin);
   if (request.headers.has("Svelte-Cache") === false) {
     return fetch(request);
   }

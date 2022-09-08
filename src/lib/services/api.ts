@@ -5,7 +5,7 @@
  * This allows access to the headers and http status of the response using the helper methods.
  */
 import { error } from "@sveltejs/kit";
-import env from "./env";
+import { env } from "$env/dynamic/public";
 import buildUrl from "./buildUrl";
 import type {
   ApiGetResponse,
@@ -13,7 +13,7 @@ import type {
 } from "./api-types-jsonplaceholder";
 
 const endpoint =
-  env.SVELTE_PUBLIC_API_ENDPOINT ?? "https://jsonplaceholder.typicode.com/";
+  env.PUBLIC_API_ENDPOINT ?? "https://jsonplaceholder.typicode.com/";
 
 export type Fetch = (
   info: RequestInfo,

@@ -1,3 +1,5 @@
+import { env } from "$env/dynamic/private";
+
 // Remove prerender when switching to the adapter-node (SSR)
 export const prerender = true;
 
@@ -8,7 +10,7 @@ export const prerender = true;
  */
 export const GET = () => {
   let allow = true;
-  const robotstxt = process.env.ROBOTSTXT;
+  const robotstxt = env.ROBOTSTXT;
   if (robotstxt === "noindex") {
     allow = false;
   } else if (robotstxt !== "index") {
