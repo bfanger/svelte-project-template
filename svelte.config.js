@@ -7,4 +7,9 @@ export default {
   kit: {
     adapter: adapter(),
   },
+  vitePlugin: {
+    experimental: {
+      inspector: true,
+    },
+  },
 };
