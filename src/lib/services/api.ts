@@ -65,7 +65,8 @@ async function wrapped(
     );
   }
   if (!response.ok) {
-    const err = new Error(
+    const err = error(
+      response.status,
       `${method} ${url} failed: ${response.status} ${response.statusText}`
     ) as ApiResponse<Error>;
     err[responseSymbol] = response;
@@ -135,46 +136,10 @@ export function getHeader(
 ): string | undefined {
   const response = getResponse(dataOrError);
   if (response) {
-    try {
-      const value = response.headers.get(name);
-      if (value !== null) {
-        return value;
-      }
-    } catch (_) {
-      // ignore
+    const value = response.headers.get(name);
+    if (value !== null) {
+      return value;
     }
   }
   return undefined;
-}
-
-export function repeatCacheHeaders(
-  response: ApiResponse | unknown,
-  setHeaders: (headers: Record<string, string>) => void
-) {
-  const cacheControl = getHeader(response, "Cache-Control");
-  if (cacheControl) {
-    setHeaders({
-      "Cache-Control": cacheControl,
-    });
-  }
-}
-
-/**
- * Report the error message and generate a load response that will go the the __error.svelte route.
- */
-export function withErrorStatus(err: Error | unknown) {
-  const typedError = err as Error;
-  const code = getStatus(err);
-  if (code === undefined) {
-    console.error(typedError);
-  } else {
-    const clean = new Error(typedError.message || "load error");
-    clean.stack = typedError.stack;
-    clean.name = typedError.name;
-    console.error(clean);
-  }
-  if (code && code > 400) {
-    return error(code, typedError.message);
-  }
-  return typedError;
 }
