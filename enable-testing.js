@@ -30,8 +30,7 @@ if (packageJson.scripts.dev === "vite dev") {
     'concurrently -c "#676778","#990f3f" --kill-others-on-fail "npm:dev:*"';
 }
 if (packageJson.scripts.build === "vite build") {
-  packageJson.scripts.build =
-    "npm run build:sveltekit && npm run build:storybook";
+  packageJson.scripts.build = "npm run build:vite && npm run build:storybook";
 }
 
 const devDependencies = {

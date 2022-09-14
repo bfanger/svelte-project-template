@@ -15,7 +15,7 @@
   <a href="/">&lt; Home</a>
   <article>
     <h1>{title}</h1>
-    <p>{body}LoadError</p>
+    <p>{body}</p>
   </article>
   <div class="pager">
     {#if id > 1}
