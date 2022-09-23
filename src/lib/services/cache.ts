@@ -5,7 +5,7 @@ const timers: {
 } = { ttl: {}, timedout: {} };
 
 /**
- * In memory caching helper
+ * An in-memory caching helper
  *
  * @param key globally unique key
  * @param ttl Time to Live in sec. Determines how long the promise remains in the cache after resolving

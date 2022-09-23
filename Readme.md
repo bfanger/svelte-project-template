@@ -4,7 +4,7 @@
 
 - [SvelteKit](https://kit.svelte.dev/) ([Vite](https://vitejs.dev/))
 - [Typescript](http://typescriptlang.org/)
-- [Sass](https://sass-lang.com/) & [Autoprefixer](https://github.com/postcss/autoprefixer)
+- [Sass](https://sass-lang.com/) & [PostCSS Preset Env](https://github.com/csstools/postcss-plugins/tree/main/plugin-packs/postcss-preset-env) ( which includes [Autoprefixer](https://github.com/postcss/autoprefixer))
 - [Prettier](https://prettier.io/) & [Eslint](https://eslint.org/)
 - [Husky](https://typicode.github.io/husky/) & [Lint-staged](https://github.com/okonet/lint-staged)
 - [Vitest](https://vitest.dev/) \*1
@@ -34,7 +34,7 @@ yarn  # or  npm install
 - Creates an example unittest
 - Creates an example e2e test
 - Creates an example storybook story
-- Number of folders inside node_modules goes from ~279 to ~964.
+- Number of folders inside node_modules grows from ~347 to ~967.
 
 ## Linting
 
@@ -45,6 +45,6 @@ yarn lint  # or  npm run lint
 ## Build
 
 ```sh
-yarn build  # or  npm run build
-npx serve -s build
+yarn build             # or  npm run build
+npx serve@latest build # or  yarn preview
 ```
