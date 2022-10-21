@@ -2,7 +2,7 @@
   export let name: string;
 </script>
 
-<h1 class="hello" on:click>Hello {name}</h1>
+<h1 class="hello" on:click on:keydown>Hello {name}</h1>
 
 <style lang="scss">
   .hello {

@@ -5,12 +5,12 @@
  * This allows access to the headers and http status of the response using the helper methods.
  */
 import { error } from "@sveltejs/kit";
-import { env } from "$env/dynamic/public";
 import buildUrl from "./buildUrl";
 import type {
   ApiGetResponse,
   ApiPostResponse,
 } from "./api-types-jsonplaceholder";
+import { env } from "$env/dynamic/public";
 
 const endpoint =
   env.PUBLIC_API_ENDPOINT ?? "https://jsonplaceholder.typicode.com/";
