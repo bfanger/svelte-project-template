@@ -1,8 +1,7 @@
-let storage: Record<string, Promise<any>> = {};
-const timers: {
-  ttl: Record<string, ReturnType<typeof setTimeout>>;
-  timedout: Record<string, ReturnType<typeof setTimeout>>;
-} = { ttl: {}, timedout: {} };
+type Timer = ReturnType<typeof setTimeout>;
+const promises = new Map<string, Promise<any>>();
+const ttlTimers = new Map<string, Timer>();
+const timedOutTimers = new Map<string, Timer>();
 
 /**
  * An in-memory caching helper
@@ -25,57 +24,63 @@ export default async function cache<T>(
   factory: () => Promise<T>,
   timeout = 5
 ): Promise<T> {
-  const cacheHit = storage[key] as Promise<T> | undefined;
+  const cacheHit = promises.get(key) as Promise<T> | undefined;
   if (cacheHit) {
     return cacheHit;
   }
   const entry = factory();
-  storage[key] = entry;
-  timers.timedout[key] = setTimeout(() => {
-    if (storage[key] === entry) {
-      flush(key);
-    }
-  }, timeout * 1000);
+  promises.set(key, entry);
+  clearTimeout(timedOutTimers.get(key));
+  timedOutTimers.set(
+    key,
+    setTimeout(() => {
+      if (promises.get(key) === entry) {
+        flush(key);
+      }
+    }, timeout * 1000)
+  );
   return entry
     .then((response) => {
-      if (storage[key] === entry || typeof storage[key] === "undefined") {
-        clearTimeout(timers.timedout[key]);
+      if (!promises.has(key) || promises.get(key) === entry) {
+        clearTimeout(timedOutTimers.get(key));
+        timedOutTimers.delete(key);
         const duration = typeof ttl === "number" ? ttl : ttl(response);
-        delete timers.timedout[key];
-        timers.ttl[key] = setTimeout(() => {
-          if (storage[key] === entry) {
-            flush(key);
-          }
-        }, duration * 1000);
+        clearTimeout(ttlTimers.get(key));
+        ttlTimers.set(
+          key,
+          setTimeout(() => {
+            if (promises.get(key) === entry) {
+              flush(key);
+            }
+          }, duration * 1000)
+        );
       }
       return response;
     })
     .catch((err) => {
-      if (storage[key] === entry) {
+      if (promises.get(key) === entry) {
         flush(key);
       }
       throw err;
     });
 }
 /**
- * Clear the cached promise for a spefic key
+ * Clear the cached promise for a specific key
  */
-function flush(key: string) {
-  delete storage[key];
-  clearInterval(timers.timedout[key]);
-  delete timers.timedout[key];
-  clearInterval(timers.ttl[key]);
-  delete timers.ttl[key];
+export function flush(key: string) {
+  promises.delete(key);
+  clearTimeout(timedOutTimers.get(key));
+  timedOutTimers.delete(key);
+  clearTimeout(ttlTimers.get(key));
+  ttlTimers.delete(key);
 }
 /**
  * Clear all cached values
  */
-function flushAll() {
-  storage = {};
-  Object.values(timers.timedout).forEach(clearTimeout);
-  timers.timedout = {};
-  Object.values(timers.ttl).forEach(clearTimeout);
-  timers.ttl = {};
+export function flushAll() {
+  promises.clear();
+  timedOutTimers.forEach(clearTimeout);
+  timedOutTimers.clear();
+  ttlTimers.forEach(clearTimeout);
+  ttlTimers.clear();
 }
-cache.flush = flush;
-cache.flushAll = flushAll;
