@@ -8,6 +8,7 @@ import { error } from "@sveltejs/kit";
 import buildUrl from "./buildUrl";
 import type {
   ApiGetResponse,
+  ApiPostRequest,
   ApiPostResponse,
 } from "./api-types-jsonplaceholder";
 import { env } from "$env/dynamic/public";
@@ -94,9 +95,9 @@ const api = {
   ): Promise<ApiResponse<ApiGetResponse[T]>> {
     return wrapped("GET", path, config || {});
   },
-  async post<T extends keyof ApiPostResponse>(
+  async post<T extends keyof ApiPostRequest & keyof ApiPostResponse>(
     path: T,
-    data: unknown,
+    data: ApiPostRequest[T],
     config?: Config
   ): Promise<ApiResponse<ApiPostResponse[T]>> {
     return wrapped("POST", path, {

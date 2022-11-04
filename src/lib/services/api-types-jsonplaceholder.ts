@@ -7,7 +7,9 @@ export type ApiGetResponse = {
   "posts/[id]/comments": CommentDto[];
   "user/[id]/todos": TodoDto[];
 };
-
+export type ApiPostRequest = {
+  posts: CreatePostRequest;
+};
 export type ApiPostResponse = {
   posts: PostDto;
 };
@@ -19,6 +21,7 @@ type PostDto = {
   title: string;
   body: string;
 };
+type CreatePostRequest = Omit<PostDto, "id">;
 
 // https://jsonplaceholder.typicode.com/user/1/todos
 type TodoDto = {
