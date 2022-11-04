@@ -1,7 +1,7 @@
 /**
  * Typed api wrapper with injectable fetch for SSR
  *
- * The responses of the api methods contain the data direcly but also have a hidden property.
+ * The responses of the api methods contain the data directly but also have a hidden property.
  * This allows access to the headers and http status of the response using the helper methods.
  */
 import { error } from "@sveltejs/kit";
@@ -44,7 +44,7 @@ async function wrapped(
   }
   if (ssrCache && typeof window === "undefined") {
     init.headers = new Headers(init.headers);
-    init.headers.append("Svelte-Cache", `${ssrCache}`);
+    init.headers.append("SSR-Cache", `${ssrCache}`);
   }
   init.method = method;
   const url = endpoint + buildUrl(path, params);
@@ -72,13 +72,21 @@ async function wrapped(
     err[responseSymbol] = response;
     throw err;
   }
-  const data = await response.json();
+  let data = {
+    __: "Missing `Content-Type: application/json`",
+  } as ApiResponse<any>;
+  if (response.headers.get("Content-Type")?.startsWith("application/json")) {
+    data = await response.json();
+  }
   if (config.signal && config.signal.aborted) {
     throw new Error("Aborted");
   }
-  data[responseSymbol] = response;
+  if (typeof data === "object" && data !== null) {
+    data[responseSymbol] = response;
+  }
   return data;
 }
+
 const api = {
   get<T extends keyof ApiGetResponse>(
     path: T,

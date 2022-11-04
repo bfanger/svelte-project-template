@@ -1,14 +1,20 @@
 /* eslint-disable import/prefer-default-export */
-import type { HandleFetch } from "@sveltejs/kit";
+import type { Handle, HandleFetch } from "@sveltejs/kit";
 import cache from "$lib/services/cache";
+
+const headerWhitelist = ["content-type", "access-control-allow-origin"];
+export const handle: Handle = ({ event, resolve }) =>
+  resolve(event, {
+    filterSerializedResponseHeaders: (name) => headerWhitelist.includes(name),
+  });
 
 export const handleFetch: HandleFetch = async ({ request, fetch, event }) => {
   request.headers.set("origin", event.url.origin);
-  if (request.headers.has("Svelte-Cache") === false) {
+  if (request.headers.has("SSR-Cache") === false) {
     return fetch(request);
   }
-  const ttl = parseInt(request.headers.get("Svelte-Cache") as string, 10);
-  request.headers.delete("Svelte-Cache");
+  const ttl = parseInt(request.headers.get("SSR-Cache") as string, 10);
+  request.headers.delete("SSR-Cache");
 
   return cache(
     keyFromRequest(request),
@@ -19,11 +25,9 @@ export const handleFetch: HandleFetch = async ({ request, fetch, event }) => {
 
 function keyFromRequest(request: Request) {
   if (request.method !== "GET") {
-    throw new Error(
-      `Svelte-Cache not supported for ${request.method} requests`
-    );
+    throw new Error(`SSR-Cache not supported for ${request.method} requests`);
   }
-  return `Svelte-Cache_${request.url}`;
+  return `SSR-Cache_${request.url}`;
 }
 
 /**

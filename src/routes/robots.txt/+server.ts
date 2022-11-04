@@ -10,11 +10,11 @@ export const prerender = true;
  */
 export const GET = () => {
   let allow = true;
-  const robotstxt = env.ROBOTSTXT;
-  if (robotstxt === "noindex") {
+  const robotsTxt = env.ROBOTS_TXT;
+  if (robotsTxt === "noindex") {
     allow = false;
-  } else if (robotstxt !== "index") {
-    console.warn("Invalid ROBOTSTXT env, expecting 'noindex' or 'index'");
+  } else if (robotsTxt !== "index") {
+    console.warn("Invalid ROBOTS_TXT env, expecting 'noindex' or 'index'");
   }
 
   return new Response(`User-agent: *
