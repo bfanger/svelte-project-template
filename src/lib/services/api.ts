@@ -4,7 +4,7 @@
  * The responses of the api methods contain the data directly but also have a hidden property.
  * This allows access to the headers and http status of the response using the helper methods.
  */
-import { error } from "@sveltejs/kit";
+import { error, type HttpError } from "@sveltejs/kit";
 import buildUrl from "./buildUrl";
 import type {
   ApiGetResponse,
@@ -69,8 +69,9 @@ async function wrapped(
     const err = error(
       response.status,
       `${method} ${url} failed: ${response.status} ${response.statusText}`
-    ) as ApiResponse<Error>;
+    ) as ApiResponse<HttpError>;
     err[responseSymbol] = response;
+    // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw err;
   }
   let data = {
