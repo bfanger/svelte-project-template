@@ -14,7 +14,6 @@
     "format": "prettier --write . && eslint --ext=js,ts,svelte --fix src",
     "prepare": "husky install"
   },
-  "prettier": "eslint-config-triple/.prettierrc",
   "lint-staged": {
     "*.ts": [
       "eslint --max-warnings 0 --no-ignore",
