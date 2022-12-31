@@ -44,7 +44,7 @@ const devDependencies = {
   "@testing-library/svelte": "^3.1.0",
   "happy-dom": "^8.1.0",
   "vite-tsconfig-paths": "^4.0.3",
-  vitest: "^0.25.8",
+  vitest: "^0.26.2",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =

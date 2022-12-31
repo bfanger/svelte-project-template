@@ -19,15 +19,15 @@
 npx degit "github.com/bfanger/svelte-project-template#main" my-svelte-project
 cd my-svelte-project
 git init && git add .
-yarn             # or  npm install
-yarn dev --open  # or  npm run dev -- --open
+pnpm install     # or  npm install
+pnpm dev --open  # or  npm run dev -- --open
 ```
 
 ## Enabling Testing & Storybook
 
 ```sh
 node ./enable-testing.js
-yarn  # or  npm install
+pnpm install  # or  npm install
 ```
 
 - Creates the configuration files
@@ -39,12 +39,12 @@ yarn  # or  npm install
 ## Linting
 
 ```sh
-yarn lint  # or  npm run lint
+pnpm lint  # or  npm run lint
 ```
 
 ## Build
 
 ```sh
-yarn build             # or  npm run build
-npx serve@latest build # or  yarn preview
+pnpm build             # or  npm run build
+npx serve@latest build # or  npm run preview
 ```
