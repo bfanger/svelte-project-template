@@ -10,7 +10,7 @@ specifiers:
   eslint-config-airbnb-base: ^15.0.0
   eslint-config-airbnb-typescript: ^17.0.0
   eslint-config-prettier: ^8.6.0
-  eslint-config-triple: ^0.5.6
+  eslint-config-triple: ^0.5.7
   eslint-import-resolver-typescript: ^3.5.3
   eslint-plugin-import: ^2.27.5
   eslint-plugin-only-warn: ^1.1.0
@@ -39,7 +39,7 @@ devDependencies:
   eslint-config-airbnb-base: 15.0.0_ps7hf4l2dvbuxvtusmrfhmzsba
   eslint-config-airbnb-typescript: 17.0.0_4uspdq5wyqa45em4fomihl4hbu
   eslint-config-prettier: 8.6.0_eslint@8.32.0
-  eslint-config-triple: 0.5.6_jcuqneepuxuktwndbozl5tnp4m
+  eslint-config-triple: 0.5.7_jcuqneepuxuktwndbozl5tnp4m
   eslint-import-resolver-typescript: 3.5.3_ps7hf4l2dvbuxvtusmrfhmzsba
   eslint-plugin-import: 2.27.5_bzolr7xl6xcwr64wsu2tr4eimm
   eslint-plugin-only-warn: 1.1.0
@@ -1322,8 +1322,8 @@ packages:
       eslint: 8.32.0
     dev: true
 
-  /eslint-config-triple/0.5.6_jcuqneepuxuktwndbozl5tnp4m:
-    resolution: {integrity: sha512-8j0+ot7VbumCdMSkk8K6UxsVPPSB4deq/MDh46RPeXHLPrBXsaWkWGOgmO/8WpfjpOMcAh50HYT6zUnb2qvBsw==}
+  /eslint-config-triple/0.5.7_jcuqneepuxuktwndbozl5tnp4m:
+    resolution: {integrity: sha512-z2KAInhO05zu0s0/CkQfDwSqM0YxeeAUSU7D0BVPP4v574imhMx7o6vAktFyehQq2Rdo9NpJYyzdyfiefyEcxA==}
     peerDependencies:
       '@typescript-eslint/eslint-plugin': '*'
       '@typescript-eslint/parser': '*'
