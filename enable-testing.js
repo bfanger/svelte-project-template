@@ -11,10 +11,9 @@ const packageJson = JSON.parse(
 
 const scripts = {
   "dev:vite": "vite dev",
-  "dev:storybook": "start-storybook --modern --no-open --port 6006",
+  "dev:storybook": "storybook dev -p 6006 --no-open",
   "build:vite": "vite build",
-  "build:storybook":
-    "build-storybook --modern --output-dir build/styleguide-storybook",
+  "build:storybook": "storybook build --output-dir build/styleguide-storybook",
   test: 'concurrently -c "#fcc72a","#45ba4b" --kill-others-on-fail "npm:test:*"',
   "test:vitest": "vitest run --passWithNoTests",
   "test:playwright": "playwright test",
@@ -27,24 +26,27 @@ for (const [task, command] of Object.entries(scripts)) {
 }
 if (packageJson.scripts.dev === "vite dev") {
   packageJson.scripts.dev =
-    'concurrently -c "#676778","#990f3f" --kill-others-on-fail "npm:dev:*"';
+    'concurrently -c "#747bff","#990f3f" --kill-others-on-fail "npm:dev:*"';
 }
 if (packageJson.scripts.build === "vite build") {
   packageJson.scripts.build = "npm run build:vite && npm run build:storybook";
 }
 
 const devDependencies = {
-  "@playwright/test": "^1.22.1",
-  "@storybook/addon-actions": "^6.5.3",
-  "@storybook/addon-essentials": "^6.5.3",
-  "@storybook/addon-links": "^6.5.3",
-  "@storybook/addon-svelte-csf": "^2.0.4",
-  "@storybook/builder-vite": "^0.2.0",
-  "@storybook/svelte": "^6.5.3",
-  "@testing-library/svelte": "^3.1.0",
+  "@faker-js/faker": "^7.6.0",
+  "@playwright/test": "^1.31.1",
+  "@storybook/addon-essentials": "next",
+  "@storybook/addon-interactions": "next",
+  "@storybook/addon-links": "next",
+  "@storybook/blocks": "7.0.0-alpha.8",
+  "@storybook/svelte": "next",
+  "@storybook/sveltekit": "next",
+  "@storybook/testing-library": "^0.0.13",
+  "@testing-library/svelte": "^3.2.2",
   "happy-dom": "^8.1.0",
-  "vite-tsconfig-paths": "^4.0.3",
-  vitest: "^0.26.2",
+  react: "^18.2.0",
+  "react-dom": "^18.2.0",
+  vitest: "^0.29.1",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
@@ -127,34 +129,28 @@ test("hello world", async ({ page }) => {
 `
 );
 await writeFile(
-  ".storybook/main.cjs",
-  `const path = require("path");
-const preprocess = require("svelte-preprocess");
-const { default: tsconfigPaths } = require("vite-tsconfig-paths");
-
-module.exports = {
-  core: { builder: "@storybook/builder-vite" },
-  stories: ["../src/**/*.stories.mdx", "../src/**/*.stories.@(ts|svelte)"],
+  ".storybook/main.ts",
+  `import type { StorybookConfig } from "@storybook/sveltekit";
+const config: StorybookConfig = {
+  stories: ["../src/**/*.stories.ts"],
   addons: [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
-    "@storybook/addon-svelte-csf",
+    "@storybook/addon-interactions",
   ],
-  staticDirs: ["../static"],
-  svelteOptions: {
-    preprocess: preprocess({ sourceMap: true }),
-  },
-  viteFinal(config) {
-    /* eslint-disable no-param-reassign */
-    config.base = "";
-    config.resolve.alias = config.resolve.alias || {};
-    config.resolve.alias.$lib = path.resolve(__dirname, "../src/lib");
-    config.plugins.push(tsconfigPaths());
-    config.build = config.build || {};
-    config.build.chunkSizeWarningLimit = 1000;
-    return config;
+  framework: {
+    name: "@storybook/sveltekit",
+    options: {},
   },
 };
+export default config;
+`
+);
+await writeFile(
+  ".storybook/preview-head.html",
+  `<script>
+  window.global = window;
+</script>
 `
 );
 const appScssExists = await fs
@@ -163,7 +159,7 @@ const appScssExists = await fs
 
 if (appScssExists) {
   await writeFile(
-    ".storybook/preview.cjs",
+    ".storybook/preview.ts",
     `import "../src/app.scss";
 `
   );
@@ -220,41 +216,31 @@ describe("Hello component", () => {
 `
   );
   await writeFile(
-    "src/lib/components/Hello/Hello.stories.svelte",
-    `<script lang="ts">
-  import { Meta, Template, Story } from "@storybook/addon-svelte-csf";
-  import Hello from "./Hello.svelte";
-</script>
+    "src/lib/components/Hello/Hello.stories.ts",
+    `import { faker } from "@faker-js/faker/locale/nl";
+import Hello from "./Hello.svelte";
 
-<Meta
-  title="Example/Hello"
-  component={Hello}
-  argTypes={{
+export default {
+  title: "Example/Hello",
+  component: Hello,
+  argTypes: {
     name: { control: "text" },
-    click: { action: "click" },
-  }}
-/>
+  },
+};
 
-<Template let:args>
-  <Hello name={args.name} on:click={args.click} />
-</Template>
-
-<Story
-  name="Wereld"
-  args={{
-    name: "wereld",
-  }}
-/>
-
-<Story
-  name="World"
-  args={{
+export const Random = {
+  args: {
+    name: faker.name.firstName(),
+  },
+};
+export const World = {
+  args: {
     name: "world",
-  }}
-/>
+  },
+};
 `
   );
 }
 process.stdout.write(
-  "\n\nTo bring in the additional depencencies for Vitest & Storybook run:\n\nyarn  # or npm install\n"
+  "\n\nTo bring in the additional depencencies for Vitest & Storybook run:\n\npnpm install  # or npm install\n"
 );
