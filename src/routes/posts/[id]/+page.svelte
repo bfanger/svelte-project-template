@@ -2,9 +2,7 @@
   import type { PageData } from "./$types";
 
   export let data: PageData;
-  $: id = data.id;
-  $: title = data.title;
-  $: body = data.body;
+  $: ({ id, title, body } = data.post);
 </script>
 
 <svelte:head>

@@ -27,7 +27,7 @@ function keyFromRequest(request: Request) {
   if (request.method !== "GET") {
     throw new Error(`SSR-Cache not supported for ${request.method} requests`);
   }
-  return `SSR-Cache_${request.url}`;
+  return `SSR-Cache_${request.url}\n${request.headers.get("origin")}}`;
 }
 
 /**
