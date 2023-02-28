@@ -1,3 +1,4 @@
+import { execSync } from "node:child_process";
 import adapter from "@sveltejs/adapter-static";
 import { vitePreprocess } from "@sveltejs/kit/vite";
 
@@ -6,6 +7,7 @@ export default {
   preprocess: vitePreprocess(),
   kit: {
     adapter: adapter(),
+    version: { name: execSync("git rev-parse HEAD").toString().trim() },
   },
   vitePlugin: {
     experimental: {
