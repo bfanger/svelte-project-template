@@ -47,6 +47,7 @@ const devDependencies = {
   react: "^18.2.0",
   "react-dom": "^18.2.0",
   vitest: "^0.29.1",
+  storybook: "next",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
