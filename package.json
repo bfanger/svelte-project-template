@@ -6,26 +6,21 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "concurrently -c \"#c596c7\",\"#676778\",\"#3074c0\",\"#7c7cea\" --kill-others-on-fail \"npm:lint:*\"",
+    "lint": "concurrently -c \"#c596c7\",\"#676778\",\"#4b32c3\" --kill-others-on-fail \"npm:lint:*\"",
     "lint:prettier": "prettier --check --loglevel=warn \"src/**/*.svelte\"",
     "lint:svelte-check": "svelte-check --fail-on-warnings --fail-on-hints --ignore build,package",
-    "lint:tsc": "tsc --noEmit",
     "lint:eslint": "eslint --ext=js,ts,svelte --max-warnings=0 src",
     "format": "prettier --write . && eslint --ext=js,ts,svelte --fix src",
     "prepare": "husky install"
   },
   "lint-staged": {
-    "*.ts": [
-      "eslint --max-warnings 0 --no-ignore",
-      "sh -c 'tsc -p tsconfig.json --noEmit'"
-    ],
-    "*.(c)?js": [
-      "eslint --max-warnings 0 --no-ignore"
-    ],
-    "*.svelte": [
+    "*.{ts,svelte}": [
       "eslint --max-warnings 0 --no-ignore",
       "svelte-check --fail-on-warnings --fail-on-hints",
       "prettier --check"
+    ],
+    "*.(c)?js": [
+      "eslint --max-warnings 0 --no-ignore"
     ]
   },
   "engines": {
@@ -33,14 +28,14 @@
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^2.0.1",
-    "@sveltejs/kit": "^1.11.0",
-    "@typescript-eslint/eslint-plugin": "^5.55.0",
-    "@typescript-eslint/parser": "^5.55.0",
+    "@sveltejs/kit": "^1.13.0",
+    "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "@typescript-eslint/parser": "^5.56.0",
     "concurrently": "^7.6.0",
     "eslint": "^8.36.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
-    "eslint-config-prettier": "^8.7.0",
+    "eslint-config-prettier": "^8.8.0",
     "eslint-config-triple": "^0.5.8",
     "eslint-import-resolver-typescript": "^3.5.3",
     "eslint-plugin-import": "^2.27.5",
@@ -51,12 +46,12 @@
     "lint-staged": "^13.2.0",
     "postcss": "^8.4.21",
     "postcss-preset-env": "^8.0.1",
-    "prettier": "^2.8.4",
+    "prettier": "^2.8.6",
     "prettier-plugin-svelte": "^2.9.0",
     "sass": "^1.59.3",
-    "svelte": "^3.56.0",
+    "svelte": "^3.57.0",
     "svelte-check": "^3.1.4",
-    "typescript": "^4.9.5",
-    "vite": "^4.1.4"
+    "typescript": "^5.0.2",
+    "vite": "^4.2.1"
   }
 }
