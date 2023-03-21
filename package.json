@@ -16,11 +16,13 @@
   "lint-staged": {
     "*.{ts,svelte}": [
       "eslint --max-warnings 0 --no-ignore",
-      "svelte-check --fail-on-warnings --fail-on-hints",
-      "prettier --check"
+      "svelte-check --fail-on-warnings --fail-on-hints"
     ],
     "*.(c)?js": [
       "eslint --max-warnings 0 --no-ignore"
+    ],
+    "*.{css,scss,json,html}": [
+      "prettier --check"
     ]
   },
   "engines": {
