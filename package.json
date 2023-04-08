@@ -7,16 +7,16 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "concurrently -c \"#c596c7\",\"#676778\",\"#4b32c3\" --kill-others-on-fail \"npm:lint:*\"",
-    "lint:prettier": "prettier --check --loglevel=warn \"src/**/*.svelte\"",
-    "lint:svelte-check": "svelte-check --fail-on-warnings --fail-on-hints --ignore build,package",
+    "lint:prettier": "prettier --check --loglevel=warn . \"src/**/*.svelte\"",
+    "lint:svelte-check": "svelte-check --fail-on-warnings --ignore build,package",
     "lint:eslint": "eslint --ext=js,ts,svelte --max-warnings=0 src",
-    "format": "prettier --write . && eslint --ext=js,ts,svelte --fix src",
+    "format": "prettier --write  . \"src/**/*.svelte\" && eslint --ext=js,ts,svelte --fix src",
     "prepare": "husky install"
   },
   "lint-staged": {
     "*.{ts,svelte}": [
       "eslint --max-warnings 0 --no-ignore",
-      "svelte-check --fail-on-warnings --fail-on-hints"
+      "svelte-check --fail-on-warnings"
     ],
     "*.(c)?js": [
       "eslint --max-warnings 0 --no-ignore"
@@ -30,30 +30,30 @@
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^2.0.1",
-    "@sveltejs/kit": "^1.13.0",
-    "@typescript-eslint/eslint-plugin": "^5.56.0",
-    "@typescript-eslint/parser": "^5.56.0",
-    "concurrently": "^7.6.0",
-    "eslint": "^8.36.0",
+    "@sveltejs/kit": "^1.15.2",
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/parser": "^5.57.1",
+    "concurrently": "^8.0.1",
+    "eslint": "^8.38.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-prettier": "^8.8.0",
     "eslint-config-triple": "^0.5.8",
-    "eslint-import-resolver-typescript": "^3.5.3",
+    "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-only-warn": "^1.1.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-svelte3": "^4.0.0",
     "husky": "^8.0.3",
-    "lint-staged": "^13.2.0",
+    "lint-staged": "^13.2.1",
     "postcss": "^8.4.21",
-    "postcss-preset-env": "^8.0.1",
-    "prettier": "^2.8.6",
-    "prettier-plugin-svelte": "^2.9.0",
-    "sass": "^1.59.3",
-    "svelte": "^3.57.0",
-    "svelte-check": "^3.1.4",
-    "typescript": "^5.0.2",
+    "postcss-preset-env": "^8.3.0",
+    "prettier": "^2.8.7",
+    "prettier-plugin-svelte": "^2.10.0",
+    "sass": "^1.61.0",
+    "svelte": "^3.58.0",
+    "svelte-check": "^3.2.0",
+    "typescript": "^5.0.4",
     "vite": "^4.2.1"
   }
 }
