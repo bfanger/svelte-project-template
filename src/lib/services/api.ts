@@ -22,7 +22,7 @@ export type Fetch = (
 ) => Promise<Response>;
 
 type Config = RequestInit & {
-  params?: Record<string, string>;
+  params?: Record<string, string | number>;
   fetch?: Fetch;
   ssrCache?: number;
 };
