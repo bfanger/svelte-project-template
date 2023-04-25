@@ -35,19 +35,19 @@ if (packageJson.scripts.build === "vite build") {
 const devDependencies = {
   "@faker-js/faker": "^7.6.0",
   "@playwright/test": "^1.32.2",
-  "@storybook/addon-essentials": "^7.0.2",
-  "@storybook/addon-interactions": "^7.0.2",
-  "@storybook/addon-links": "^7.0.2",
-  "@storybook/blocks": "^7.0.2",
-  "@storybook/svelte": "^7.0.2",
-  "@storybook/sveltekit": "^7.0.2",
+  "@storybook/addon-essentials": "^7.0.7",
+  "@storybook/addon-interactions": "^7.0.7",
+  "@storybook/addon-links": "^7.0.7",
+  "@storybook/blocks": "^7.0.7",
+  "@storybook/svelte": "^7.0.7",
+  "@storybook/sveltekit": "^7.0.7",
   "@storybook/testing-library": "^0.1.0",
   "@testing-library/svelte": "^3.2.2",
-  "happy-dom": "^9.1.9",
+  "happy-dom": "^9.9.2",
   react: "^18.2.0",
   "react-dom": "^18.2.0",
-  vitest: "^0.29.8",
-  storybook: "^7.0.2",
+  vitest: "^0.30.1",
+  storybook: "^7.0.7",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
