@@ -27,34 +27,41 @@
 
 <style lang="scss">
   .post {
-    margin-left: auto;
-    margin-right: auto;
-    width: 70rem;
-    padding: 4rem;
     box-sizing: border-box;
+    width: 70rem;
     max-width: 100vw;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 4rem;
   }
+
   .pager {
     display: flex;
   }
 
   .button {
+    user-select: none;
+
     display: inline-block;
+
     padding: 1rem 2rem;
-    border-radius: 2rem;
-    background: #9324b6;
+
     font-weight: bold;
     color: white;
     text-decoration: none;
-    user-select: none;
+
+    background: #9324b6;
+    border-radius: 2rem;
 
     &:focus-visible {
-      box-shadow: 0px 0px 0px 2px rgba(white, 0.9);
       outline: none;
+      box-shadow: 0 0 0 2px #ffffffe6;
     }
+
     &:hover {
       background: #ab48c9;
     }
+
     &:active {
       background: #722988;
     }

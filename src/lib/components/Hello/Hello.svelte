@@ -6,14 +6,18 @@
 
 <style lang="scss">
   .hello {
-    background-color: #1d859e;
-    color: white;
-    padding: 4rem;
-    margin: 0;
-    font: bold 4rem sans-serif;
-    text-align: center;
-    transition: letter-spacing 200ms;
     cursor: pointer;
+
+    margin: 0;
+    padding: 4rem;
+
+    font: bold 4rem sans-serif;
+    color: white;
+    text-align: center;
+
+    background-color: #1d859e;
+
+    transition: letter-spacing 200ms;
 
     &:hover {
       letter-spacing: 1px;

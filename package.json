@@ -6,11 +6,12 @@
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "concurrently -c \"#c596c7\",\"#676778\",\"#4b32c3\" --kill-others-on-fail \"npm:lint:*\"",
+    "lint": "concurrently -c \"#c596c7\",\"#676778\",\"#4b32c3\",\"#fafafa\" --kill-others-on-fail \"npm:lint:*\"",
     "lint:prettier": "prettier --check --loglevel=warn . \"src/**/*.svelte\"",
     "lint:svelte-check": "svelte-check --fail-on-warnings --ignore build,package",
     "lint:eslint": "eslint --ext=js,ts,svelte --max-warnings=0 src",
-    "format": "prettier --write  . \"src/**/*.svelte\" && eslint --ext=js,ts,svelte --fix src",
+    "lint:stylelint": "stylelint \"src/**/*.{css,scss,svelte}\"",
+    "format": "prettier --write  . \"src/**/*.svelte\" && stylelint --fix \"src/**/*.{css,scss,svelte}\" && eslint --ext=js,ts,svelte --fix src",
     "prepare": "husky install"
   },
   "lint-staged": {
@@ -47,6 +48,7 @@
     "husky": "^8.0.3",
     "lint-staged": "^13.2.1",
     "postcss": "^8.4.23",
+    "postcss-html": "^1.5.0",
     "postcss-preset-env": "^8.3.2",
     "prettier": "^2.8.8",
     "prettier-plugin-svelte": "^2.10.0",
@@ -54,6 +56,10 @@
     "svelte": "^3.58.0",
     "svelte-check": "^3.2.0",
     "typescript": "^5.0.4",
-    "vite": "^4.3.1"
+    "vite": "^4.3.2",
+    "stylelint": "^15.6.0",
+    "stylelint-config-clean-order": "^5.0.1",
+    "stylelint-config-standard-scss": "^9.0.0",
+    "stylelint-prettier": "^3.0.0"
   }
 }
