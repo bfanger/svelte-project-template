@@ -133,6 +133,7 @@ test("hello world", async ({ page }) => {
 await writeFile(
   ".storybook/main.ts",
   `import type { StorybookConfig } from "@storybook/sveltekit";
+
 const config: StorybookConfig = {
   stories: ["../src/**/*.stories.ts"],
   addons: [
