@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import type { Handle, HandleFetch } from "@sveltejs/kit";
-import cache from "$lib/services/cache";
+import cache from "./services/cache";
 
 const headerWhitelist = ["content-type", "access-control-allow-origin"];
 export const handle: Handle = ({ event, resolve }) =>

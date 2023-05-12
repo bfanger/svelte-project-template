@@ -10,8 +10,6 @@ export default {
     version: { name: execSync("git rev-parse HEAD || date").toString().trim() },
   },
   vitePlugin: {
-    experimental: {
-      inspector: { holdMode: true },
-    },
+    inspector: true,
   },
 };

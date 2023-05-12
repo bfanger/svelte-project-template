@@ -33,21 +33,21 @@ if (packageJson.scripts.build === "vite build") {
 }
 
 const devDependencies = {
-  "@faker-js/faker": "^7.6.0",
-  "@playwright/test": "^1.32.2",
-  "@storybook/addon-essentials": "^7.0.7",
-  "@storybook/addon-interactions": "^7.0.7",
-  "@storybook/addon-links": "^7.0.7",
-  "@storybook/blocks": "^7.0.7",
-  "@storybook/svelte": "^7.0.7",
-  "@storybook/sveltekit": "^7.0.7",
+  "@faker-js/faker": "^8.0.0",
+  "@playwright/test": "^1.33.0",
+  "@storybook/addon-essentials": "^7.0.10",
+  "@storybook/addon-interactions": "^7.0.10",
+  "@storybook/addon-links": "^7.0.10",
+  "@storybook/blocks": "^7.0.10",
+  "@storybook/svelte": "^7.0.10",
+  "@storybook/sveltekit": "^7.0.10",
   "@storybook/testing-library": "^0.1.0",
   "@testing-library/svelte": "^3.2.2",
-  "happy-dom": "^9.9.2",
+  "happy-dom": "^9.16.0",
   react: "^18.2.0",
   "react-dom": "^18.2.0",
-  vitest: "^0.30.1",
-  storybook: "^7.0.7",
+  vitest: "^0.31.0",
+  storybook: "^7.0.10",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
@@ -109,7 +109,8 @@ const config: PlaywrightTestConfig = {
         projects: [
           { name: "Chrome", use: { ...devices["Desktop Chrome"] } },
           { name: "Firefox", use: { ...devices["Desktop Firefox"] } },
-          { name: "Safari", use: { ...devices["Desktop Safari"] } },
+          // "iPhone" instead of "Desktop Safari" to also run the tests on a small screen.
+          { name: "iPhone", use: { ...devices["iPhone 13 Pro"] } },
         ],
       }
     : {}),
@@ -177,12 +178,12 @@ npm run test
 await fs.chmod(path.resolve(projectDir, ".husky/pre-push"), "755");
 
 const helloComponentExists = await fs
-  .stat(path.resolve(projectDir, "src/lib/components/Hello/Hello.svelte"))
+  .stat(path.resolve(projectDir, "src/components/Hello/Hello.svelte"))
   .catch(() => false);
 
 if (helloComponentExists) {
   await writeFile(
-    "src/lib/components/Hello/Hello.spec.ts",
+    "src/components/Hello/Hello.spec.ts",
     `import { expect, it, describe, vi } from "vitest";
 import { render, fireEvent } from "@testing-library/svelte";
 import { tick } from "svelte";
@@ -217,7 +218,7 @@ describe("Hello component", () => {
 `
   );
   await writeFile(
-    "src/lib/components/Hello/Hello.stories.ts",
+    "src/components/Hello/Hello.stories.ts",
     `import { faker } from "@faker-js/faker/locale/nl";
 import Hello from "./Hello.svelte";
 

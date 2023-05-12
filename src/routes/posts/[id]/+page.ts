@@ -1,4 +1,4 @@
-import api from "$lib/services/api";
+import api from "../../../services/api";
 
 export function load({ fetch, params }) {
   return {
