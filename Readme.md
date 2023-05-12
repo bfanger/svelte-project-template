@@ -3,7 +3,7 @@
 [Svelte](https://svelte.dev/) project preconfigured with:
 
 - [SvelteKit](https://kit.svelte.dev/) ([Vite](https://vitejs.dev/))
-- [Typescript](http://typescriptlang.org/)
+- [TypeScript](http://typescriptlang.org/)
 - [Sass](https://sass-lang.com/) & [PostCSS Preset Env](https://github.com/csstools/postcss-plugins/tree/main/plugin-packs/postcss-preset-env) ( which includes [Autoprefixer](https://github.com/postcss/autoprefixer))
 - [Prettier](https://prettier.io/), [Eslint](https://eslint.org/) & [Stylelint](https://stylelint.io/)
 - [Husky](https://typicode.github.io/husky/) & [Lint-staged](https://github.com/okonet/lint-staged)
@@ -16,9 +16,9 @@
 ## Initial setup
 
 ```sh
-npx degit "github.com/bfanger/svelte-project-template#main" my-svelte-project
+npx tiged "github.com/bfanger/svelte-project-template#main" my-svelte-project
 cd my-svelte-project
-git init && git add .
+git init --initial-branch main && git add .
 pnpm install     # or  npm install
 pnpm dev --open  # or  npm run dev -- --open
 ```
@@ -34,12 +34,18 @@ pnpm install  # or  npm install
 - Creates an example unittest
 - Creates an example e2e test
 - Creates an example storybook story
-- Number of folders inside node_modules grows from ~347 to ~967.
+- node_modules grows from ~200M to ~350M.
 
 ## Linting
 
 ```sh
 pnpm lint  # or  npm run lint
+```
+
+I'd recommend enabling format-on-save in your editor, but to apply all auto fixes manually:
+
+```sh
+pnpm format  # or  npm run format
 ```
 
 ## Build
