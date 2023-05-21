@@ -5,12 +5,8 @@
  * This allows access to the headers and http status of the response using the helper methods.
  */
 import { error, type HttpError } from "@sveltejs/kit";
-import buildUrl from "./buildUrl";
-import type {
-  ApiGetResponse,
-  ApiPostRequest,
-  ApiPostResponse,
-} from "./api-types-jsonplaceholder";
+import buildUrl from "../utils/buildUrl";
+import type { ApiGetResponse, ApiPostRequest, ApiPostResponse } from "./dto";
 import { env } from "$env/dynamic/public";
 
 const endpoint =
