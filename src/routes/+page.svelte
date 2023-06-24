@@ -15,7 +15,7 @@
 <Hello {name} on:click={onClick} />
 
 <div class="links">
-  <a href="/posts/1" data-sveltekit:prefetch>Api Example</a>
+  <a href="/posts/1" data-sveltekit-preload-data="hover">Api Example</a>
 </div>
 
 <style>
