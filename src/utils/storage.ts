@@ -1,10 +1,11 @@
 /**
- * Typed wrapper for localStorage
+ * Typed wrapper for localStorage with automatic JSON serialization/deserialization
  */
-export default {
+const namespace = "app:";
+const storage = {
   get<T>(key: string, defaultValue: T) {
     try {
-      const value = localStorage.getItem(key);
+      const value = localStorage.getItem(namespace + key);
       if (value === null) {
         return defaultValue;
       }
@@ -16,14 +17,14 @@ export default {
   },
   set(key: string, value: any) {
     try {
-      localStorage.setItem(key, JSON.stringify(value));
+      localStorage.setItem(namespace + key, JSON.stringify(value));
     } catch (e) {
       console.warn("Saving to localStorage failed", e);
     }
   },
   remove(key: string) {
     try {
-      localStorage.removeItem(key);
+      localStorage.removeItem(namespace + key);
     } catch (e) {
       console.warn("Removing from localStorage failed", e);
     }
@@ -37,3 +38,5 @@ export default {
     return !!returnValue;
   },
 };
+
+export default storage;
