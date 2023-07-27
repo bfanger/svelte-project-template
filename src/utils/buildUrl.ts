@@ -6,7 +6,7 @@
  */
 export default function buildUrl(
   path: string,
-  params: Record<string, string | number>
+  params: Record<string, string | number>,
 ) {
   const search = new URLSearchParams();
   let hasSearch = false;

@@ -22,7 +22,7 @@ export default async function cache<T>(
   key: string,
   ttl: number | ((val: T) => number), // time to live in seconds
   factory: () => Promise<T>,
-  timeout = 5
+  timeout = 5,
 ): Promise<T> {
   const cacheHit = promises.get(key) as Promise<T> | undefined;
   if (cacheHit) {
@@ -37,7 +37,7 @@ export default async function cache<T>(
       if (promises.get(key) === entry) {
         flush(key);
       }
-    }, timeout * 1000)
+    }, timeout * 1000),
   );
   return entry
     .then((response) => {
@@ -52,7 +52,7 @@ export default async function cache<T>(
             if (promises.get(key) === entry) {
               flush(key);
             }
-          }, duration * 1000)
+          }, duration * 1000),
         );
       }
       return response;

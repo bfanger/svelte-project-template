@@ -19,7 +19,7 @@ export const handleFetch: HandleFetch = async ({ request, fetch, event }) => {
   return cache(
     keyFromRequest(request),
     (response) => (response.ok ? ttl : 0),
-    async () => reusableResponse(await fetch(request))
+    async () => reusableResponse(await fetch(request)),
   );
 };
 

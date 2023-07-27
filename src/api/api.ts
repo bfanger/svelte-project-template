@@ -14,7 +14,7 @@ const endpoint =
 
 export type Fetch = (
   info: RequestInfo,
-  init?: RequestInit
+  init?: RequestInit,
 ) => Promise<Response>;
 
 type Config = RequestInit & {
@@ -28,7 +28,7 @@ type ApiResponse<T = unknown> = T & { [responseSymbol]: Response };
 async function wrapped(
   method: RequestInit["method"],
   path: string,
-  config: Config
+  config: Config,
 ): Promise<any> {
   // eslint-disable-next-line prefer-const
   let { ssrCache, fetch, params, ...init } = config;
@@ -58,13 +58,15 @@ async function wrapped(
   const duration = (Date.now() - start) / 1000;
   if (duration > 1) {
     console.info(
-      `${method} ${url.substring(endpoint.length)} took ${duration.toFixed(3)}s`
+      `${method} ${url.substring(endpoint.length)} took ${duration.toFixed(
+        3,
+      )}s`,
     );
   }
   if (!response.ok) {
     const err = error(
       response.status,
-      `${method} ${url} failed: ${response.status} ${response.statusText}`
+      `${method} ${url} failed: ${response.status} ${response.statusText}`,
     ) as ApiResponse<HttpError>;
     err[responseSymbol] = response;
     // eslint-disable-next-line @typescript-eslint/no-throw-literal
@@ -88,14 +90,14 @@ async function wrapped(
 const api = {
   get<T extends keyof ApiGetResponse>(
     path: T,
-    config?: Config
+    config?: Config,
   ): Promise<ApiResponse<ApiGetResponse[T]>> {
     return wrapped("GET", path, config || {});
   },
   async post<T extends keyof ApiPostRequest & keyof ApiPostResponse>(
     path: T,
     data: ApiPostRequest[T],
-    config?: Config
+    config?: Config,
   ): Promise<ApiResponse<ApiPostResponse[T]>> {
     return wrapped("POST", path, {
       ...config,
@@ -117,7 +119,7 @@ function getResponse(dataOrError: ApiResponse | unknown): Response | undefined {
 }
 
 export function getStatus(
-  dataOrError: ApiResponse | unknown
+  dataOrError: ApiResponse | unknown,
 ): number | undefined {
   const response = getResponse(dataOrError);
   if (response) {
@@ -127,7 +129,7 @@ export function getStatus(
 }
 
 export function getStatusText(
-  dataOrError: ApiResponse | unknown
+  dataOrError: ApiResponse | unknown,
 ): string | undefined {
   const response = getResponse(dataOrError);
   if (response) {
@@ -138,7 +140,7 @@ export function getStatusText(
 
 export function getHeader(
   dataOrError: ApiResponse | unknown,
-  name: string
+  name: string,
 ): string | undefined {
   const response = getResponse(dataOrError);
   if (response) {

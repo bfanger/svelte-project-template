@@ -6,7 +6,7 @@ import path from "path";
 const projectDir = new URL(".", import.meta.url).pathname;
 
 const packageJson = JSON.parse(
-  await fs.readFile(path.resolve(projectDir, "package.json"), "utf-8")
+  await fs.readFile(path.resolve(projectDir, "package.json"), "utf-8"),
 );
 
 const scripts = {
@@ -80,7 +80,7 @@ export default defineConfig({
     exclude: [...configDefaults.exclude, "package", "playwright"],
   },
 });
-`
+`,
 );
 await writeFile(
   "playwright.config.ts",
@@ -117,7 +117,7 @@ const config: PlaywrightTestConfig = {
 };
 
 export default config;
-`
+`,
 );
 await writeFile(
   "playwright/tests/hello-world.spec.ts",
@@ -128,7 +128,7 @@ test("hello world", async ({ page }) => {
   await page.locator("text=Hello world").click();
   await expect(page.locator("text=Hello you")).toBeVisible();
 });
-`
+`,
 );
 await writeFile(
   ".storybook/main.ts",
@@ -147,14 +147,14 @@ const config: StorybookConfig = {
   },
 };
 export default config;
-`
+`,
 );
 await writeFile(
   ".storybook/preview-head.html",
   `<script>
   window.global = window;
 </script>
-`
+`,
 );
 const appScssExists = await fs
   .stat(path.resolve(projectDir, "src/app.scss"))
@@ -164,7 +164,7 @@ if (appScssExists) {
   await writeFile(
     ".storybook/preview.ts",
     `import "../src/app.scss";
-`
+`,
   );
 }
 
@@ -174,7 +174,7 @@ await writeFile(
 . "$(dirname "$0")/_/husky.sh"
 
 npm run test
-`
+`,
 );
 await fs.chmod(path.resolve(projectDir, ".husky/pre-push"), "755");
 
@@ -216,7 +216,7 @@ describe("Hello component", () => {
     expect(listener).toBeCalledTimes(1);
   });
 });
-`
+`,
   );
   await writeFile(
     "src/components/Hello/Hello.stories.ts",
@@ -241,9 +241,9 @@ export const World = {
     name: "world",
   },
 };
-`
+`,
   );
 }
 process.stdout.write(
-  "\n\nTo bring in the additional depencencies for Vitest & Storybook run:\n\npnpm install  # or npm install\n"
+  "\n\nTo bring in the additional depencencies for Vitest & Storybook run:\n\npnpm install  # or npm install\n",
 );
