@@ -14,14 +14,6 @@
 
 <Hello {name} on:click={onClick} />
 
-<div class="links">
+<div class="flex justify-center mt-10">
   <a href="/posts/1" data-sveltekit-preload-data="hover">Api Example</a>
 </div>
-
-<style>
-  .links {
-    display: flex;
-    justify-content: center;
-    margin-top: 4rem;
-  }
-</style>

@@ -4,7 +4,7 @@ import { vitePreprocess } from "@sveltejs/kit/vite";
 
 /** @type {import('@sveltejs/kit').Config} */
 export default {
-  preprocess: vitePreprocess(),
+  preprocess: [vitePreprocess({})],
   kit: {
     adapter: adapter(),
     version: { name: execSync("git rev-parse HEAD || date").toString().trim() },
