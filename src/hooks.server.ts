@@ -3,10 +3,13 @@ import type { Handle, HandleFetch } from "@sveltejs/kit";
 import cache from "./utils/cache";
 
 const headerWhitelist = ["content-type", "access-control-allow-origin"];
-export const handle: Handle = ({ event, resolve }) =>
-  resolve(event, {
+export const handle: Handle = async ({ event, resolve }) => {
+  const response = await resolve(event, {
     filterSerializedResponseHeaders: (name) => headerWhitelist.includes(name),
   });
+  response.headers.set("X-Frame-Options", "sameorigin");
+  return response;
+};
 
 export const handleFetch: HandleFetch = async ({ request, fetch, event }) => {
   request.headers.set("origin", event.url.origin);
