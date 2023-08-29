@@ -14,7 +14,8 @@ const scripts = {
   "dev:storybook": "storybook dev -p 6006 --no-open",
   "build:vite": "vite build",
   "build:storybook": "storybook build --output-dir build/styleguide-storybook",
-  test: 'concurrently -c "#fcc72a","#45ba4b" --kill-others-on-fail "npm:test:*"',
+  // test: 'concurrently -c "#fcc72a","#45ba4b" --kill-others-on-fail "npm:test:*"', // vitest interferes with playwright's reuseExistingServer
+  test: "npm run test:vitest && npm run test:playwright",
   "test:vitest": "vitest run --passWithNoTests",
   "test:playwright": "playwright test",
   vitest: "vitest watch",
@@ -41,12 +42,12 @@ const devDependencies = {
   "@storybook/blocks": "^7.0.10",
   "@storybook/svelte": "^7.0.10",
   "@storybook/sveltekit": "^7.0.10",
-  "@storybook/testing-library": "^0.1.0",
-  "@testing-library/svelte": "^3.2.2",
-  "happy-dom": "^9.16.0",
+  "@storybook/testing-library": "^0.2.0",
+  "@testing-library/svelte": "^4.0.3",
+  "happy-dom": "^10.11.1",
   react: "^18.2.0",
   "react-dom": "^18.2.0",
-  vitest: "^0.31.0",
+  vitest: "^0.34.3",
   storybook: "^7.0.10",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
@@ -199,7 +200,7 @@ describe("Hello component", () => {
   it("should render based on prop", async () => {
     const { getByText, component } = render(
       Hallo as any,
-      { name: "world" } as any
+      { name: "world" } as any,
     );
     const el = getByText("Hello world");
     expect(el.textContent).toBe("Hello world");
