@@ -44,7 +44,7 @@ const devDependencies = {
   "@storybook/sveltekit": "^7.0.10",
   "@storybook/testing-library": "^0.2.0",
   "@testing-library/svelte": "^4.0.3",
-  "happy-dom": "^10.11.1",
+  "happy-dom": "^12.0.1",
   react: "^18.2.0",
   "react-dom": "^18.2.0",
   vitest: "^0.34.3",
