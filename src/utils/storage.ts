@@ -31,9 +31,9 @@ const storage = {
   },
   isAvailable() {
     const key = "has-localStorage";
-    this.set(key, true);
-    const returnValue = this.get(key, null);
-    this.remove(key);
+    storage.set(key, true);
+    const returnValue = storage.get(key, null);
+    storage.remove(key);
 
     return !!returnValue;
   },
