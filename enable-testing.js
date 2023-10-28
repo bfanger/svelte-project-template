@@ -2,8 +2,9 @@
 
 import { promises as fs } from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 
-const projectDir = new URL(".", import.meta.url).pathname;
+const projectDir = path.dirname(fileURLToPath(import.meta.url));
 
 const packageJson = JSON.parse(
   await fs.readFile(path.resolve(projectDir, "package.json"), "utf-8"),
@@ -13,14 +14,14 @@ const scripts = {
   "dev:vite": "vite dev",
   "dev:storybook": "storybook dev -p 6006 --no-open",
   "build:vite": "vite build",
-  "build:storybook": "storybook build --output-dir build/styleguide-storybook",
+  "build:storybook":
+    "storybook build --output-dir build/client/styleguide-storybook",
   // test: 'concurrently -c "#fcc72a","#45ba4b" --kill-others-on-fail "npm:test:*"', // vitest interferes with playwright's reuseExistingServer
   test: "npm run test:vitest && npm run test:playwright",
   "test:vitest": "vitest run --passWithNoTests",
   "test:playwright": "playwright test",
-  vitest: "vitest watch",
-  playwright:
-    'npx chokidar-cli "playwright/**/*.ts" --initial -c "npx playwright test"',
+  "vitest:watch": "vitest watch",
+  "playwright:ui": "playwright test --ui",
 };
 for (const [task, command] of Object.entries(scripts)) {
   packageJson.scripts[task] = packageJson.scripts[task] || command;
@@ -34,21 +35,21 @@ if (packageJson.scripts.build === "vite build") {
 }
 
 const devDependencies = {
-  "@faker-js/faker": "^8.0.0",
-  "@playwright/test": "^1.33.0",
-  "@storybook/addon-essentials": "^7.0.10",
-  "@storybook/addon-interactions": "^7.0.10",
-  "@storybook/addon-links": "^7.0.10",
-  "@storybook/blocks": "^7.0.10",
-  "@storybook/svelte": "^7.0.10",
-  "@storybook/sveltekit": "^7.0.10",
-  "@storybook/testing-library": "^0.2.0",
-  "@testing-library/svelte": "^4.0.3",
-  "happy-dom": "^12.0.1",
+  "@faker-js/faker": "^8.2.0",
+  "@playwright/test": "^1.39.0",
+  "@storybook/addon-essentials": "^7.5.1",
+  "@storybook/addon-interactions": "^7.5.1",
+  "@storybook/addon-links": "^7.5.1",
+  "@storybook/blocks": "^7.5.1",
+  "@storybook/svelte": "^7.5.1",
+  "@storybook/sveltekit": "^7.5.1",
+  "@storybook/testing-library": "^0.2.2",
+  "@testing-library/svelte": "^4.0.4",
+  "happy-dom": "^12.10.3",
   react: "^18.2.0",
   "react-dom": "^18.2.0",
-  vitest: "^0.34.3",
-  storybook: "^7.0.10",
+  vitest: "^0.34.6",
+  storybook: "^7.5.1",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
@@ -146,6 +147,7 @@ const config: StorybookConfig = {
     name: "@storybook/sveltekit",
     options: {},
   },
+  staticDirs: ["../static"],
 };
 export default config;
 `,
