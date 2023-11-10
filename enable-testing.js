@@ -16,8 +16,7 @@ const scripts = {
   "build:vite": "vite build",
   "build:storybook":
     "storybook build --output-dir build/client/styleguide-storybook",
-  // test: 'concurrently -c "#fcc72a","#45ba4b" --kill-others-on-fail "npm:test:*"', // vitest interferes with playwright's reuseExistingServer
-  test: "npm run test:vitest && npm run test:playwright",
+  test: 'concurrently -c "#fcc72a","#45ba4b" --kill-others-on-fail "npm:test:*"',
   "test:vitest": "vitest run --passWithNoTests",
   "test:playwright": "playwright test",
   "vitest:watch": "vitest watch",
