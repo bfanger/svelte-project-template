@@ -1,29 +1,24 @@
 /**
  * Typed api wrapper with injectable fetch for SSR
  *
- * The responses of the api methods contain the data directly but also have a hidden property.
- * This allows access to the headers and http status of the response using the helper methods.
+ * The responses of the api methods contain the data directly.
+ * The corresponding Response object is available via the helper methods via lookup.
+ * This allows access to the headers and http status code by passing the data to those helpers
  */
-import { error, type HttpError } from "@sveltejs/kit";
-import buildUrl from "../utils/buildUrl";
+import { error } from "@sveltejs/kit";
+import buildUrl, { type Params } from "../utils/buildUrl";
 import type { ApiGetResponse, ApiPostRequest, ApiPostResponse } from "./dto";
 import { env } from "$env/dynamic/public";
 
 const endpoint =
   env.PUBLIC_API_ENDPOINT ?? "https://jsonplaceholder.typicode.com/";
 
-export type Fetch = (
-  info: RequestInfo,
-  init?: RequestInit,
-) => Promise<Response>;
-
 type Config = RequestInit & {
-  params?: Record<string, string | number>;
-  fetch?: Fetch;
+  params?: Params;
+  fetch?: typeof fetch;
   ssrCache?: number;
 };
-const responseSymbol = Symbol("response");
-type ApiResponse<T = unknown> = T & { [responseSymbol]: Response };
+const responses = new WeakMap<any, Response>();
 
 async function wrapped(
   method: RequestInit["method"],
@@ -67,22 +62,26 @@ async function wrapped(
     const err = error(
       response.status,
       `${method} ${url} failed: ${response.status} ${response.statusText}`,
-    ) as ApiResponse<HttpError>;
-    err[responseSymbol] = response;
+    );
+    responses.set(err, response);
     // eslint-disable-next-line @typescript-eslint/no-throw-literal
     throw err;
   }
-  let data = {
-    __: "Missing `Content-Type: application/json`",
-  } as ApiResponse<any>;
-  if (response.headers.get("Content-Type")?.startsWith("application/json")) {
-    data = await response.json();
+
+  // Note: If the api is allowed to return empty or non-json content, this check should be tweaked or removed.
+  if (!response.headers.get("Content-Type")?.startsWith("application/json")) {
+    const err = new Error(
+      `${method} ${url} failed: Missing 'Content-Type: application/json' header`,
+    );
+    responses.set(err, response);
+    throw err;
   }
+  const data = await response.json();
   if (config.signal && config.signal.aborted) {
     throw new Error("Aborted");
   }
   if (typeof data === "object" && data !== null) {
-    data[responseSymbol] = response;
+    responses.set(data, response);
   }
   return data;
 }
@@ -91,14 +90,14 @@ const api = {
   get<T extends keyof ApiGetResponse>(
     path: T,
     config?: Config,
-  ): Promise<ApiResponse<ApiGetResponse[T]>> {
+  ): Promise<ApiGetResponse[T]> {
     return wrapped("GET", path, config || {});
   },
   async post<T extends keyof ApiPostRequest & keyof ApiPostResponse>(
     path: T,
     data: ApiPostRequest[T],
     config?: Config,
-  ): Promise<ApiResponse<ApiPostResponse[T]>> {
+  ): Promise<ApiPostResponse[T]> {
     return wrapped("POST", path, {
       ...config,
       headers: {
@@ -111,16 +110,11 @@ const api = {
 };
 export default api;
 
-function getResponse(dataOrError: ApiResponse | unknown): Response | undefined {
-  if (typeof dataOrError === "object" && dataOrError !== null) {
-    return (dataOrError as any)[responseSymbol];
-  }
-  return undefined;
+function getResponse(dataOrError: unknown): Response | undefined {
+  return responses.get(dataOrError);
 }
 
-export function getStatus(
-  dataOrError: ApiResponse | unknown,
-): number | undefined {
+export function getStatus(dataOrError: unknown): number | undefined {
   const response = getResponse(dataOrError);
   if (response) {
     return response.status;
@@ -128,9 +122,7 @@ export function getStatus(
   return undefined;
 }
 
-export function getStatusText(
-  dataOrError: ApiResponse | unknown,
-): string | undefined {
+export function getStatusText(dataOrError: unknown): string | undefined {
   const response = getResponse(dataOrError);
   if (response) {
     return response.statusText;
@@ -139,7 +131,7 @@ export function getStatusText(
 }
 
 export function getHeader(
-  dataOrError: ApiResponse | unknown,
+  dataOrError: unknown,
   name: string,
 ): string | undefined {
   const response = getResponse(dataOrError);

@@ -38,11 +38,13 @@ function keyFromRequest(request: Request) {
  */
 function reusableResponse(res: Response): Response {
   const textPromise = res.text();
+  const jsonPromise = textPromise.then((text) => JSON.parse(text));
   return {
     ok: res.ok,
     headers: res.headers,
     status: res.status,
     statusText: res.statusText,
     text: () => textPromise,
+    json: () => jsonPromise,
   } as Response;
 }
