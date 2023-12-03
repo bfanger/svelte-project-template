@@ -250,5 +250,5 @@ export const World = {
   );
 }
 process.stdout.write(
-  "\n\nTo bring in the additional depencencies for Vitest & Storybook run:\n\npnpm install  # or npm install\n",
+  "\n\nTo bring in the additional dependencies for Vitest, Playwright and Storybook run:\n\npnpm install  # or npm install\n",
 );

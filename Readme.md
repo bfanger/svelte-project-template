@@ -18,7 +18,8 @@
 ```sh
 npx tiged "github.com/bfanger/svelte-project-template#main" my-svelte-project
 cd my-svelte-project
-git init --initial-branch main && git add .
+git init --initial-branch main
+git add .
 pnpm install     # or  npm install
 pnpm dev --open  # or  npm run dev -- --open
 ```
