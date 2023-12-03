@@ -68,20 +68,23 @@ async function writeFile(filename, body) {
 }
 
 await writeFile("package.json", `${JSON.stringify(packageJson, null, 2)}\n`);
-await writeFile(
-  "vitest.config.ts",
-  `import { sveltekit } from "@sveltejs/kit/vite";
-import { configDefaults, defineConfig } from "vitest/config";
 
-export default defineConfig({
-  plugins: [sveltekit()],
+await writeFile(
+  "vite.config.ts",
+  (await fs.readFile("vite.config.ts", "utf-8"))
+    .replace(
+      'import { defineConfig } from "vite";',
+      'import { configDefaults, defineConfig } from "vitest/config";',
+    )
+    .replace(
+      "\n});",
+      `
   test: {
-    globals: true,
     environment: "happy-dom",
     exclude: [...configDefaults.exclude, "package", "playwright"],
   },
-});
-`,
+});`,
+    ),
 );
 await writeFile(
   "playwright.config.ts",
