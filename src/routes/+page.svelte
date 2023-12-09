@@ -23,5 +23,8 @@
     display: flex;
     justify-content: center;
     margin-top: 4rem;
+
+    color: #0df5e3;
+    text-decoration: underline;
   }
 </style>

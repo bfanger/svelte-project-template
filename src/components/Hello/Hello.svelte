@@ -6,21 +6,15 @@
 
 <style lang="scss">
   .hello {
-    cursor: pointer;
-
-    display: block;
-
-    box-sizing: border-box;
     width: 100%;
-    margin: 0;
     padding: 4rem;
 
-    font: bold 4rem sans-serif;
-    color: white;
+    font-weight: bold;
+    font-size: 4rem;
+    color: #fff;
     text-align: center;
 
-    background-color: #1d859e;
-    border: 0;
+    background-color: #38304c;
 
     transition: letter-spacing 200ms;
 

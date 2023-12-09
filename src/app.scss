@@ -4,15 +4,19 @@ html {
 }
 
 body {
+  display: flow-root;
+
   min-height: 100%;
   margin: 0;
 
-  font: 1.6rem sans-serif;
-  color: white;
+  font:
+    1.6rem system-ui,
+    "Segoe UI",
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  color: #ffffff;
 
-  background: #202020;
-}
-
-a {
-  color: #51deff;
+  background: #201a31;
 }

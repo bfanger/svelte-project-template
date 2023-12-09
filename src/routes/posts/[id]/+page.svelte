@@ -9,18 +9,20 @@
 </svelte:head>
 
 <div class="post">
-  <a href="/">&lt; Home</a>
-  <article>
-    <h1>{title}</h1>
-    <p>{body}</p>
-  </article>
+  <a href="/" class="button">Home</a>
+  <div class="content">
+    <article class="prose">
+      <h1>{title}</h1>
+      <p>{body}</p>
+    </article>
+  </div>
   <div class="pager">
     {#if id > 1}
-      <a href="/posts/{id - 1}" class="button"> &lt; Previous </a>
+      <a href="/posts/{id - 1}" class="button">Previous </a>
     {/if}
 
     {#if id < 10}
-      <a href="/posts/{id + 1}" class="button next"> Next &gt; </a>
+      <a href="/posts/{id + 1}" class="button next">Next</a>
     {/if}
   </div>
 </div>
@@ -29,10 +31,13 @@
   .post {
     box-sizing: border-box;
     width: 70rem;
-    max-width: 100vw;
-    margin-right: auto;
+    max-width: 100%;
+    margin-inline: auto;
     margin-left: auto;
-    padding: 4rem;
+    padding: 3rem;
+  }
+  .content {
+    margin-block: 3rem;
   }
 
   .pager {
@@ -40,30 +45,20 @@
   }
 
   .button {
-    user-select: none;
-
-    display: inline-block;
-
-    padding: 1rem 2rem;
+    padding: 0.8rem 3.2rem;
 
     font-weight: bold;
-    color: white;
-    text-decoration: none;
+    color: #1f1f34;
 
-    background: #9324b6;
+    background: #0df5e3;
     border-radius: 2rem;
 
-    &:focus-visible {
-      outline: none;
-      box-shadow: 0 0 0 2px #ffffffe6;
-    }
-
     &:hover {
-      background: #ab48c9;
+      background: #9afff7;
     }
 
     &:active {
-      background: #722988;
+      background: #0df5e3;
     }
   }
 

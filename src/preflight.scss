@@ -1,0 +1,124 @@
+/**
+ * Defaults and resets
+ *
+ * Inspired by https://tailwindcss.com/docs/preflight
+ * https://unpkg.com/tailwindcss@3.3.6/src/css/preflight.css
+*/
+html {
+  line-height: 1.5;
+  text-size-adjust: 100%;
+  tab-size: 2;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  line-height: inherit;
+}
+
+// Default margins are removed
+blockquote,
+dl,
+dd,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+figure,
+p,
+pre {
+  margin: 0;
+}
+
+// Headings are unstyled
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+// Lists are unstyled
+ol,
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+// Images are block-level
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: block;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+table {
+  border-collapse: collapse;
+  text-indent: 0;
+  border-color: inherit;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  margin: 0;
+  padding: 0;
+
+  font-family: inherit;
+  font-size: 100%;
+  font-feature-settings: inherit;
+  font-variation-settings: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+button,
+[role="button"] {
+  cursor: pointer;
+}
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  appearance: button;
+  background-color: transparent;
+  background-image: none;
+  border-width: 0;
+}
+
+:disabled {
+  cursor: default;
+}
+
+[hidden] {
+  display: none;
+}
