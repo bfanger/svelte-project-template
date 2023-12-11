@@ -10,8 +10,8 @@
     "lint:prettier": "prettier --check . \"src/**/*.{svelte,ts,scss,css,html}\"",
     "lint:svelte-check": "svelte-check --fail-on-warnings --ignore build,package --diagnostic-sources \"js,svelte\"",
     "lint:eslint": "eslint --ext=js,ts,svelte --max-warnings=0 src",
-    "lint:stylelint": "stylelint \"src/**/*.{css,scss,svelte}\"",
-    "format": "eslint --ext=js,ts,svelte --fix src  && stylelint --fix \"src/**/*.{css,scss,svelte}\" && prettier --write . \"src/**/*.{svelte,ts,scss,css,html}\"",
+    "lint:stylelint": "stylelint --max-warnings=0 \"src/**/*.{css,scss,svelte}\"",
+    "format": "eslint --ext=js,ts,svelte --fix src && stylelint --fix \"src/**/*.{css,scss,svelte}\" && prettier --write . \"src/**/*.{svelte,ts,scss,css,html}\"",
     "prepare": "husky install"
   },
   "lint-staged": {
@@ -26,7 +26,7 @@
     ]
   },
   "engines": {
-    "node": ">20"
+    "node": ">=20"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "^2.0.3",

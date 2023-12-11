@@ -9,8 +9,8 @@
     width: 100%;
     padding: 4rem;
 
-    font-weight: bold;
     font-size: 4rem;
+    font-weight: bold;
     color: #fff;
     text-align: center;
 

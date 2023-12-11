@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import type { Handle, HandleFetch } from "@sveltejs/kit";
 import cache from "./utils/cache";
 

@@ -32,10 +32,11 @@
     box-sizing: border-box;
     width: 70rem;
     max-width: 100%;
-    margin-inline: auto;
     margin-left: auto;
+    margin-inline: auto;
     padding: 3rem;
   }
+
   .content {
     margin-block: 3rem;
   }
