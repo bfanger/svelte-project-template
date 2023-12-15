@@ -5,13 +5,11 @@
  * The corresponding Response object is available via the helper methods via lookup.
  * This allows access to the headers and http status code by passing the data to those helpers
  */
-import { error } from "@sveltejs/kit";
+import { error, type NumericRange } from "@sveltejs/kit";
 import buildUrl, { type Params } from "../utils/buildUrl";
 import type { ApiGetResponse, ApiPostRequest, ApiPostResponse } from "./dto";
-import { env } from "$env/dynamic/public";
 
-const endpoint =
-  env.PUBLIC_API_ENDPOINT ?? "https://jsonplaceholder.typicode.com/";
+const endpoint = "https://jsonplaceholder.typicode.com/";
 
 type Config = RequestInit & {
   params?: Params;
@@ -59,13 +57,15 @@ async function wrapped(
     );
   }
   if (!response.ok) {
-    const err = error(
-      response.status,
-      `${method} ${url} failed: ${response.status} ${response.statusText}`,
-    );
-    responses.set(err, response);
-    // eslint-disable-next-line @typescript-eslint/no-throw-literal
-    throw err;
+    try {
+      error(
+        response.status as NumericRange<400, 599>,
+        `${method} ${url} failed: ${response.status} ${response.statusText}`,
+      );
+    } catch (err) {
+      responses.set(err, response);
+      throw err;
+    }
   }
 
   // Note: If the api is allowed to return empty or non-json content, this check should be tweaked or removed.

@@ -1,7 +1,14 @@
-import { env } from "$env/dynamic/private";
+/* @svelte/adapter-node start */
+// import { env } from "$env/dynamic/private";
+//
+// const ROBOTS_TXT = env.ROBOTS_TXT;
+/* @svelte/adapter-node end */
 
-// Remove prerender when switching to the adapter-node (SSR)
+/* @svelte/adapter-static start */
+import { ROBOTS_TXT } from "$env/static/private";
+
 export const prerender = true;
+/* @svelte/adapter-static end */
 
 /**
  * Enable or disable indexing of the site.
@@ -10,10 +17,10 @@ export const prerender = true;
  */
 export const GET = () => {
   let allow = true;
-  const robotsTxt = env.ROBOTS_TXT;
-  if (robotsTxt === "noindex") {
+
+  if (ROBOTS_TXT === "noindex") {
     allow = false;
-  } else if (robotsTxt !== "index") {
+  } else if (ROBOTS_TXT !== "index") {
     console.warn("Invalid ROBOTS_TXT env, expecting 'noindex' or 'index'");
   }
 
