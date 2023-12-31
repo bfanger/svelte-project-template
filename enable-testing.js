@@ -168,7 +168,9 @@ const appScssExists = await fs
 if (appScssExists) {
   await writeFile(
     ".storybook/preview.ts",
-    `import "../src/app.scss";
+    `import "../src/preflight.scss";
+import "../src/typography.scss";
+import "../src/app.scss";
 `,
   );
 }
