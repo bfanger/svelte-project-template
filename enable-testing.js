@@ -128,7 +128,10 @@ await writeFile(
   `import { test, expect } from "@playwright/test";
 
 test("hello world", async ({ page }) => {
-  await page.goto("http://localhost:5173/", { waitUntil: "networkidle" });
+  const response = await page.goto("http://localhost:5173/", {
+    waitUntil: "networkidle",
+  });
+  expect(response?.status()).toBe(200);
   await page.locator("text=Hello world").click();
   await expect(page.locator("text=Hello you")).toBeVisible();
 });
@@ -195,17 +198,17 @@ if (helloComponentExists) {
     `import { expect, it, describe, vi } from "vitest";
 import { render, fireEvent } from "@testing-library/svelte";
 import { tick } from "svelte";
-import Hallo from "./Hello.svelte";
+import Hello from "./Hello.svelte";
 
 /**
- * Note! For demonstation purposes only. this is a terrible unittest:
+ * Note! For demonstration purposes only. this is a terrible unittest:
  * - It doesn't test any complexity we wrote
  * - The components is trivial an unlikely to break/change
  */
 describe("Hello component", () => {
   it("should render based on prop", async () => {
     const { getByText, component } = render(
-      Hallo as any,
+      Hello as any,
       { name: "world" } as any,
     );
     const el = getByText("Hello world");
@@ -216,7 +219,7 @@ describe("Hello component", () => {
   });
 
   it("should trigger handlers based on events", async () => {
-    const { getByText, component } = render(Hallo, { name: "click" });
+    const { getByText, component } = render(Hello, { name: "click" });
     const listener = vi.fn();
     component.$on("click", listener);
     fireEvent(getByText("Hello click"), new MouseEvent("click"));
