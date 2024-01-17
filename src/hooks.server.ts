@@ -1,5 +1,5 @@
 import type { Handle, HandleFetch } from "@sveltejs/kit";
-import cache from "./utils/cache";
+import cache from "./services/cache";
 
 const headerWhitelist = ["content-type", "access-control-allow-origin"];
 export const handle: Handle = async ({ event, resolve }) => {

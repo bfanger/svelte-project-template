@@ -1,4 +1,4 @@
-import api from "../../../api/api";
+import api from "../../../services/api.js";
 
 export async function load({ fetch, params }) {
   return {

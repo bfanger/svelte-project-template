@@ -6,8 +6,12 @@
  * This allows access to the headers and http status code by passing the data to those helpers
  */
 import { error, type NumericRange } from "@sveltejs/kit";
-import buildUrl, { type Params } from "../utils/buildUrl";
-import type { ApiGetResponse, ApiPostRequest, ApiPostResponse } from "./dto";
+import buildUrl, { type Params } from "./buildUrl";
+import type {
+  ApiGetResponse,
+  ApiPostRequest,
+  ApiPostResponse,
+} from "./api-types";
 
 const endpoint = "https://jsonplaceholder.typicode.com/";
 
