@@ -21,6 +21,7 @@ cd my-svelte-project
 git init --initial-branch main
 git add .
 pnpm install     # or  npm install
+cp -n env.example .env
 pnpm dev --open  # or  npm run dev -- --open
 ```
 
@@ -35,7 +36,7 @@ pnpm install  # or  npm install
 - Creates an example unittest
 - Creates an example e2e test
 - Creates an example storybook story
-- node_modules grows from ~200M to ~350M.
+- node_modules grows from ~240M to ~475M.
 
 ## Linting
 
