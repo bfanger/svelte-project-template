@@ -9,7 +9,7 @@ const storage = {
       if (value === null) {
         return defaultValue;
       }
-      return JSON.parse(value);
+      return JSON.parse(value) as T;
     } catch (e) {
       console.warn("Reading from localStorage failed", e);
       return defaultValue;

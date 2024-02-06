@@ -222,7 +222,7 @@ describe("Hello component", () => {
     const { getByText, component } = render(Hello, { name: "click" });
     const listener = vi.fn();
     component.$on("click", listener);
-    fireEvent(getByText("Hello click"), new MouseEvent("click"));
+    await fireEvent(getByText("Hello click"), new MouseEvent("click"));
     expect(listener).toBeCalledTimes(1);
   });
 });

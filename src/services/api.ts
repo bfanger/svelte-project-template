@@ -22,11 +22,11 @@ type Config = RequestInit & {
 };
 const responses = new WeakMap<any, Response>();
 
-async function wrapped(
+async function wrapped<T>(
   method: RequestInit["method"],
   path: string,
   config: Config,
-): Promise<any> {
+): Promise<T> {
   // eslint-disable-next-line prefer-const
   let { ssrCache, fetch, params, ...init } = config;
   params = params || {};
@@ -87,22 +87,19 @@ async function wrapped(
   if (typeof data === "object" && data !== null) {
     responses.set(data, response);
   }
-  return data;
+  return data as T;
 }
 
 const api = {
-  get<T extends keyof ApiGetResponse>(
-    path: T,
-    config?: Config,
-  ): Promise<ApiGetResponse[T]> {
-    return wrapped("GET", path, config || {});
+  get<T extends keyof ApiGetResponse>(path: T, config?: Config) {
+    return wrapped<ApiGetResponse[T]>("GET", path, config || {});
   },
   async post<T extends keyof ApiPostRequest & keyof ApiPostResponse>(
     path: T,
     data: ApiPostRequest[T],
     config?: Config,
-  ): Promise<ApiPostResponse[T]> {
-    return wrapped("POST", path, {
+  ) {
+    return wrapped<ApiPostResponse[T]>("POST", path, {
       ...config,
       headers: {
         ...config?.headers,

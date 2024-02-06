@@ -37,7 +37,7 @@ function keyFromRequest(request: Request) {
  */
 function reusableResponse(res: Response): Response {
   const textPromise = res.text();
-  const jsonPromise = textPromise.then((text) => JSON.parse(text));
+  const jsonPromise = textPromise.then((text) => JSON.parse(text) as unknown);
   return {
     ok: res.ok,
     headers: res.headers,
