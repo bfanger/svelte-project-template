@@ -23,7 +23,7 @@ type Config = RequestInit & {
 const responses = new WeakMap<any, Response>();
 
 async function wrapped<T>(
-  method: RequestInit["method"],
+  method: Exclude<RequestInit["method"], undefined>,
   path: string,
   config: Config,
 ): Promise<T> {
