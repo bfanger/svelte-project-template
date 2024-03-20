@@ -2,9 +2,9 @@
   "extends": ["triple/svelte"],
   "env": {
     "browser": true,
-    "node": true
+    "node": true,
   },
   "parserOptions": {
-    "project": "./tsconfig.eslint.json"
-  }
+    "project": "./tsconfig.eslint.json",
+  },
 }

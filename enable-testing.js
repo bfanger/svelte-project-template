@@ -12,7 +12,7 @@ const packageJson = JSON.parse(
 
 const scripts = {
   "dev:vite": "vite dev",
-  "dev:storybook": "storybook dev -p 6006 --no-open",
+  "dev:storybook": "storybook dev -p 6006 --no-open --disable-telemetry",
   "build:vite": "vite build",
   "build:storybook":
     "storybook build --output-dir build/client/styleguide-storybook",
@@ -27,7 +27,7 @@ for (const [task, command] of Object.entries(scripts)) {
 }
 if (packageJson.scripts.dev === "vite dev") {
   packageJson.scripts.dev =
-    'concurrently -c "#747bff","#990f3f" --kill-others-on-fail "npm:dev:*"';
+    'concurrently -c "#747bff","#d6577d" --kill-others-on-fail "npm:dev:*"';
 }
 if (packageJson.scripts.build === "vite build") {
   packageJson.scripts.build = "npm run build:vite && npm run build:storybook";
@@ -36,18 +36,18 @@ if (packageJson.scripts.build === "vite build") {
 const devDependencies = {
   "@faker-js/faker": "^8.3.1",
   "@playwright/test": "^1.41.0",
-  "@storybook/addon-essentials": "^7.6.8",
-  "@storybook/addon-interactions": "^7.6.8",
-  "@storybook/addon-links": "^7.6.8",
-  "@storybook/blocks": "^7.6.8",
-  "@storybook/svelte": "^7.6.8",
-  "@storybook/sveltekit": "^7.6.8",
+  "@storybook/addon-essentials": "^8.0.2",
+  "@storybook/addon-interactions": "^8.0.2",
+  "@storybook/addon-links": "^8.0.2",
+  "@storybook/blocks": "^8.0.2",
+  "@storybook/svelte": "^8.0.2",
+  "@storybook/sveltekit": "^8.0.2",
   "@storybook/testing-library": "^0.2.2",
   "@testing-library/svelte": "^4.0.5",
-  "happy-dom": "^13.1.4",
+  "happy-dom": "^14.1.1",
   react: "^18.2.0",
   "react-dom": "^18.2.0",
-  storybook: "^7.6.8",
+  storybook: "^8.0.2",
   vitest: "^1.2.0",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
@@ -255,5 +255,5 @@ export const World = {
   );
 }
 process.stdout.write(
-  "\n\nTo bring in the additional dependencies for Vitest, Playwright and Storybook run:\n\npnpm install  # or npm install\n",
+  "\n\nTo bring in the additional dependencies for Vitest, Playwright and Storybook run:\n\npnpm install  # or npm install\n\n",
 );
