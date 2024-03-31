@@ -2,24 +2,7 @@
   export let name: string;
 </script>
 
-<button class="hello" on:click>Hello {name}</button>
-
-<style lang="scss">
-  .hello {
-    width: 100%;
-    padding: 4rem;
-
-    font-size: 4rem;
-    font-weight: bold;
-    color: #fff;
-    text-align: center;
-
-    background-color: #38304c;
-
-    transition: letter-spacing 200ms;
-
-    &:hover {
-      letter-spacing: 1px;
-    }
-  }
-</style>
+<button
+  class="w-full bg-slate-100 p-4 text-center text-[3rem] font-bold transition-[letter-spacing_200ms] hover:tracking-[1px]"
+  on:click>Hello {name}</button
+>

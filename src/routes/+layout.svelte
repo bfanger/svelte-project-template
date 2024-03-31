@@ -1,7 +1,5 @@
 <script lang="ts">
-  import "../preflight.scss";
-  import "../typography.scss";
-  import "../app.scss";
+  import "../app.css";
 </script>
 
 <slot />

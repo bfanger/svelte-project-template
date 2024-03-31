@@ -14,18 +14,10 @@
 
 <Hello {name} on:click={onClick} />
 
-<div class="links">
-  <a href="/posts/1" data-sveltekit-preload-data="hover">Api Example</a>
+<div class="mt-4 flex justify-center">
+  <a
+    class="text-sky-700 underline hover:text-sky-600 hover:no-underline"
+    href="/posts/1"
+    data-sveltekit-preload-data="hover">Api Example</a
+  >
 </div>
-
-<style>
-  .links {
-    display: flex;
-    justify-content: center;
-
-    margin-top: 4rem;
-
-    color: #0df5e3;
-    text-decoration: underline;
-  }
-</style>
