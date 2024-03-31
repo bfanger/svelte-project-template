@@ -158,10 +158,8 @@ export default config;
 `,
 );
 await writeFile(
-  ".storybook/preview-head.html",
-  `<script>
-  window.global = window;
-</script>
+  ".storybook/preview.ts",
+  `import "../src/app.css";
 `,
 );
 const appScssExists = await fs
@@ -230,7 +228,8 @@ describe("Hello component", () => {
   );
   await writeFile(
     "src/components/Hello/Hello.stories.ts",
-    `import { faker } from "@faker-js/faker/locale/nl";
+    `import { type Meta } from "@storybook/svelte";
+import { faker } from "@faker-js/faker/locale/nl";
 import Hello from "./Hello.svelte";
 
 export default {
@@ -239,11 +238,11 @@ export default {
   argTypes: {
     name: { control: "text" },
   },
-};
+} as Meta<typeof Hello>;
 
 export const Random = {
   args: {
-    name: faker.name.firstName(),
+    name: faker.person.firstName(),
   },
 };
 export const World = {
