@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 
 import { promises as fs } from "fs";
 import path from "path";

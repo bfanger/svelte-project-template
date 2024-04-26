@@ -5,6 +5,7 @@
     href: string;
     children: Snippet;
   };
+
   const { href, children }: Props = $props();
 </script>
 

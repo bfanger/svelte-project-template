@@ -94,7 +94,7 @@ const api = {
   get<T extends keyof ApiGetResponse>(path: T, config?: Config) {
     return wrapped<ApiGetResponse[T]>("GET", path, config || {});
   },
-  async post<T extends keyof ApiPostRequest & keyof ApiPostResponse>(
+  async post<T extends keyof ApiPostRequest>(
     path: T,
     data: ApiPostRequest[T],
     config?: Config,
