@@ -56,7 +56,6 @@ for (const [dependency, version] of Object.entries(devDependencies)) {
 }
 
 for (const folder of [".storybook", "playwright", "playwright/tests"]) {
-  // eslint-disable-next-line no-await-in-loop
   await fs
     .stat(path.resolve(projectDir, folder))
     .catch(() => fs.mkdir(path.resolve(projectDir, folder)));

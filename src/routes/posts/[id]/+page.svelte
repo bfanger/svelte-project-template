@@ -1,9 +1,8 @@
 <script lang="ts">
   import ButtonLink from "./ButtonLink.svelte";
 
-  export let data;
-
-  $: ({ id, title, body } = data.post);
+  let { data } = $props();
+  let { id, title, body } = $derived(data.post);
 </script>
 
 <svelte:head>

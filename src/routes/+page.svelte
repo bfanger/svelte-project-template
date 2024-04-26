@@ -1,9 +1,9 @@
 <script lang="ts">
   import Hello from "../components/Hello/Hello.svelte";
 
-  let name = "world";
+  let name = $state("world");
 
-  function onClick() {
+  function swapName() {
     name = "you";
   }
 </script>
@@ -12,7 +12,7 @@
   <title>SvelteKit demo page</title>
 </svelte:head>
 
-<Hello {name} on:click={onClick} />
+<Hello {name} onclick={swapName} />
 
 <div class="mt-4 flex justify-center">
   <a

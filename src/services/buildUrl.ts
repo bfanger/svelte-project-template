@@ -25,7 +25,6 @@ export default function buildUrl<T extends string>(
   let interpolatedPath = path as string;
   for (const [param, value] of Object.entries(params)) {
     if (value === undefined || value === null) {
-      // eslint-disable-next-line no-continue
       continue;
     }
     const replaced = interpolatedPath.replace(`[${param}]`, value as string);
