@@ -162,16 +162,14 @@ await writeFile(
   `import "../src/app.css";
 `,
 );
-const appScssExists = await fs
-  .stat(path.resolve(projectDir, "src/app.scss"))
+const appCssExists = await fs
+  .stat(path.resolve(projectDir, "src/app.css"))
   .catch(() => false);
 
-if (appScssExists) {
+if (appCssExists) {
   await writeFile(
     ".storybook/preview.ts",
-    `import "../src/preflight.scss";
-import "../src/typography.scss";
-import "../src/app.scss";
+    `import "../src/app.css";
 `,
   );
 }
