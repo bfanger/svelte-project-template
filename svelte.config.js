@@ -1,10 +1,8 @@
 import { spawnSync } from "node:child_process";
 import adapter from "@sveltejs/adapter-static";
-import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 
 /** @type {import('@sveltejs/kit').Config} */
 export default {
-  preprocess: vitePreprocess(),
   compilerOptions: { runes: true },
   kit: {
     adapter: adapter(),

@@ -4,8 +4,8 @@
 
 - [SvelteKit](https://kit.svelte.dev/) ([Vite](https://vitejs.dev/))
 - [TypeScript](https://www.typescriptlang.org/)
-- [Tailwind CSS](https://tailwindcss.com/), [Sass](https://sass-lang.com/) & [PostCSS Preset Env](https://github.com/csstools/postcss-plugins/tree/main/plugin-packs/postcss-preset-env) ( which includes [Autoprefixer](https://github.com/postcss/autoprefixer))
-- [Prettier](https://prettier.io/), [Eslint](https://eslint.org/) & [Stylelint](https://stylelint.io/)
+- [Tailwind CSS](https://tailwindcss.com/), [PostCSS Preset Env](https://github.com/csstools/postcss-plugins/tree/main/plugin-packs/postcss-preset-env) ( which includes [Autoprefixer](https://github.com/postcss/autoprefixer))
+- [Prettier](https://prettier.io/), [ESLint](https://eslint.org/) & [Stylelint](https://stylelint.io/)
 - [Husky](https://typicode.github.io/husky/) & [Lint-staged](https://github.com/okonet/lint-staged)
 - [Vitest](https://vitest.dev/) \*1
 - [Playwright](https://playwright.dev/) \*1
