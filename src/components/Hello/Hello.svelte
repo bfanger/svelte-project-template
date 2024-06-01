@@ -7,7 +7,7 @@
 </script>
 
 <button
-  class="w-full bg-slate-100 p-4 text-center text-[3rem] font-bold transition-[letter-spacing_200ms] hover:tracking-[1px]"
+  class="w-full bg-slate-200 p-5 text-center text-5xl font-bold leading-normal transition-[letter-spacing_200ms] hover:tracking-[1px]"
   {onclick}
 >
   Hello {name}
