@@ -5,7 +5,7 @@
   type Props = {
     children: Snippet;
   };
-  const { children }: Props = $props();
+  let { children }: Props = $props();
 </script>
 
 {@render children()}

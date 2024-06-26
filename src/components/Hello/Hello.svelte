@@ -3,7 +3,7 @@
     name: string;
     onclick: () => void;
   };
-  const { name, onclick }: Props = $props();
+  let { name, onclick }: Props = $props();
 </script>
 
 <button
