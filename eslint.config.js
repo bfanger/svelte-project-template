@@ -35,7 +35,13 @@ export default ts.config(
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-unsafe-assignment": "off",
       "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { ignoreRestSiblings: true, argsIgnorePattern: "^_+$" },
+      ],
       "no-console": ["warn", { allow: ["info", "warn", "error"] }],
+      "no-useless-rename": "warn",
+      "object-shorthand": "warn",
       "prefer-template": "warn",
       "svelte/block-lang": ["warn", { script: "ts" }],
     },
