@@ -1,9 +1,10 @@
 import { spawnSync } from "node:child_process";
 import adapter from "@sveltejs/adapter-static";
+import runesMode from "./src/runesMode.js";
 
 /** @type {import('@sveltejs/kit').Config} */
 export default {
-  compilerOptions: { runes: true },
+  preprocess: runesMode(),
   kit: {
     adapter: adapter(),
     version: {
