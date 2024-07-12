@@ -39,11 +39,20 @@ export default ts.config(
         "warn",
         { ignoreRestSiblings: true, argsIgnorePattern: "^_+$" },
       ],
+      eqeqeq: "warn",
       "no-console": ["warn", { allow: ["info", "warn", "error"] }],
       "no-useless-rename": "warn",
       "object-shorthand": "warn",
       "prefer-template": "warn",
       "svelte/block-lang": ["warn", { script: "ts" }],
+    },
+  },
+  {
+    files: ["src/routes/**/*.ts", "src/routes/**/*.svelte"],
+    rules: {
+      // ESLint is not aware of the generated ./$types and reports false positives
+      "@typescript-eslint/no-unsafe-argument": 0,
+      "@typescript-eslint/no-unsafe-call": 0,
     },
   },
   {
