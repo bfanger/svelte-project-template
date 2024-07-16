@@ -45,6 +45,7 @@ export default ts.config(
       "object-shorthand": "warn",
       "prefer-template": "warn",
       "svelte/block-lang": ["warn", { script: "ts" }],
+      "svelte/no-at-html-tags": "off",
     },
   },
   {
