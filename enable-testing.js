@@ -35,21 +35,21 @@ if (packageJson.scripts.build === "vite build") {
 }
 
 const devDependencies = {
-  "@faker-js/faker": "^8.3.1",
-  "@playwright/test": "^1.44.1",
-  "@storybook/addon-essentials": "^8.1.6",
-  "@storybook/addon-interactions": "^8.1.6",
-  "@storybook/addon-links": "^8.1.6",
-  "@storybook/blocks": "^8.1.6",
-  "@storybook/svelte": "^8.1.6",
-  "@storybook/sveltekit": "^8.1.6",
-  "@storybook/test": "^8.1.6",
-  "@testing-library/svelte": "^5.1.0",
-  "happy-dom": "^14.1.1",
-  react: "^18.2.0",
-  "react-dom": "^18.2.0",
-  storybook: "^8.1.6",
-  vitest: "^1.6.0",
+  "@faker-js/faker": "^8.4.1",
+  "@playwright/test": "^1.45.3",
+  "@storybook/addon-essentials": "^8.2.5",
+  "@storybook/addon-interactions": "^8.2.5",
+  "@storybook/addon-links": "^8.2.5",
+  "@storybook/blocks": "^8.2.5",
+  "@storybook/svelte": "^8.2.5",
+  "@storybook/sveltekit": "^8.2.5",
+  "@storybook/test": "^8.2.5",
+  "@testing-library/svelte": "^5.2.0",
+  "happy-dom": "^14.12.3",
+  react: "^18.3.1",
+  "react-dom": "^18.3.1",
+  storybook: "^8.2.5",
+  vitest: "^2.0.4",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
@@ -86,15 +86,7 @@ await writeFile(
 });`,
     ),
 );
-await writeFile(
-  "svelte.config.js",
-  (await fs.readFile("svelte.config.js", "utf-8")).replace(
-    "compilerOptions: { runes: true },",
-    `compilerOptions: {
-    // runes: true Disabled runes-only mode for Storybook
-  },`,
-  ),
-);
+
 await writeFile(
   "playwright.config.ts",
   `import type { PlaywrightTestConfig } from "@playwright/test";
@@ -202,7 +194,7 @@ if (helloComponentExists) {
     "src/components/Hello/Hello.spec.ts",
     `import { expect, it, describe, vi } from "vitest";
 import { render, fireEvent } from "@testing-library/svelte/svelte5";
-import { tick } from "svelte";
+import { tick, type SvelteComponent } from "svelte";
 import Hello from "./Hello.svelte";
 
 /**
@@ -212,10 +204,9 @@ import Hello from "./Hello.svelte";
  */
 describe("Hello component", () => {
   it.skip("should render based on prop", async () => {
-    const { getByText, component } = render(
-      Hello as any,
-      { name: "world" } as any,
-    );
+    const { getByText, component } = render<SvelteComponent<any>>(Hello, {
+      name: "world",
+    });
     const el = getByText("Hello world");
     expect(el.textContent).toBe("Hello world");
     component.$set({ name: "you" });
@@ -240,7 +231,7 @@ import Hello from "./Hello.svelte";
 
 export default {
   title: "Example/Hello",
-  component: Hello,
+  component: Hello as any,
   argTypes: {
     name: { control: "text" },
   },
