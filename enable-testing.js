@@ -177,10 +177,7 @@ if (appCssExists) {
 
 await writeFile(
   ".husky/pre-push",
-  `#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-npm run test
+  `npm run test
 `,
 );
 await fs.chmod(path.resolve(projectDir, ".husky/pre-push"), "755");

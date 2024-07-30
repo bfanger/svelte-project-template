@@ -57,6 +57,13 @@ export default ts.config(
     },
   },
   {
-    ignores: [".svelte-kit", ".vercel", "build", "node_modules", "package"],
+    ignores: [
+      ".svelte-kit",
+      ".vercel",
+      "build",
+      "node_modules",
+      "package",
+      "vite.config.ts.timestamp-*.mjs",
+    ],
   },
 );

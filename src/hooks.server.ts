@@ -2,6 +2,7 @@ import type { Handle, HandleFetch } from "@sveltejs/kit";
 import cache from "./services/cache";
 
 const headerWhitelist = ["content-type", "access-control-allow-origin"];
+// eslint-disable-next-line @typescript-eslint/unbound-method
 export const handle: Handle = async ({ event, resolve }) => {
   const response = await resolve(event, {
     filterSerializedResponseHeaders: (name) => headerWhitelist.includes(name),
