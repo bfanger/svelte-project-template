@@ -2,9 +2,8 @@ import type { Handle, HandleFetch } from "@sveltejs/kit";
 import cache from "./services/cache";
 
 const headerWhitelist = ["content-type", "access-control-allow-origin"];
-// eslint-disable-next-line @typescript-eslint/unbound-method
-export const handle: Handle = async ({ event, resolve }) => {
-  const response = await resolve(event, {
+export const handle: Handle = async (input) => {
+  const response = await input.resolve(input.event, {
     filterSerializedResponseHeaders: (name) => headerWhitelist.includes(name),
   });
   response.headers.set("X-Frame-Options", "sameorigin");
