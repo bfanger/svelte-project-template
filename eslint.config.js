@@ -39,6 +39,7 @@ export default ts.config(
         "warn",
         { ignoreRestSiblings: true, argsIgnorePattern: "^_+$" },
       ],
+      curly: "warn",
       eqeqeq: "warn",
       "no-console": ["warn", { allow: ["info", "warn", "error"] }],
       "no-useless-rename": "warn",
@@ -54,6 +55,13 @@ export default ts.config(
       // ESLint is not aware of the generated ./$types and reports false positives
       "@typescript-eslint/no-unsafe-argument": 0,
       "@typescript-eslint/no-unsafe-call": 0,
+    },
+  },
+  {
+    files: ["**/*.cjs"],
+    rules: {
+      // Allow require() in CommonJS modules.
+      "@typescript-eslint/no-require-imports": "off",
     },
   },
   {
