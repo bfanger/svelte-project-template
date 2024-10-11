@@ -6,30 +6,35 @@
  * This allows access to the headers and http status code by passing the data to those helpers
  */
 import { error, type NumericRange } from "@sveltejs/kit";
-import buildUrl, { type Params } from "./buildUrl";
+import buildUrl, { type PathParams, type SearchParams } from "./buildUrl";
 import type {
   ApiGetResponse,
+  ApiGetSearchParams,
   ApiPostRequest,
   ApiPostResponse,
 } from "./api-types";
+import { env } from "$env/dynamic/public";
 
-const endpoint = "https://jsonplaceholder.typicode.com/";
+const slowResponseThreshold = 1000;
+type ParamsProperty<T> = T extends `${string}{${string}}${string}`
+  ? { params: PathParams<T> }
+  : { params?: never };
 
-type Config = RequestInit & {
-  params?: Params;
-  fetch?: typeof fetch;
-  ssrCache?: number;
-};
+type Config<TParams, TSearchParams> = RequestInit &
+  TParams & {
+    searchParams?: TSearchParams;
+    fetch?: typeof fetch;
+    ssrCache?: number;
+  };
 const responses = new WeakMap<any, Response>();
 
 async function wrapped<T>(
   method: Exclude<RequestInit["method"], undefined>,
   path: string,
-  config: Config,
+  config: Config<{ params?: unknown }, unknown>,
 ): Promise<T> {
   // eslint-disable-next-line prefer-const
-  let { ssrCache, fetch, params, ...init } = config;
-  params = params || {};
+  let { ssrCache, fetch, params, searchParams, ...init } = config;
   if (!fetch) {
     if (typeof window === "undefined") {
       throw new Error("Missing config.fetch");
@@ -41,7 +46,13 @@ async function wrapped<T>(
     init.headers.append("SSR-Cache", `${ssrCache}`);
   }
   init.method = method;
-  const url = endpoint + buildUrl(path, params);
+  const endpoint = env.PUBLIC_API_ENDPOINT;
+  if (!endpoint) {
+    throw new Error("Missing environment variable PUBLIC_API_ENDPOINT");
+  }
+  const url =
+    endpoint +
+    buildUrl(path, params as PathParams<string>, searchParams as SearchParams);
   const start = Date.now();
   let response: Response;
   try {
@@ -52,12 +63,12 @@ async function wrapped<T>(
     }
     throw err;
   }
-  const duration = (Date.now() - start) / 1000;
-  if (duration > 1) {
+  const duration = Date.now() - start;
+  if (duration > slowResponseThreshold) {
     console.info(
-      `${method} ${url.substring(endpoint.length)} took ${duration.toFixed(
-        3,
-      )}s`,
+      `${method} ${url.substring(endpoint.length)} took ${(
+        duration / 1000
+      ).toFixed(3)}s`,
     );
   }
   if (!response.ok) {
@@ -91,13 +102,16 @@ async function wrapped<T>(
 }
 
 const api = {
-  get<T extends keyof ApiGetResponse>(path: T, config?: Config) {
-    return wrapped<ApiGetResponse[T]>("GET", path, config || {});
+  get<T extends keyof ApiGetResponse>(
+    path: T,
+    config: Config<ParamsProperty<T>, ApiGetSearchParams[T]>,
+  ) {
+    return wrapped<ApiGetResponse[T]>("GET", path, config);
   },
   async post<T extends keyof ApiPostRequest>(
     path: T,
     data: ApiPostRequest[T],
-    config?: Config,
+    config: Config<ParamsProperty<T>, never>,
   ) {
     return wrapped<ApiPostResponse[T]>("POST", path, {
       ...config,

@@ -3,10 +3,18 @@
  */
 
 export type ApiGetResponse = {
-  "posts/[id]": PostDto;
-  "posts/[id]/comments": CommentDto[];
-  "user/[id]/todos": TodoDto[];
+  posts: PostDto[];
+  "posts/{id}": PostDto;
+  "posts/{id}/comments": CommentDto[];
+  "user/{id}/todos": TodoDto[];
 };
+export type ApiGetSearchParams = {
+  posts: { userId?: number | string };
+  "posts/{id}": never;
+  "posts/{id}/comments": never;
+  "user/{id}/todos": never;
+};
+
 export type ApiPostRequest = {
   posts: CreatePostRequest;
 };
