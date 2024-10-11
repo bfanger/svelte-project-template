@@ -36,7 +36,7 @@ pnpm install  # or  npm install
 - Creates an example unittest
 - Creates an example e2e test
 - Creates an example storybook story
-- node_modules grows from ~240M to ~475M.
+- node_modules grows from ~166M to ~288M.
 
 ## Linting
 
