@@ -24,7 +24,7 @@ type Config<TParams, TSearchParams> = RequestInit &
   TParams & {
     searchParams?: TSearchParams;
     fetch?: typeof fetch;
-    ssrCache?: number;
+    ssrCache?: { revalidate?: number; ttl?: number; reuse?: number };
   };
 const responses = new WeakMap<any, Response>();
 
@@ -43,7 +43,7 @@ async function wrapped<T>(
   }
   if (ssrCache && typeof window === "undefined") {
     init.headers = new Headers(init.headers);
-    init.headers.append("SSR-Cache", `${ssrCache}`);
+    init.headers.append("SSR-Cache", `${JSON.stringify(ssrCache)}`);
   }
   init.method = method;
   const endpoint = env.PUBLIC_API_ENDPOINT;

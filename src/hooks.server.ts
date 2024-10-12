@@ -1,5 +1,5 @@
 import type { Handle, HandleFetch } from "@sveltejs/kit";
-import cache from "./services/cache";
+import cache, { type CacheConfig } from "./services/cache";
 
 const headerWhitelist = ["content-type", "access-control-allow-origin"];
 export const handle: Handle = async (input) => {
@@ -15,13 +15,19 @@ export const handleFetch: HandleFetch = async ({ request, fetch, event }) => {
   if (request.headers.has("SSR-Cache") === false) {
     return fetch(request);
   }
-  const ttl = parseInt(request.headers.get("SSR-Cache") as string, 10);
+  const config: CacheConfig<Response> = JSON.parse(
+    request.headers.get("SSR-Cache") as string,
+  );
   request.headers.delete("SSR-Cache");
-
   return cache(
     keyFromRequest(request),
-    (response) => (response.ok ? ttl : 0),
     async () => reusableResponse(await fetch(request)),
+    {
+      ...config,
+      validate: (response) => {
+        return response.ok;
+      },
+    },
   );
 };
 
