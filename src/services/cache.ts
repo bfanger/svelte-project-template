@@ -1,90 +1,98 @@
-export type CacheConfig<T> = {
-  revalidate?: number; // number of seconds to wait before revalidating the task
-  ttl?: number; // number of seconds to wait before clearing the cached data
-  reuse?: number; // number of seconds to wait before retying the task, default 10 seconds
-  validate?: (result: T) => boolean; // check if the
+type Options<T> = {
+  /** Number of seconds before calls to cache() will stop reusing the same promise, provide the expected pessimistic duration of the task */
+  dedupe: number;
+  /** Number of seconds before the result is considered stale and a revalidate is triggered, the stale data is still used as result */
+  revalidate?: number;
+  /** Number of seconds to wait before cached value removed from the cache */
+  ttl?: number;
+  /** Check if the resolved value is allow to be cached */
+  validate?: (result: T) => boolean;
 };
 type Timer = ReturnType<typeof setTimeout>;
-type SWR<T> = { stale: T; while: number };
+type SWR<T> = { result: T; till: number };
 
-const promises = new Map<string, Promise<unknown>>();
-const swr = new Map<string, SWR<unknown>>();
-const ttlTimers = new Map<string, Timer>();
-const reuseTimers = new Map<string, Timer>();
+const promises = new Map<unknown, Promise<unknown>>();
+const results = new Map<unknown, SWR<unknown>>();
+const dedupeTimers = new Map<unknown, Timer>();
+const ttlTimers = new Map<unknown, Timer>();
+
+const debug = false;
+const log = debug
+  ? function (message: string, key: unknown) {
+      console.info(`[cache] ${message}:`, key);
+    }
+  : () => {};
 
 /**
  * An in-memory caching helper
  *
  * @param key globally unique key
- * @param factory Creates the promise that will be cached
- * @param config Cache configuration
+ * @param task Creates the promise that will be cached
  *
  * Usage:
- *   const result = await cache('unique_key', () => doStuff((), { ttl:30 })
+ *   const result = await cache('unique_key', () => doStuff((), { timeout: 10, ttl: 30 })
  *
  * First call with the 'unique_key' calls the doStuff() and stores the promise for 30 seconds.
  * Additional calls with the 'unique_key' key will return that cached promise.
  * If the promise rejects, the cached promise is flushed.
  */
 export default async function cache<T>(
-  key: string,
-  factory: () => Promise<T>,
-  config: CacheConfig<T>,
+  key: unknown,
+  task: () => Promise<T>,
+  options: Options<T>,
 ): Promise<T> {
   const cacheHit = promises.get(key) as Promise<T> | undefined;
   if (cacheHit) {
+    log("hit", key);
     return cacheHit;
   }
-  const swrHit = swr.get(key) as SWR<T> | undefined;
-  if (swrHit) {
-    if (swrHit.while > Date.now()) {
-      return swrHit.stale;
+  const swr = results.get(key) as SWR<T> | undefined;
+  if (swr) {
+    if (swr.till > Date.now()) {
+      log("fresh", key);
+      return swr.result;
     }
-
-    void revalidate(key, swrHit, factory, config);
-    return swrHit.stale;
+    log("stale-while-revalidate", key);
+    void revalidate(key, swr, task, options);
+    return swr.result;
   }
-
-  const entry = factory();
+  log("miss", key);
+  const entry = task();
   promises.set(key, entry);
-  clearTimeout(reuseTimers.get(key));
-  reuseTimers.set(
+  clearTimeout(dedupeTimers.get(key));
+  dedupeTimers.set(
     key,
-    setTimeout(
-      () => {
-        if (promises.get(key) === entry) {
-          flush(key);
-        }
-      },
-      config.reuse ?? 10 * 1000,
-    ),
+    setTimeout(() => {
+      log("timeout", key);
+      promises.delete(key);
+    }, options.dedupe * 1000),
   );
-  const promise = entry
+  return entry
     .then((result) => {
-      if (!promises.has(key) || promises.get(key) === entry) {
-        clearTimeout(reuseTimers.get(key));
-        reuseTimers.delete(key);
-        const invalid = config.validate ? !config.validate(result) : false;
-        if (invalid) {
-          flush(key);
+      if (promises.get(key) === entry) {
+        clearTimeout(dedupeTimers.get(key));
+        dedupeTimers.delete(key);
+        const valid = options.validate ? options.validate(result) : true;
+        if (!valid) {
+          log("invalid", key);
+          promises.delete(key);
           return result;
         }
-        if (config.revalidate) {
-          swr.set(key, {
-            stale: result,
-            while: Date.now() + config.revalidate * 1000,
+        if (options.revalidate) {
+          log("store", key);
+          results.set(key, {
+            result,
+            till: Date.now() + options.revalidate * 1000,
           });
           promises.delete(key);
         }
-        if (config.ttl) {
+        if (options.ttl) {
           clearTimeout(ttlTimers.get(key));
           ttlTimers.set(
             key,
             setTimeout(() => {
-              if (promises.get(key) === entry) {
-                flush(key);
-              }
-            }, config.ttl * 1000),
+              flush(key);
+            }, options.ttl * 1000),
           );
         }
       }
@@ -96,77 +104,81 @@ export default async function cache<T>(
       }
       throw err;
     });
-
-  return promise;
 }
 /**
- * Clear the cached promise for a specific key
+ * Clear the cache for a specific key
  */
-export function flush(key: string) {
+export function flush(key: unknown) {
+  log("flush", key);
   promises.delete(key);
-  swr.delete(key);
-  clearTimeout(reuseTimers.get(key));
-  reuseTimers.delete(key);
+  results.delete(key);
+  clearTimeout(dedupeTimers.get(key));
+  dedupeTimers.delete(key);
   clearTimeout(ttlTimers.get(key));
   ttlTimers.delete(key);
 }
 /**
- * Clear all cached values
+ * Clear all cached results.
  */
 export function flushAll() {
+  log("flushAll", "");
   promises.clear();
-  swr.clear();
-  reuseTimers.forEach(clearTimeout);
-  reuseTimers.clear();
+  results.clear();
+  dedupeTimers.forEach(clearTimeout);
+  dedupeTimers.clear();
   ttlTimers.forEach(clearTimeout);
   ttlTimers.clear();
 }
 
 async function revalidate<T>(
-  key: string,
-  start: SWR<T>,
-  factory: () => Promise<T>,
-  config: CacheConfig<T>,
+  key: unknown,
+  current: SWR<T>,
+  task: () => Promise<T>,
+  options: Options<T>,
 ) {
-  if (!config.revalidate || config.revalidate <= 0) {
-    swr.delete(key);
+  if (!options.revalidate || options.revalidate <= 0) {
+    results.delete(key);
     throw new Error("Invalid config.revalidate value");
   }
-  const entry: SWR<T> = {
-    ...start,
-    while:
-      Date.now() + (config.reuse ? config.reuse : config.revalidate) * 1000,
+  // Prevent multiple revalidation in parallel
+  const intermediate: SWR<T> = {
+    result: current.result,
+    till: Date.now() + options.dedupe * 1000,
   };
-  swr.set(key, entry);
+  results.set(key, intermediate);
+  let result: T;
   try {
-    const result = await factory();
-    const invalid = config.validate ? !config.validate(result) : false;
-    if (invalid) {
-      if (swr.get(key) === entry) {
-        swr.set(key, start);
-      }
-      return;
-    }
-    const current = {
-      stale: result,
-      while: Date.now() + config.revalidate * 1000,
-    };
-    swr.set(key, current);
-    if (config.ttl) {
-      clearTimeout(ttlTimers.get(key));
-      ttlTimers.set(
-        key,
-        setTimeout(() => {
-          if (swr.get(key) === current) {
-            flush(key);
-          }
-        }, config.ttl * 1000),
-      );
-    }
+    result = await task();
   } catch (err) {
-    if (swr.get(key) === entry) {
-      swr.set(key, start);
+    if (results.get(key) === intermediate) {
+      results.set(key, current);
     }
-    throw err;
+    console.warn(err);
+    return;
+  }
+  const invalid = options.validate ? !options.validate(result) : false;
+  if (invalid) {
+    console.warn("Revalidation result was invalid for", key);
+    if (results.get(key) === intermediate) {
+      results.set(key, current);
+    }
+    return;
+  }
+  const revalidated: SWR<T> = {
+    result,
+    till: Date.now() + options.revalidate * 1000,
+  };
+  log("update", key);
+  results.set(key, revalidated);
+  if (options.ttl) {
+    clearTimeout(ttlTimers.get(key));
+    ttlTimers.set(
+      key,
+      setTimeout(() => {
+        if (results.get(key) === revalidated) {
+          flush(key);
+        }
+      }, options.ttl * 1000),
+    );
   }
 }

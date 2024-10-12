@@ -13,7 +13,15 @@ import type {
   ApiPostRequest,
   ApiPostResponse,
 } from "./api-types";
-import { env } from "$env/dynamic/public";
+/* @svelte/adapter-node start */
+// import { env } from "$env/dynamic/public";
+//
+// const PUBLIC_API_ENDPOINT = env.PUBLIC_API_ENDPOINT;
+/* @svelte/adapter-node end */
+
+/* @svelte/adapter-static start */
+import { PUBLIC_API_ENDPOINT } from "$env/static/public";
+/* @svelte/adapter-static end */
 
 const slowResponseThreshold = 1000;
 type ParamsProperty<T> = T extends `${string}{${string}}${string}`
@@ -24,7 +32,7 @@ type Config<TParams, TSearchParams> = RequestInit &
   TParams & {
     searchParams?: TSearchParams;
     fetch?: typeof fetch;
-    ssrCache?: { revalidate?: number; ttl?: number; reuse?: number };
+    ssrCache?: { dedupe: number; revalidate?: number; ttl?: number };
   };
 const responses = new WeakMap<any, Response>();
 
@@ -46,8 +54,8 @@ async function wrapped<T>(
     init.headers.append("SSR-Cache", `${JSON.stringify(ssrCache)}`);
   }
   init.method = method;
-  const endpoint = env.PUBLIC_API_ENDPOINT;
-  if (!endpoint) {
+  const endpoint = PUBLIC_API_ENDPOINT;
+  if (typeof endpoint !== "string" || endpoint === "") {
     throw new Error("Missing environment variable PUBLIC_API_ENDPOINT");
   }
   const url =
