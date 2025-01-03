@@ -27,7 +27,7 @@ export default function storage<T extends ZodType<any, any, any>>(
 ) {
   const backend = init(type);
   let raw: string | null = $state(backend.getItem(namespace + key));
-  const value = $derived.by(() => {
+  let value = $derived.by(() => {
     let parsed: unknown;
     try {
       parsed = JSON.parse(raw as string);

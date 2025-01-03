@@ -42,9 +42,11 @@ export default ts.config(
       "no-console": ["warn", { allow: ["info", "warn", "error"] }],
       "no-useless-rename": "warn",
       "object-shorthand": "warn",
+      "prefer-const": "off",
       "prefer-template": "warn",
       "svelte/block-lang": ["warn", { script: "ts" }],
       "svelte/no-at-html-tags": "off",
+      "svelte/prefer-const": ["warn", { destructuring: "all" }],
     },
   },
   {

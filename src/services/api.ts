@@ -41,7 +41,6 @@ async function wrapped<T>(
   path: string,
   config: Config<{ params?: unknown }, unknown>,
 ): Promise<T> {
-  // eslint-disable-next-line prefer-const
   let { ssrCache, fetch, params, searchParams, ...init } = config;
   if (!fetch) {
     if (typeof window === "undefined") {
