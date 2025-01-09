@@ -3,15 +3,21 @@
 
   type Props = {
     href: string;
+    "data-sveltekit-preload-data"?: "hover" | "tap" | "off";
     children: Snippet;
   };
 
-  let { href, children }: Props = $props();
+  let {
+    href,
+    "data-sveltekit-preload-data": preloadData,
+    children,
+  }: Props = $props();
 </script>
 
 <a
   {href}
   class="inline-block rounded-full bg-sky-500 px-5 py-2 font-bold text-sky-50 shadow hover:bg-sky-400 hover:shadow-md"
+  data-sveltekit-preload-data={preloadData}
 >
   {@render children()}
 </a>

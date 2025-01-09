@@ -24,7 +24,9 @@
 
     {#if id < 10}
       <span class="ml-auto">
-        <ButtonLink href="/posts/{id + 1}">Next</ButtonLink>
+        <ButtonLink href="/posts/{id + 1}" data-sveltekit-preload-data="tap">
+          Next
+        </ButtonLink>
       </span>
     {/if}
   </div>
