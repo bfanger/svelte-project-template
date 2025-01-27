@@ -9,7 +9,7 @@
   <title>{title}</title>
 </svelte:head>
 
-<div class="container mx-auto p-3">
+<div class="container mx-auto p-4 md:pt-6">
   <ButtonLink href="/">Home</ButtonLink>
   <div class="my-4">
     <article class="prose">
