@@ -35,21 +35,21 @@ if (packageJson.scripts.build === "vite build") {
 }
 
 const devDependencies = {
-  "@faker-js/faker": "^9.0.3",
-  "@playwright/test": "^1.47.2",
-  "@storybook/addon-essentials": "^8.3.4",
-  "@storybook/addon-interactions": "^8.3.4",
-  "@storybook/addon-links": "^8.3.4",
-  "@storybook/blocks": "^8.3.4",
-  "@storybook/svelte": "^8.3.4",
-  "@storybook/sveltekit": "^8.3.4",
-  "@storybook/test": "^8.3.4",
-  "@testing-library/svelte": "^5.2.1",
-  "happy-dom": "^15.7.4",
-  react: "^18.3.1",
-  "react-dom": "^18.3.1",
-  storybook: "^8.3.4",
-  vitest: "^2.1.1",
+  "@faker-js/faker": "^9.4.0",
+  "@playwright/test": "^1.50.0",
+  "@storybook/addon-essentials": "^8.5.2",
+  "@storybook/addon-interactions": "^8.5.2",
+  "@storybook/addon-links": "^8.5.2",
+  "@storybook/blocks": "^8.5.2",
+  "@storybook/svelte": "^8.5.2",
+  "@storybook/sveltekit": "^8.5.2",
+  "@storybook/test": "^8.5.2",
+  "@testing-library/svelte": "^5.2.6",
+  "happy-dom": "^16.7.3",
+  react: "^19.0.0",
+  "react-dom": "^19.0.0",
+  storybook: "^8.5.2",
+  vitest: "^3.0.4",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
@@ -68,25 +68,26 @@ async function writeFile(filename, body) {
 }
 
 await writeFile("package.json", `${JSON.stringify(packageJson, null, 2)}\n`);
-
-await writeFile(
-  "vite.config.ts",
-  (await fs.readFile("vite.config.ts", "utf-8"))
-    .replace(
-      'import { defineConfig } from "vite";',
-      'import { configDefaults, defineConfig } from "vitest/config";',
-    )
-    .replace(
-      "\n});",
-      `
+const viteConfig = await fs.readFile("vite.config.ts", "utf-8");
+if (viteConfig.indexOf("test: {") === -1) {
+  await writeFile(
+    "vite.config.ts",
+    viteConfig
+      .replace(
+        'import { defineConfig } from "vite";',
+        'import { configDefaults, defineConfig } from "vitest/config";',
+      )
+      .replace(
+        "\n});",
+        `
   test: {
     environment: "happy-dom",
     exclude: [...configDefaults.exclude, "package", "playwright"],
   },
 });`,
-    ),
-);
-
+      ),
+  );
+}
 await writeFile(
   "playwright.config.ts",
   `import type { PlaywrightTestConfig } from "@playwright/test";
