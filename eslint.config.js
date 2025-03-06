@@ -45,6 +45,7 @@ export default ts.config(
       "svelte/block-lang": ["warn", { script: "ts" }],
       "svelte/no-at-html-tags": "off",
       "svelte/prefer-const": ["warn", { destructuring: "all" }],
+      "svelte/require-each-key": "off",
     },
   },
   {
