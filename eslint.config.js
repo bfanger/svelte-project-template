@@ -9,7 +9,6 @@ export default ts.config(
   js.configs.recommended,
   ...ts.configs.recommendedTypeChecked,
   ...svelte.configs["flat/recommended"],
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   prettier,
   ...svelte.configs["flat/prettier"],
   {

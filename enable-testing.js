@@ -35,21 +35,22 @@ if (packageJson.scripts.build === "vite build") {
 }
 
 const devDependencies = {
-  "@faker-js/faker": "^9.5.1",
-  "@playwright/test": "^1.50.1",
-  "@storybook/addon-essentials": "^8.6.4",
-  "@storybook/addon-interactions": "^8.6.4",
-  "@storybook/addon-links": "^8.6.4",
-  "@storybook/blocks": "^8.6.4",
-  "@storybook/svelte": "^8.6.4",
-  "@storybook/sveltekit": "^8.6.4",
-  "@storybook/test": "^8.6.4",
+  "@faker-js/faker": "^9.7.0",
+  "@playwright/test": "^1.52.0",
+  "@storybook/addon-essentials": "^8.6.12",
+  "@storybook/addon-interactions": "^8.6.12",
+  "@storybook/addon-links": "^8.6.12",
+  "@storybook/blocks": "^8.6.12",
+  "@storybook/svelte": "^8.6.12",
+  "@storybook/sveltekit": "^8.6.12",
+  "@storybook/test": "^8.6.12",
   "@testing-library/svelte": "^5.2.7",
-  "happy-dom": "^17.2.2",
-  react: "^19.0.0",
-  "react-dom": "^19.0.0",
-  storybook: "^8.6.4",
-  vitest: "^3.0.7",
+  "@testing-library/user-event": "^14.6.1",
+  "happy-dom": "^17.4.7",
+  react: "^19.1.0",
+  "react-dom": "^19.1.0",
+  storybook: "^8.6.12",
+  vitest: "^3.1.3",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
@@ -84,6 +85,7 @@ if (viteConfig.indexOf("test: {") === -1) {
     environment: "happy-dom",
     exclude: [...configDefaults.exclude, "package", "playwright"],
   },
+  resolve: process.env.VITEST ? { conditions: ["browser"] } : undefined,
 });`,
       ),
   );
@@ -189,10 +191,11 @@ const helloComponentExists = await fs
 
 if (helloComponentExists) {
   await writeFile(
-    "src/components/Hello/Hello.spec.ts",
-    `import { expect, it, describe, vi } from "vitest";
-import { render, fireEvent } from "@testing-library/svelte/svelte5";
-import { tick, type SvelteComponent } from "svelte";
+    "src/components/Hello/Hello.svelte.spec.ts",
+    `import { expect, vi, test } from "vitest";
+import { render } from "@testing-library/svelte";
+import userEvent from "@testing-library/user-event";
+import { flushSync } from "svelte";
 import Hello from "./Hello.svelte";
 
 /**
@@ -200,24 +203,25 @@ import Hello from "./Hello.svelte";
  * - It doesn't test any complexity we wrote
  * - The components is trivial an unlikely to break/change
  */
-describe("Hello component", () => {
-  it.skip("should render based on prop", async () => {
-    const { getByText, component } = render<SvelteComponent<any>>(Hello, {
-      name: "world",
-    });
-    const el = getByText("Hello world");
-    expect(el.textContent).toBe("Hello world");
-    component.$set({ name: "you" });
-    await tick();
-    expect(el.textContent).toBe("Hello you");
-  });
 
-  it.skip("should trigger handlers based on events", async () => {
-    const onclick = vi.fn();
-    const { getByText } = render(Hello, { name: "click", onclick });
-    await fireEvent(getByText("Hello click"), new MouseEvent("click"));
-    expect(onclick).toBeCalledTimes(1);
-  });
+test("Hello should render content based on props", () => {
+  const props = $state({ name: "world", onclick: () => {} });
+  const { getByText } = render(Hello, { props });
+  const el = getByText("Hello world");
+  expect(el.textContent).toBe("Hello world");
+  props.name = "you";
+  flushSync();
+  expect(el.textContent).toBe("Hello you");
+});
+
+test("Hello should trigger handlers based on events", async () => {
+  const user = userEvent.setup();
+  const onclick = vi.fn();
+  const { getByText } = render(Hello, { props: { name: "click", onclick } });
+  const button = getByText("Hello click");
+
+  await user.click(button);
+  expect(onclick).toBeCalledTimes(1);
 });
 `,
   );
