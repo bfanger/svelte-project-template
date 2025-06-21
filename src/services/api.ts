@@ -50,7 +50,7 @@ async function wrapped<T>(
   }
   if (ssrCache && typeof window === "undefined") {
     init.headers = new Headers(init.headers);
-    init.headers.append("SSR-Cache", `${JSON.stringify(ssrCache)}`);
+    init.headers.append("SSR-Cache", JSON.stringify(ssrCache));
   }
   init.method = method;
   const endpoint = PUBLIC_API_ENDPOINT;
@@ -99,7 +99,7 @@ async function wrapped<T>(
     throw err;
   }
   const data = await response.json();
-  if (config.signal && config.signal.aborted) {
+  if (config.signal?.aborted) {
     throw new Error("Aborted");
   }
   if (typeof data === "object" && data !== null) {

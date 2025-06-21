@@ -21,7 +21,8 @@ const log = debug
   ? function (message: string, key: unknown) {
       console.info(`[cache] ${message}:`, key);
     }
-  : () => {};
+  : // eslint-disable-next-line @typescript-eslint/no-empty-function
+    () => {};
 
 /**
  * An in-memory caching helper

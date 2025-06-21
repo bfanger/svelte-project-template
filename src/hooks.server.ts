@@ -12,10 +12,11 @@ export const handle: Handle = async (input) => {
 
 export const handleFetch: HandleFetch = async ({ request, fetch, event }) => {
   request.headers.set("origin", event.url.origin);
-  if (request.headers.has("SSR-Cache") === false) {
+  const ssrCache = request.headers.get("SSR-Cache");
+  if (!ssrCache) {
     return fetch(request);
   }
-  const config = JSON.parse(request.headers.get("SSR-Cache") as string) as {
+  const config = JSON.parse(ssrCache) as {
     dedupe: number;
     revalidate?: number;
     ttl?: number;

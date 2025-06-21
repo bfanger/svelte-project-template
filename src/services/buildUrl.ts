@@ -56,7 +56,9 @@ export default function buildUrl<T extends string>(
   if (searchParams) {
     for (const [param, value] of Object.entries(searchParams)) {
       if (Array.isArray(value)) {
-        value.forEach((v) => params.append(param, parseParam(param, v)));
+        value.forEach((v) => {
+          params.append(param, parseParam(param, v));
+        });
       } else if (typeof value === "string" || typeof value === "number") {
         params.set(param, parseParam(param, value));
       }
@@ -85,7 +87,7 @@ function parseParam(parameter: string, value: string | number): string {
     return value;
   }
   const numeric = value.toString();
-  if (!numeric.match(/^[0-9]+$/)) {
+  if (!/^[0-9]+$/.exec(numeric)) {
     throw new Error(`Only integer are allowed. ${parameter} was: ${numeric}`);
   }
   return numeric;

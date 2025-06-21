@@ -15,7 +15,7 @@ export default function runesMode() {
     markup({ content, filename }) {
       if (
         filename.startsWith(srcFolder) &&
-        content.indexOf("<svelte:options") === -1
+        !content.includes("<svelte:options")
       ) {
         content += `\n<svelte:options runes />`;
       }

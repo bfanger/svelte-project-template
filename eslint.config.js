@@ -6,26 +6,40 @@ import svelte from "eslint-plugin-svelte";
 import globals from "globals";
 
 export default ts.config(
-  js.configs.recommended,
-  ...ts.configs.recommendedTypeChecked,
-  ...svelte.configs["flat/recommended"],
-  prettier,
-  ...svelte.configs["flat/prettier"],
+  {
+    ignores: [
+      ".svelte-kit",
+      ".vercel",
+      "build",
+      "node_modules",
+      "package",
+      "vite.config.ts.timestamp-*.mjs",
+    ],
+  },
   {
     languageOptions: {
       ecmaVersion: "latest",
       sourceType: "module",
-      globals: { ...globals.node, ...globals.browser },
+      globals: globals.browser,
       parserOptions: {
         parser: ts.parser,
         extraFileExtensions: [".svelte"],
-        project: `tsconfig.eslint.json`,
+        project: "tsconfig.eslint.json",
       },
     },
   },
+  js.configs.recommended,
+  ts.configs.eslintRecommended,
+  ...ts.configs.recommendedTypeChecked,
+  ...ts.configs.stylisticTypeChecked,
+  ...svelte.configs["flat/recommended"],
+  prettier,
+  ...svelte.configs["flat/prettier"],
   {
     rules: {
+      "@typescript-eslint/consistent-type-definitions": ["warn", "type"],
       "@typescript-eslint/ban-ts-comment": "off",
+      "@typescript-eslint/prefer-includes": "warn",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-shadow": "warn",
       "@typescript-eslint/no-unsafe-assignment": "off",
@@ -63,13 +77,7 @@ export default ts.config(
     },
   },
   {
-    ignores: [
-      ".svelte-kit",
-      ".vercel",
-      "build",
-      "node_modules",
-      "package",
-      "vite.config.ts.timestamp-*.mjs",
-    ],
+    files: ["**/*.cjs", "**/*.js", "**/*.server.ts"],
+    languageOptions: { globals: globals.node },
   },
 );

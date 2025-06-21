@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 
 import { promises as fs } from "fs";
 import path from "path";
@@ -24,7 +23,7 @@ const scripts = {
   "playwright:ui": "playwright test --ui",
 };
 for (const [task, command] of Object.entries(scripts)) {
-  packageJson.scripts[task] = packageJson.scripts[task] || command;
+  packageJson.scripts[task] = packageJson.scripts[task] ?? command;
 }
 if (packageJson.scripts.dev === "vite dev") {
   packageJson.scripts.dev =
@@ -54,7 +53,7 @@ const devDependencies = {
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
-    packageJson.devDependencies[dependency] || version;
+    packageJson.devDependencies[dependency] ?? version;
 }
 
 for (const folder of [".storybook", "playwright", "playwright/tests"]) {
@@ -63,6 +62,10 @@ for (const folder of [".storybook", "playwright", "playwright/tests"]) {
     .catch(() => fs.mkdir(path.resolve(projectDir, folder)));
 }
 
+/**
+ * @param {string} filename
+ * @param {string} body
+ */
 async function writeFile(filename, body) {
   await fs.writeFile(path.resolve(projectDir, filename), body);
   process.stdout.write(`created "${filename}" (${body.length} bytes)\n`);
@@ -70,7 +73,7 @@ async function writeFile(filename, body) {
 
 await writeFile("package.json", `${JSON.stringify(packageJson, null, 2)}\n`);
 const viteConfig = await fs.readFile("vite.config.ts", "utf-8");
-if (viteConfig.indexOf("test: {") === -1) {
+if (!viteConfig.includes("test: {")) {
   await writeFile(
     "vite.config.ts",
     viteConfig
