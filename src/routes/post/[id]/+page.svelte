@@ -17,17 +17,19 @@
       <p>{body}</p>
     </article>
   </div>
-  <div class="flex">
-    {#if id > 1}
-      <ButtonLink href="/posts/{id - 1}">Previous</ButtonLink>
-    {/if}
+  {#if id}
+    <div class="flex">
+      {#if id > 1}
+        <ButtonLink href="/post/{id - 1}">Previous</ButtonLink>
+      {/if}
 
-    {#if id < 10}
-      <span class="ml-auto">
-        <ButtonLink href="/posts/{id + 1}" data-sveltekit-preload-data="tap">
-          Next
-        </ButtonLink>
-      </span>
-    {/if}
-  </div>
+      {#if id < 10}
+        <span class="ml-auto">
+          <ButtonLink href="/post/{id + 1}" data-sveltekit-preload-data="tap">
+            Next
+          </ButtonLink>
+        </span>
+      {/if}
+    </div>
+  {/if}
 </div>

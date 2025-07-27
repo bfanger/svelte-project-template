@@ -82,13 +82,18 @@ export default function buildUrl<T extends string>(
  * Allows writing:
  *   buildUrl("/post/{id}/comments", { id: 1 }, { offset: 24, limit: 12 });
  */
-function parseParam(parameter: string, value: string | number): string {
+function parseParam(parameter: string, value: unknown): string {
   if (typeof value === "string") {
     return value;
   }
-  const numeric = value.toString();
-  if (!/^[0-9]+$/.exec(numeric)) {
-    throw new Error(`Only integer are allowed. ${parameter} was: ${numeric}`);
+  if (typeof value === "number") {
+    const numeric = value.toString();
+    if (!/^[0-9]+$/.exec(numeric)) {
+      throw new Error(`Only integer are allowed. ${parameter} was: ${numeric}`);
+    }
+    return numeric;
   }
-  return numeric;
+  throw new Error(
+    `Invalid value for parameter "${parameter}": ${typeof value}`,
+  );
 }

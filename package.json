@@ -12,6 +12,7 @@
     "lint:eslint": "eslint --max-warnings=0",
     "lint:stylelint": "stylelint --max-warnings=0 \"src/**/*.{css,svelte}\"",
     "format": "eslint --fix && stylelint --fix \"src/**/*.{css,svelte}\" && prettier --write .",
+    "api-types": "npx openapi-typescript@latest --output src/services/api-types.gen.ts https://raw.githubusercontent.com/arnu515/jsonplaceholder-api-docs/refs/heads/master/openapi.yaml && eslint --fix src/services/api-types.gen.ts && prettier --write src/services/api-types.gen.ts",
     "preinstall": "npx -y only-allow pnpm",
     "prepare": "husky || true"
   },

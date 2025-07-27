@@ -1,3 +1,4 @@
+// @ts-check
 import "eslint-plugin-only-warn";
 import js from "@eslint/js";
 import ts from "typescript-eslint";
@@ -39,7 +40,6 @@ export default ts.config(
     rules: {
       "@typescript-eslint/consistent-type-definitions": ["warn", "type"],
       "@typescript-eslint/ban-ts-comment": "off",
-      "@typescript-eslint/prefer-includes": "warn",
       "@typescript-eslint/no-explicit-any": "off",
       "@typescript-eslint/no-shadow": "warn",
       "@typescript-eslint/no-unsafe-assignment": "off",
