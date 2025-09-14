@@ -34,22 +34,18 @@ if (packageJson.scripts.build === "vite build") {
 }
 
 const devDependencies = {
-  "@faker-js/faker": "^9.7.0",
-  "@playwright/test": "^1.52.0",
-  "@storybook/addon-essentials": "^8.6.12",
-  "@storybook/addon-interactions": "^8.6.12",
-  "@storybook/addon-links": "^8.6.12",
-  "@storybook/blocks": "^8.6.12",
-  "@storybook/svelte": "^8.6.12",
-  "@storybook/sveltekit": "^8.6.12",
-  "@storybook/test": "^8.6.12",
-  "@testing-library/svelte": "^5.2.7",
+  "@faker-js/faker": "^10.0.0",
+  "@playwright/test": "^1.55.0",
+  "@storybook/addon-links": "^9.1.5",
+  "@storybook/svelte": "^9.1.5",
+  "@storybook/sveltekit": "^9.1.5",
+  "@testing-library/svelte": "^5.2.8",
   "@testing-library/user-event": "^14.6.1",
-  "happy-dom": "^17.4.7",
-  react: "^19.1.0",
-  "react-dom": "^19.1.0",
-  storybook: "^8.6.12",
-  vitest: "^3.1.3",
+  "happy-dom": "^18.0.1",
+  react: "^19.1.1",
+  "react-dom": "^19.1.1",
+  storybook: "^9.1.5",
+  vitest: "^3.2.4",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
@@ -150,11 +146,6 @@ await writeFile(
 
 const config: StorybookConfig = {
   stories: ["../src/**/*.stories.ts"],
-  addons: [
-    "@storybook/addon-links",
-    "@storybook/addon-essentials",
-    "@storybook/addon-interactions",
-  ],
   framework: {
     name: "@storybook/sveltekit",
     options: {},
