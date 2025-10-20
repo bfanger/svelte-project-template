@@ -10,6 +10,7 @@ const commit = spawnSync("git rev-parse HEAD", {
 /** @type {import('@sveltejs/kit').Config} */
 export default {
   preprocess: runesMode(),
+  compilerOptions: { experimental: { async: true } },
   kit: {
     adapter: adapter(),
     ...(commit ? { version: { name: commit } } : {}),
