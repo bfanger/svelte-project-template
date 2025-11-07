@@ -1,4 +1,5 @@
 type Options<T> = {
+  key: unknown;
   /** Number of seconds before calls to cache() will stop reusing the same promise, provide the expected pessimistic duration of the task */
   dedupe: number;
   /** Number of seconds before the result is considered stale and a revalidate is triggered, the stale data is still used as result */
@@ -26,21 +27,21 @@ const log = debug
 /**
  * An in-memory caching helper
  *
- * @param key globally unique key
+ * @param options Cache options
  * @param task Creates the promise that will be cached
  *
  * Usage:
- *   const result = await cache('unique_key', () => doStuff((), { timeout: 10, ttl: 30 })
+ *   const result = await cache({ key: 'unique_key', dedupe: 10, ttl: 30 }, () => doStuff())
  *
- * First call with the 'unique_key' calls the doStuff() and stores the promise for 30 seconds.
+ * First call with the 'unique_key' calls the doStuff() and stores the promise for 30s (ttl).
  * Additional calls with the 'unique_key' key will return that cached promise.
- * If the promise rejects, the cached promise is flushed.
+ * If the promise rejects or the task doesn't complete within 10s (dedupe) the cached promise is flushed.
  */
 export default async function cache<T>(
-  key: unknown,
-  task: () => Promise<T>,
   options: Options<T>,
+  task: () => Promise<T>,
 ): Promise<T> {
+  const key = options.key;
   const cacheHit = promises.get(key) as Promise<T> | undefined;
   if (cacheHit) {
     log("hit", key);

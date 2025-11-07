@@ -23,14 +23,12 @@ export const handleFetch: HandleFetch = async ({ request, fetch, event }) => {
   };
   request.headers.delete("SSR-Cache");
   return cache(
-    keyFromRequest(request),
-    async () => reusableResponse(await fetch(request)),
     {
       ...config,
-      validate: (response) => {
-        return response.ok;
-      },
+      key: keyFromRequest(request),
+      validate: (response) => response.ok,
     },
+    async () => reusableResponse(await fetch(request)),
   );
 };
 
