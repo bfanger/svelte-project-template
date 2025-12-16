@@ -52,7 +52,7 @@ async function wrapped<T>(
   const start = Date.now();
   let response: Response;
   try {
-    response = await fetch(url, init);
+    response = await fetch(url, { ...init, headers });
   } catch (err: any) {
     if (err.message) {
       throw new Error(`${config.method} ${url} failed: ${err.message}`);

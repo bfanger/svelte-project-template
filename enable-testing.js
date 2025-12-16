@@ -35,17 +35,17 @@ if (packageJson.scripts.build === "vite build") {
 
 const devDependencies = {
   "@faker-js/faker": "^10.1.0",
-  "@playwright/test": "^1.56.1",
-  "@storybook/addon-links": "^9.1.13",
-  "@storybook/svelte": "^9.1.13",
-  "@storybook/sveltekit": "^9.1.13",
-  "@testing-library/svelte": "^5.2.8",
+  "@playwright/test": "^1.57.0",
+  "@storybook/addon-links": "^10.1.9",
+  "@storybook/svelte": "^10.1.9",
+  "@storybook/sveltekit": "^10.1.9",
+  "@testing-library/svelte": "^5.2.9",
   "@testing-library/user-event": "^14.6.1",
-  "happy-dom": "^20.0.7",
-  react: "^19.2.0",
-  "react-dom": "^19.2.0",
-  storybook: "^9.1.13",
-  vitest: "^3.2.4",
+  "happy-dom": "^20.0.11",
+  react: "^19.2.3",
+  "react-dom": "^19.2.3",
+  storybook: "^10.1.9",
+  vitest: "^4.0.15",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
@@ -199,7 +199,7 @@ import Hello from "./Hello.svelte";
  */
 
 test("Hello should render content based on props", () => {
-  const props = $state({ name: "world", onclick: () => {} });
+  const props = $state({ name: "world", onclick: () => undefined });
   const { getByText } = render(Hello, { props });
   const el = getByText("Hello world");
   expect(el.textContent).toBe("Hello world");
