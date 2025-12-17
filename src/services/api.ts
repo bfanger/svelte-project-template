@@ -34,25 +34,28 @@ async function wrapped<T>(
     }
     fetch = window.fetch;
   }
-  const headers = new Headers(init.headers);
+  init.headers = new Headers(init.headers);
   if (ssrCache && typeof window === "undefined") {
-    headers.append("SSR-Cache", JSON.stringify(ssrCache));
+    init.headers.append("SSR-Cache", JSON.stringify(ssrCache));
   }
   const endpoint = PUBLIC_API_ENDPOINT;
   if (typeof endpoint !== "string" || endpoint === "") {
     throw new Error("Missing environment variable PUBLIC_API_ENDPOINT");
   }
-  if (body !== undefined) {
-    headers.append("Content-Type", "application/json; charset=utf-8");
-    init.body = JSON.stringify(body);
-  }
   const url =
     endpoint +
     buildUrl(path, params as PathParams<string>, searchParams as SearchParams);
+
+  if (body instanceof FormData) {
+    init.body = body;
+  } else if (body !== undefined) {
+    init.headers.append("Content-Type", "application/json; charset=utf-8");
+    init.body = JSON.stringify(body);
+  }
   const start = Date.now();
   let response: Response;
   try {
-    response = await fetch(url, { ...init, headers });
+    response = await fetch(url, init);
   } catch (err: any) {
     if (err.message) {
       throw new Error(`${config.method} ${url} failed: ${err.message}`);
@@ -205,7 +208,11 @@ type Requests<TMethod extends HttpMethod> = {
     requestBody: { content: { "application/json": unknown } };
   }
     ? paths[P][TMethod]["requestBody"]["content"]["application/json"]
-    : undefined;
+    : paths[P][TMethod] extends {
+          requestBody?: { content: { "multipart/form-data": string } };
+        }
+      ? FormData
+      : undefined;
 };
 
 /**
