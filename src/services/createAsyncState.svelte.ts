@@ -8,6 +8,7 @@ export class AsyncState<T> {
 
 /**
  * Related to the {#await} block but allows using the results of the promise inside the script section.
+ * The function will re-execute when reactive state updates and also reset the data & error to undefined.
  *
  * Usage:
  * ```ts
