@@ -41,9 +41,9 @@ const devDependencies = {
   "@storybook/sveltekit": "^10.1.11",
   "@testing-library/svelte": "^5.3.1",
   "@testing-library/user-event": "^14.6.1",
-  "happy-dom": "^20.0.11",
+  "happy-dom": "^20.3.1",
   storybook: "^10.1.11",
-  vitest: "^4.0.16",
+  vitest: "^4.0.17",
 };
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
