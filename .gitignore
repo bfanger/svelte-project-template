@@ -5,7 +5,7 @@ node_modules
 /.svelte-kit
 /.vercel
 /build
-/package
+/dist
 /functions
 /test-results
 /vite.config.ts.timestamp-*.mjs
