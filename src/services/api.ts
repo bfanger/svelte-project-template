@@ -56,11 +56,8 @@ async function wrapped<T>(
   let response: Response;
   try {
     response = await fetch(url, init);
-  } catch (err: any) {
-    if (err.message) {
-      throw new Error(`${config.method} ${url} failed: ${err.message}`);
-    }
-    throw err;
+  } catch (err) {
+    throw new Error(`${config.method} ${url} failed`, { cause: err });
   }
   const duration = Date.now() - start;
   if (duration > slowResponseThreshold) {
