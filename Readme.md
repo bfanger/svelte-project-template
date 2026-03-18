@@ -7,6 +7,7 @@
 - [Tailwind CSS](https://tailwindcss.com/), [PostCSS Preset Env](https://github.com/csstools/postcss-plugins/tree/main/plugin-packs/postcss-preset-env) ( which includes [Autoprefixer](https://github.com/postcss/autoprefixer))
 - [Prettier](https://prettier.io/), [ESLint](https://eslint.org/) & [Stylelint](https://stylelint.io/)
 - [Husky](https://typicode.github.io/husky/) & [Lint-staged](https://github.com/okonet/lint-staged)
+- [Varlock](https://varlock.dev/) & [Valibot](https://valibot.dev/)
 - [Vitest](https://vitest.dev/) \*1
 - [Playwright](https://playwright.dev/) \*1
 - [Storybook](https://storybook.js.org/docs/svelte/writing-stories/introduction) \*1
@@ -21,7 +22,6 @@ cd my-svelte-project
 git init --initial-branch main
 git add .
 pnpm install     # or  npm install
-cp -n env.example .env
 pnpm dev --open  # or  npm run dev -- --open
 ```
 

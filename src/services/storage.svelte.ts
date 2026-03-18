@@ -1,4 +1,4 @@
-import { type TypeOf, type ZodType } from "zod";
+import { safeParse, type BaseSchema, type InferOutput } from "valibot";
 import { browser } from "$app/environment";
 import asError from "./asError";
 
@@ -25,12 +25,12 @@ if (browser) {
  * Typesafe reactive API using Signals for interacting with localStorage or sessionStorage
  *
  * - Automatic JSON serialization/deserialization
- * - Zod schema validation
- * - Fallback via Zod .catch
+ * - Valibot validation
+ * - Default values and fallback via Valibot .fallback
  * - Cross-tab synchronization
  *
  * Usage:
- *   const token = storage("token", z.string().catch(""));
+ *   const token = storage("token", v.fallback(v.string(), ""))
  *
  *   // Read
  *   console.log(token.value);
@@ -38,11 +38,11 @@ if (browser) {
  *   token.value = "new value";
  *
  */
-export default function storage<T extends ZodType<any, any, any>>(
+export default function storage<T extends BaseSchema<any, any, any>>(
   key: string,
   schema: T,
   type: StorageType = "localStorage",
-) {
+): InferOutput<T> {
   const backend = init(type);
   let jsonValue: string | null | undefined = backend.getItem(namespace + key);
   if (signal[type][key] !== jsonValue) {
@@ -57,21 +57,35 @@ export default function storage<T extends ZodType<any, any, any>>(
       }
     } catch (err) {
       console.warn(
-        `Invalid JSON in ${type} for key: ${key}\n${asError(err).message}`,
+        `[storage] Invalid JSON in ${type} for key: ${key}\n${asError(err).message}`,
       );
     }
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return schema.parse(parsed) as TypeOf<T>;
+    const result = safeParse<T>(schema, parsed);
+    if (!result.success) {
+      console.warn(
+        `[storage] Invalid value for ${JSON.stringify(key)}:`,
+        parsed,
+        `\n\nAdd valibot fallback to the schema:\nconst ${key} = storage(${JSON.stringify(key)}, v.fallback(v.string(), ""))`,
+      );
+    }
+    return result.output;
   });
 
   return {
     get value() {
       return value;
     },
-    set value(update: TypeOf<T>) {
+    set value(update: InferOutput<T>) {
       jsonValue = JSON.stringify(update);
       signal[type][key] = jsonValue;
       backend.setItem(namespace + key, jsonValue);
+      const result = safeParse(schema, JSON.parse(jsonValue));
+      if (!result.success || JSON.stringify(result.output) !== jsonValue) {
+        console.warn(
+          `[storage] Invalid value for ${JSON.stringify(key)}:`,
+          update,
+        );
+      }
     },
     reset() {
       signal[type][key] = null;
