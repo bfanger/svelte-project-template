@@ -28,7 +28,7 @@ pnpm dev --open  # or  npm run dev -- --open
 ## Enabling Testing & Storybook
 
 ```sh
-node ./enable-testing.js
+node ./enable-testing.ts
 pnpm install  # or  npm install
 ```
 

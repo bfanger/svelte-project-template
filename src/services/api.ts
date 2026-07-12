@@ -5,7 +5,7 @@
  * Access to the corresponding Response object is still available via helper methods.
  * This allows access to the headers and http status code by passing the data or error to those helpers
  */
-import { error, type NumericRange } from "@sveltejs/kit";
+import { error } from "@sveltejs/kit";
 import buildUrl, { type PathParams, type SearchParams } from "./buildUrl";
 import type { paths } from "./api-types.gen";
 
@@ -70,7 +70,7 @@ async function wrapped<T>(
   if (!response.ok) {
     try {
       error(
-        response.status as NumericRange<400, 599>,
+        response.status,
         `${config.method} ${url} failed: ${response.status} ${response.statusText}`,
       );
     } catch (err) {

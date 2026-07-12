@@ -1,8 +1,21 @@
 #!/usr/bin/env node
 
-import { promises as fs } from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import { promises as fs } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const devDependencies = {
+  "@faker-js/faker": "^10.5.0",
+  "@playwright/test": "^1.61.1",
+  "@storybook/addon-links": "^10.5.0",
+  "@storybook/svelte": "^10.5.0",
+  "@storybook/sveltekit": "^10.5.0",
+  "@testing-library/svelte": "^5.4.2",
+  "@testing-library/user-event": "^14.6.1",
+  "happy-dom": "^20.10.6",
+  storybook: "^10.5.0",
+  vitest: "^4.1.10",
+};
 
 const projectDir = path.dirname(fileURLToPath(import.meta.url));
 
@@ -33,18 +46,6 @@ if (packageJson.scripts.build === "vite build") {
   packageJson.scripts.build = "npm run build:vite && npm run build:storybook";
 }
 
-const devDependencies = {
-  "@faker-js/faker": "^10.3.0",
-  "@playwright/test": "^1.58.2",
-  "@storybook/addon-links": "^10.3.0",
-  "@storybook/svelte": "^10.3.0",
-  "@storybook/sveltekit": "^10.3.0",
-  "@testing-library/svelte": "^5.3.1",
-  "@testing-library/user-event": "^14.6.1",
-  "happy-dom": "^20.8.4",
-  storybook: "^10.3.0",
-  vitest: "^4.1.0",
-};
 for (const [dependency, version] of Object.entries(devDependencies)) {
   packageJson.devDependencies[dependency] =
     packageJson.devDependencies[dependency] ?? version;
@@ -60,7 +61,7 @@ for (const folder of [".storybook", "playwright", "playwright/tests"]) {
  * @param {string} filename
  * @param {string} body
  */
-async function writeFile(filename, body) {
+async function writeFile(filename: string, body: string) {
   await fs.writeFile(path.resolve(projectDir, filename), body);
   process.stdout.write(`created "${filename}" (${body.length} bytes)\n`);
 }
