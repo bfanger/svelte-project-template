@@ -17,7 +17,7 @@
 ## Initial setup
 
 ```sh
-npx tiged "github.com/bfanger/svelte-project-template#main" my-svelte-project
+npx -y degit "github:bfanger/svelte-project-template#main" my-svelte-project
 cd my-svelte-project
 git init --initial-branch main
 git add .
