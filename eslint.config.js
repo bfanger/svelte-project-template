@@ -14,6 +14,7 @@ export default defineConfig(
       ".vercel",
       "build",
       "node_modules",
+      ".pnpm-store",
       "dist",
       "vite.config.ts.timestamp-*.mjs",
     ],
