@@ -32,6 +32,7 @@ async function wrapped<T>(
     if (typeof window === "undefined") {
       throw new Error("Missing config.fetch");
     }
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     fetch = window.fetch;
   }
   init.headers = new Headers(init.headers);
