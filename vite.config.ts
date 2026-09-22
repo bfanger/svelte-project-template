@@ -5,10 +5,16 @@ import tailwindcss from "@tailwindcss/vite";
 import devtoolsJson from "vite-plugin-devtools-json";
 import { defineConfig } from "vite";
 
+const inDocker = existsSync("/.dockerenv");
 export default defineConfig({
-  plugins: [varlockVitePlugin(), devtoolsJson(), sveltekit(), tailwindcss()],
+  plugins: [
+    varlockVitePlugin(),
+    inDocker ? [] : devtoolsJson(),
+    sveltekit(),
+    tailwindcss(),
+  ],
   css: { devSourcemap: true },
-  server: existsSync("/.dockerenv")
+  server: inDocker
     ? { host: true, watch: { usePolling: true, interval: 1000 } }
     : undefined,
 });

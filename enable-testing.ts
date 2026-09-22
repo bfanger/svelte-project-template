@@ -5,15 +5,16 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const devDependencies = {
-  "@faker-js/faker": "^10.5.0",
-  "@playwright/test": "^1.62.0",
-  "@storybook/addon-links": "^10.5.5",
-  "@storybook/svelte": "^10.5.5",
-  "@storybook/sveltekit": "^10.5.5",
+  "@faker-js/faker": "^10.6.0",
+  "@playwright/test": "^1.63.0",
+  "@storybook/addon-links": "^10.6.0",
+  "@storybook/svelte": "^10.6.0",
+  "@storybook/sveltekit": "^10.6.0",
   "@testing-library/svelte": "^5.4.2",
-  "@testing-library/user-event": "^14.6.1",
-  "happy-dom": "^20.11.1",
-  storybook: "^10.5.5",
+  "@testing-library/user-event": "^14.6.7",
+  "happy-dom": "^20.14.5",
+  storybook: "^10.6.0",
+  vitest: "^5.0.1",
 };
 
 const projectDir = path.dirname(fileURLToPath(import.meta.url));
